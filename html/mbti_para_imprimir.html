@@ -50,6 +50,13 @@
             gap: 15px;
             padding: 0;
         }
+        /* Contenedor que representa una página imprimible */
+        .print-page {
+            /* altura automática; para impresión cada .print-page se separará */
+            width: 100%;
+            box-sizing: border-box;
+            page-break-after: always;
+        }
 
         .pregunta {
             border: 1px solid #C8E6C9; 
@@ -373,40 +380,56 @@
         // =================================================================
 
         function renderizarPreguntas() {
-            const contenedorPreguntas = document.getElementById('preguntas');
-            contenedorPreguntas.innerHTML = ''; 
+            const contenedorRoot = document.getElementById('preguntas');
+            contenedorRoot.innerHTML = '';
 
             const labels = ["1 (Muy en desacuerdo)", "2", "3 (Neutro)", "4", "5 (Muy de acuerdo)"];
 
-            preguntas.forEach((pregunta, index) => {
-                const numeroPregunta = index + 1;
-                const divPregunta = document.createElement('div');
-                divPregunta.classList.add('pregunta');
+            // Número de preguntas por página imprimible. Ajusta si necesitas más/menos.
+            const perPage = 36; // 3 columnas x 12 filas aprox.
+            const totalPages = Math.ceil(preguntas.length / perPage);
 
-                const titulo = document.createElement('h2');
-                titulo.textContent = `${numeroPregunta}. ${pregunta.texto}`;
-                divPregunta.appendChild(titulo);
+            for (let p = 0; p < totalPages; p++) {
+                const pageDiv = document.createElement('div');
+                pageDiv.classList.add('print-page');
 
-                const divOpciones = document.createElement('div');
-                divOpciones.classList.add('opciones-radio');
+                // Contenedor grid dentro de la página
+                const grid = document.createElement('div');
+                grid.classList.add('page-grid');
+                // usar el mismo id "preguntas" no es necesario por pagina
 
-                for (let i = 1; i <= 5; i++) {
-                    const label = document.createElement('label');
-                    // Mostrar solo el número, y el texto descriptivo si existe
-                    const textoPrincipal = labels[i-1].includes('(') ? labels[i-1].split(' ')[0] : labels[i-1];
-                    const textoSecundario = labels[i-1].includes('(') ? `<br><span style="font-weight: normal; font-size: 0.75em;">(${labels[i-1].split('(')[1].replace(')', '')})</span>` : '';
-                    
-                    label.innerHTML = `
-                        <input type="radio" name="pregunta${numeroPregunta}" value="${i}" required>
-                        ${textoPrincipal}
-                        ${textoSecundario}
-                    `;
-                    divOpciones.appendChild(label);
+                const start = p * perPage;
+                const end = Math.min(start + perPage, preguntas.length);
+
+                for (let i = start; i < end; i++) {
+                    const pregunta = preguntas[i];
+                    const numeroPregunta = i + 1;
+
+                    const divPregunta = document.createElement('div');
+                    divPregunta.classList.add('pregunta');
+
+                    const titulo = document.createElement('h2');
+                    titulo.textContent = `${numeroPregunta}. ${pregunta.texto}`;
+                    divPregunta.appendChild(titulo);
+
+                    const divOpciones = document.createElement('div');
+                    divOpciones.classList.add('opciones-radio');
+
+                    for (let v = 1; v <= 5; v++) {
+                        const label = document.createElement('label');
+                        const textoPrincipal = labels[v-1].includes('(') ? labels[v-1].split(' ')[0] : labels[v-1];
+                        const textoSecundario = labels[v-1].includes('(') ? `<br><span style="font-weight: normal; font-size: 0.75em;">(${labels[v-1].split('(')[1].replace(')', '')})</span>` : '';
+                        label.innerHTML = `\n                            <input type="radio" name="pregunta${numeroPregunta}" value="${v}" required>\n                            ${textoPrincipal}\n                            ${textoSecundario}\n                        `;
+                        divOpciones.appendChild(label);
+                    }
+
+                    divPregunta.appendChild(divOpciones);
+                    grid.appendChild(divPregunta);
                 }
-                
-                divPregunta.appendChild(divOpciones);
-                contenedorPreguntas.appendChild(divPregunta);
-            });
+
+                pageDiv.appendChild(grid);
+                contenedorRoot.appendChild(pageDiv);
+            }
         }
 
         // =================================================================
@@ -496,7 +519,12 @@
         }
 
         // Se asegura que las preguntas se rendericen al cargar la página
-        document.addEventListener('DOMContentLoaded', renderizarPreguntas); 
+        document.addEventListener('DOMContentLoaded', renderizarPreguntas);
+
+        // Re-renderizar antes de imprimir para asegurar paginación correcta
+        window.addEventListener('beforeprint', () => {
+            renderizarPreguntas();
+        });
     </script>
 </body>
 </html>
