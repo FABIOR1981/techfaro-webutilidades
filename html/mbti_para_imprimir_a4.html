@@ -50,8 +50,14 @@
 <body>
     <div class="wrapper">
         <header>
-            <h1>Cuestionario MBTI - Versión Imprimible A4</h1>
-            <div style="font-size:10pt; color:#444;">3 columnas × 9 filas por página (27 preguntas por página). Márgenes A4 con margen superior seguro.</div>
+            <h1>Cuestionario - Versión Imprimible A4</h1>
+            <div style="font-size:10pt; color:#444;">Completar antes de imprimir: Nombre completo, Cédula y Fecha de realización.</div>
+            <div class="global-header" style="margin-top:6px; display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap;">
+                <label>Nombre: <input id="globalNombre" type="text" style="width:220px;"></label>
+                <label>Cédula: <input id="globalCedula" type="text" style="width:120px;"></label>
+                <label>Fecha: <input id="globalFecha" type="date" style="width:150px;"></label>
+                <label style="font-size:0.9em;"><input type="checkbox" id="copyAll" checked> Copiar a todas las hojas</label>
+            </div>
         </header>
 
         <div class="controls">
@@ -182,11 +188,31 @@
     const perPage = 27;
     const pagesContainer = document.getElementById('pagesContainer');
 
+    function escapeHtmlAttr(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
     function buildPages() {
         pagesContainer.innerHTML = '';
-        for (let i = 0; i < preguntas.length; i += perPage) {
+        const copyAll = document.getElementById('copyAll')?.checked;
+        const globalNombre = document.getElementById('globalNombre')?.value || '';
+        const globalCedula = document.getElementById('globalCedula')?.value || '';
+        const globalFecha = document.getElementById('globalFecha')?.value || '';
+
+        for (let i = 0, pageIdx = 0; i < preguntas.length; i += perPage, pageIdx++) {
             const page = document.createElement('div');
             page.className = 'page';
+
+            // Cabecera por hoja (Nombre / Cédula / Fecha)
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'sheet-header';
+            headerDiv.innerHTML = `
+                <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px; font-size:10pt; flex-wrap:wrap;">
+                    <label style="min-width:160px">Nombre: <input type="text" class="sheet-nombre" name="nombre_page_${pageIdx+1}" style="width:220px" value="${escapeHtmlAttr(copyAll?globalNombre:'')}"></label>
+                    <label style="min-width:110px">Cédula: <input type="text" class="sheet-cedula" name="cedula_page_${pageIdx+1}" style="width:120px" value="${escapeHtmlAttr(copyAll?globalCedula:'')}"></label>
+                    <label>Fecha: <input type="date" class="sheet-fecha" name="fecha_page_${pageIdx+1}" style="width:140px" value="${copyAll?globalFecha:''}"></label>
+                </div>
+            `;
+            page.appendChild(headerDiv);
+
             const grid = document.createElement('div');
             grid.className = 'page-grid';
 
@@ -198,11 +224,11 @@
                 const numero = i + idx + 1;
                 q.innerHTML = `<h2>${numero}. ${escapeHtml(p.texto)}</h2>` +
                     `<div class="opciones">` +
-                    `[<label>1<br><input type="radio" name="pregunta${numero}" value="1"></label>` +
+                    `<label>1<br><input type="radio" name="pregunta${numero}" value="1"></label>` +
                     `<label>2<br><input type="radio" name="pregunta${numero}" value="2"></label>` +
                     `<label>3<br><input type="radio" name="pregunta${numero}" value="3"></label>` +
                     `<label>4<br><input type="radio" name="pregunta${numero}" value="4"></label>` +
-                    `<label>5<br><input type="radio" name="pregunta${numero}" value="5"></label>]` +
+                    `<label>5<br><input type="radio" name="pregunta${numero}" value="5"></label>` +
                     `</div>`;
                 grid.appendChild(q);
             });
@@ -210,16 +236,40 @@
             page.appendChild(grid);
             pagesContainer.appendChild(page);
         }
+
+        // Si seleccionaron copiar a todas, propagar valores
+        propagateGlobalToPages();
+    }
+
+    function propagateGlobalToPages(){
+        const copyAll = document.getElementById('copyAll')?.checked;
+        const n = document.getElementById('globalNombre')?.value || '';
+        const c = document.getElementById('globalCedula')?.value || '';
+        const f = document.getElementById('globalFecha')?.value || '';
+        if(!copyAll) return;
+        document.querySelectorAll('.page').forEach(page=>{
+            const sN = page.querySelector('.sheet-nombre'); if(sN) sN.value = n;
+            const sC = page.querySelector('.sheet-cedula'); if(sC) sC.value = c;
+            const sF = page.querySelector('.sheet-fecha'); if(sF) sF.value = f;
+        });
     }
 
     function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+    // Propagar valores globales cuando cambien
+    ['globalNombre','globalCedula','globalFecha','copyAll'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.addEventListener('input', () => propagateGlobalToPages());
+    });
+
     document.getElementById('btnImprimir').addEventListener('click', () => {
+        // actualizar antes de imprimir
+        buildPages();
         window.print();
     });
 
-    // Volver a construir antes de imprimir por si cambia el layout
-    window.addEventListener('beforeprint', buildPages);
+    // Volver a construir y propagar antes de imprimir por si cambia el layout
+    window.addEventListener('beforeprint', () => { buildPages(); propagateGlobalToPages(); });
 
     // Inicializar
     buildPages();
