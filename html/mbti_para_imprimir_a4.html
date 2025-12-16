@@ -27,8 +27,8 @@
         .page::before { content: ''; display:block; height: 6mm; }
 
         /* Encabezado imprimible por hoja (líneas para completar a mano) */
-        /* Oculto en pantalla para evitar duplicar controles; se mostrará solo en impresión */
-        .sheet-header-print { display:none; gap:8px; align-items:center; margin-bottom:6px; font-size:10pt; flex-wrap:wrap; }
+        /* VERSIÓN: Oculto en pantalla y mostrado solo al imprimir (como en la primera versión) */
+        .sheet-header-print { display:none !important; gap:8px; align-items:center; margin-bottom:6px; font-size:10pt; flex-wrap:wrap; }
         .sheet-header-print .print-line { display:inline-block; min-width:120px; border-bottom:1px solid #000; padding-bottom:3px; color: #000; }
         .sheet-header-print .print-label { margin-right:6px; color:#222; font-weight:500; }
         .sheet-header-print .print-field-small { min-width:90px; }
@@ -70,11 +70,6 @@
             <h1>Cuestionario - Versión Imprimible A4</h1>
             
             <div class="global-header" style="margin-top:6px; display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap;">
-                <label>Nombre: <input id="globalNombre" type="text" style="width:220px;"></label>
-                <label>Cédula: <input id="globalCedula" type="text" style="width:120px;"></label>
-                <label>Fecha: <input id="globalFecha" type="date" style="width:150px;"></label>
-                <label style="font-size:0.9em;"><input type="checkbox" id="copyAll" checked> Copiar a todas las hojas</label>
-            </div>
                 <label>Nombre: <input id="globalNombre" type="text" style="width:220px;"></label>
                 <label>Cédula: <input id="globalCedula" type="text" style="width:120px;"></label>
                 <label>Fecha: <input id="globalFecha" type="date" style="width:150px;"></label>
