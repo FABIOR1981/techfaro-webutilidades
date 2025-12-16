@@ -120,11 +120,4 @@ function limpiarTexto(texto) {
 	return texto.replace(/[.,\-_/\\!?'"()[\]{}@#$%^&*+=~]/g, '');
 }
 
-				
-/* Utilidades comunes movidas a `js/utils.js`.
-   Ahora `validarCedulaUruguaya`, `parsearLinea`, `codificar`,
-   `limpiarTexto` y `leerArchivoYObtenerObjeto` están disponibles globalmente
-   desde `js/utils.js` (y en `window.__TF_UTILS__`). */
-function leerArchivoYObtenerObjeto(archivo) {
 
-  return new Promise((resolve, reject) => {
