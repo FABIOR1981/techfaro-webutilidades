@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O.V.O.</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" async></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" async></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="../css/comunes.css">
+	<link rel="stylesheet" href="../css/ovo.css">
+</head>
+<body>
+ <div class="container-flex">
+    <div class="container" id="contIzq">
+       
+    </div>
+	<div class="container"id="contDer">
+        <h1>Cuestionario O.V.O.</h1>
+		<div class="fec">
+		  <label for="fechaingreso">Fecha:</label>
+		  <input type="date" id="fechaingreso" name="fechaingreso" min="1900-01-01" max="2033-12-31">
+		</div>
+		
+        <form id="myForm">
+			<div class="ingreso">
+					<label for="name">Nombre:</label>
+					<input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
+					
+					<label for="name">Cédula:</label>
+					<input type="text" id="cedula" name="cedula" placeholder="Ingrese su cédula" required>
+				
+			</div>	
+            <ul id="preguntas"></ul>
+        </form>
+        <button id="btnContarRespuestas" onclick="contarRespuestas()">Contar respuestas</button>
+        
+		<button id="btnImprimir" onclick="imprimirLo('contDer')">Imprimir</button>
+		
+        <div id="resultados">
+            <table id="tablaResultados">
+                <tbody id="tbodyResultados"></tbody>
+            </table>
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+	<script src="../js/funcGral.js"></script>
+    <script src="../js/Ovo.js"></script>
+</div>
+	  	<footer>
+			<p>Copyright © 2024 TechFaRo. Todos los derechos reservados.</p>
+		</footer>
+</body>
+</html>

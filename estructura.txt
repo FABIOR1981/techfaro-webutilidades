@@ -1,0 +1,44 @@
+Listado de rutas de carpetas para el volumen Nuevo vol
+El número de serie del volumen es 58C1-C3E2
+D:.
+¦   diagrama.txt
+¦   estructura.txt
+¦   index.html
+¦   
++---ArchivosPruebas
+¦       cedulas.txt
+¦       postulantes.txt
+¦       
++---css
+¦       bolillero.css
+¦       bolilleroDatos.css
+¦       comunes.css
+¦       login.css
+¦       mbti - copia.css
+¦       mbti.css
+¦       menu.css
+¦       ovo.css
+¦       
++---html
+¦       bolillero.html
+¦       bolillerocompleto.html
+¦       data_entry_mbti.html
+¦       mbti.html
+¦       mbti_para_imprimir.html
+¦       menu.html
+¦       ovo.html
+¦       
++---imagenes
+¦       fondo1.jpg
+¦       
++---js
+        bolillero.js
+        bolilleroDatos.js
+        data_entry_mbti.js
+        funcgral.js
+        login.js
+        mbti.js
+        mbti_nuevo.js
+        menu.js
+        ovo.js
+        

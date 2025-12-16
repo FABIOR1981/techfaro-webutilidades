@@ -1,0 +1,102 @@
+/* ======================================= */
+/* Archivo: menu.css (Mejorado - Definitivo) */
+/* ======================================= */
+
+/* Contenedor del menú: Se mantiene el fondo blanco en `comunes.css` para #contIzq */
+.container {
+    /* Mantenemos solo lo necesario si no está definido en comunes */
+    /* background-color: #fff; */
+    /* width: 300px; */
+}
+
+/* ---------------------------------- */
+/* Estilos Principales del Menú (NAV) */
+/* ---------------------------------- */
+nav {
+    background-color: transparent; /* Permite ver el fondo semitransparente de #contIzq */
+    padding: 0;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    /* Eliminamos el gap para que los items estén pegados y se vean como una barra lateral */
+    gap: 0; 
+}
+
+.menu-item {
+    position: relative;
+    /* Separador sutil entre items principales */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+}
+
+/* ---------------------------------- */
+/* Estilos de Enlaces (Items Principales: Cuestionarios, Bolilleros) */
+/* ---------------------------------- */
+.menu-item a {
+    display: block;
+    padding: 15px 20px;
+    text-decoration: none;
+    
+    /* Fondo y texto oscuros para un aspecto moderno y buen contraste */
+    color: #f0f0f0; /* Color gris claro para el texto */
+    background-color: #444; /* Fondo gris oscuro */
+    
+    transition: all 0.3s ease;
+    font-size: 1.1rem; /* Buen tamaño para lectura */
+    font-weight: 500;
+}
+
+/* Efecto Hover para Items Principales (Hover/Foco) */
+.menu-item:hover > a, .menu-item a:focus {
+    /* Uso del color primario (verde) al hacer hover para unificar la interacción */
+    background-color: var(--primary-color); 
+    color: white; /* Texto blanco sobre el verde */
+}
+
+/* ---------------------------------- */
+/* Estilos del Submenú (OVO, MBTI, etc.) */
+/* ---------------------------------- */
+.submenu {
+    display: none;
+    position: absolute;
+    
+    /* Configuración para que el submenú se despliegue lateralmente */
+    top: 0; /* Alineado con el borde superior del ítem padre */
+    left: 100%; /* Desplegado a la derecha del ítem padre */
+    
+    min-width: 200px; 
+    z-index: 10;
+    list-style: none;
+    padding: 5px 0;
+    margin: 0;
+    
+    background-color: #333; /* Fondo más oscuro para el submenú */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    border-radius: var(--border-radius);
+}
+
+/* Muestra el submenú al hacer hover sobre el ítem principal */
+.menu-item:hover > .submenu {
+    display: block;
+}
+
+/* Estilos de los ítems del Submenú */
+.submenu li a {
+    padding: 10px 15px;
+    font-size: 1rem;
+    color: #fff; /* Texto blanco */
+    background-color: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.submenu li:last-child a {
+    border-bottom: none; 
+}
+
+/* Efecto Hover para ítems del Submenú */
+.submenu li a:hover, .submenu li a:focus {
+    background-color: var(--primary-color); /* Color principal (verde) al pasar el ratón */
+    color: white;
+}

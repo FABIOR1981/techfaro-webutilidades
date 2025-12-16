@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario</title>
+
+    <link rel="stylesheet" href="../css/mbti.css">
+</head>
+<body>
+    <div class="main-content">
+        <h1>Cuestionario de Personalidad MBTI (100 Items)</h1>
+        
+        <p style="text-align: center; font-style: italic; color: #555;">
+        </p>
+
+        <form id="miFormulario" onsubmit="event.preventDefault(); calcularResultado();">
+            
+            <div id="preguntas">
+                </div>
+
+            <div id="resultado">
+                Presiona "Calcular Resultado" una vez que hayas respondido las 100 preguntas.
+            </div>
+            
+            <div class="botones-container">
+                <button type="button" id="btnAutoCompletar" onclick="autoCompletar()">Auto-Completar (Test)</button>
+                
+                <button type="submit">Calcular Resultado</button>
+				
+                <button id="btnImprimir" type="button" onclick="window.print()">Imprimir Cuestionario</button>
+				<button type="button" id="btnImprimirVacio" onclick="window.open('mbti_para_imprimir.html', '_blank')">Imprimir Vacío</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="../js/mbti.js"></script>
+</body>
+</html>

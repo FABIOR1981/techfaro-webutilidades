@@ -1,0 +1,25 @@
+webUtilidades
+├── index.html
+├──html/
+│	├──bolillero.html
+│	├──bolillerocompleto.html
+│	├──mbti.html
+│	├──menu.html
+│	└──ovo.html
+├──css/
+│	├──login.css
+│	├──menu.css
+│	├──bolillero.css
+│	├──mbti.css
+│	├──bolillerocompleto.css
+│	└──ovo.css
+├──	js/
+│	├──funcGral.js
+│	├──bolillero.js
+│	├──bolilleroDatos.js
+│	├──login.js
+│	├──menu.js
+│	└──ovo.js
+└──ArchivosPruebas/
+	├──cedulas.txt
+	└──postulantes.txt

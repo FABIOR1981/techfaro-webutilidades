@@ -1,0 +1,109 @@
+:root {
+    --primary-color: #4CAF50;
+    --secondary-color: #F5F5F5;
+    --text-color: #333;
+    --border-radius: 10px;
+    --font-family: 'Roboto', sans-serif;
+}
+
+body {
+    font-family: var(--font-family);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+	
+	background-image: url("../imagenes/fondo1.jpg");
+    background-repeat: repeat;
+    background-position: center center;
+    background-size: cover;
+	height: 100vh; /* Para que el fondo ocupe toda la altura de la pantalla */
+}
+
+.container-flex {
+    display: flex;
+    flex-grow: 1;
+}
+
+.container {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    flex-grow: 1;
+}
+
+
+#contIzq {
+    width: 15%;
+    /*background-color: var(--secondary-color);*/
+	background-color: rgba(0, 0, 0, 0.1); /* Con 20% de opacidad */
+	
+}
+
+#contDer {
+    width: 85%;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+footer {
+    padding: 10px;
+    text-align: right;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%; /* Se generaliza el ancho de la tabla */
+}
+
+th, td {
+    border: 1px solid #ddd; /* Se generaliza el color del borde */
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tr {
+    background-color: #f2f2f2;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        padding: 10px;
+    }
+}

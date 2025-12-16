@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bolillero</title>
+	<link rel="stylesheet" href="../css/comunes.css">
+    <link rel="stylesheet" href="../css/bolilleroDatos.css">
+</head>
+<body>
+<div class="container-flex">
+    <div class="container" id="contIzq">
+       
+    </div>
+	<div class="container"id="contDer">
+	<h1>Bolillero - Selector de Cédulas Aleatorias</h1>
+        <input type="file" id="archivoCedulas" accept=".txt">
+        <label for="cantidadCedulasPorGrupo">Cantidad por grupo:</label>
+        <input type="number" id="cantidadCedulasPorGrupo" min="1" required>
+        <button onclick="generarListas()">Generar</button>
+		<button id="btnImprimir" onclick="Imprimir()">Imprimir</button>
+
+        <div id="resultados">
+            <ul id="listaCedulas"></ul>
+            <p id="mensaje"></p>
+        </div>
+	</div>
+    <script src="../js/funcGral.js"></script>
+	<script src="../js/bolilleroDatos.js"></script>
+</div>
+    <footer>
+        <p>Copyright © 2024 TechFaRo. Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carga de Datos MBTI - Modo Manual</title>
+    <link rel="stylesheet" href="../css/mbti.css"> 
+    <style>
+        /* Estilos esenciales para la interfaz de entrada numérica */
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 columnas para eficiencia */
+            gap: 5px;
+        }
+        .input-grid input {
+            width: 90%; 
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1.1em;
+        }
+        .data-group {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .main-content {
+            max-width: 1200px; 
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .botones-container button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+        /* Estilos para la sección de identificación global */
+        .identificacion-global-group {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid #3498db; 
+            border-radius: 4px;
+            background-color: #ecf0f1;
+        }
+        .identificacion-global-group input {
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 5px;
+        }
+        .identificacion-global-group label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <h1>Carga de Resultados MBTI (Modos Manual y Directo)</h1>
+        
+        <div class="identificacion-global-group">
+            <h2 style="color: #3498db; margin-top: 0;">Identificación del Candidato</h2>
+            <div style="display: flex; gap: 20px;">
+                <div style="flex: 1;">
+                    <label for="nombreGlobal">Nombre Completo:</label>
+                    <input type="text" id="nombreGlobal" placeholder="Nombre y Apellido">
+                </div>
+                <div style="flex: 1;">
+                    <label for="cedulaGlobal">Cédula/DNI:</label>
+                    <input type="text" id="cedulaGlobal" placeholder="Sin puntos ni guiones">
+                </div>
+            </div>
+        </div>
+        <div style="border: 2px solid #4CAF50; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h2 style="margin-top: 0; color: #4CAF50;">Modo 1: Carga Directa de Puntuación Neta (±50)</h2>
+            <p style="text-align: center; font-style: italic; color: #555;">
+                Ingrese el resultado de cada dimensión (rango: **-50** a **+50**).
+            </p>
+            <form id="directEntryForm" onsubmit="event.preventDefault(); calcularResultadoDirecto();">
+                <div style="display: flex; justify-content: space-around; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                    <div>
+                        <label for="netEI">E/I:</label>
+                        <input type="number" id="netEI" min="-50" max="50" placeholder="E/I" style="width: 80px;" required>
+                    </div>
+                    <div>
+                        <label for="netSN">S/N:</label>
+                        <input type="number" id="netSN" min="-50" max="50" placeholder="S/N" style="width: 80px;" required>
+                    </div>
+                    <div>
+                        <label for="netTF">T/F:</label>
+                        <input type="number" id="netTF" min="-50" max="50" placeholder="T/F" style="width: 80px;" required>
+                    </div>
+                    <div>
+                        <label for="netJP">J/P:</label>
+                        <input type="number" id="netJP" min="-50" max="50" placeholder="J/P" style="width: 80px;" required>
+                    </div>
+                </div>
+                <div class="botones-container" style="text-align: center;">
+                    <button type="submit" style="background-color: #f39c12; color: white;">Calcular Resultado Directo</button>
+                </div>
+            </form>
+        </div>
+        <h2 style="color: #333;">Modo 2: Carga de 100 Respuestas (Raw Score 1-5)</h2>
+        <p style="text-align: center; font-style: italic; color: #555;">
+            Ingrese los valores de 1 a 5 para cada una de las 100 preguntas.
+        </p>
+
+        <form id="dataEntryForm" onsubmit="event.preventDefault(); calcularResultadoManual();">
+            
+            <div id="dataInputs">
+                </div>
+
+            <div class="botones-container" style="text-align: center;">
+                <button type="submit" style="background-color: #4CAF50; color: white;">Calcular Resultado Manual</button>
+                <button type="button" onclick="imprimirResultado()" style="background-color: #3498db; color: white;">Imprimir Solo Resultado</button>
+            </div>
+        </form>
+        <div id="resultado" style="margin-top: 30px; padding: 20px; border-top: 2px dashed #ccc;">
+            El resultado se mostrará aquí.
+        </div>
+    </div>
+
+	<script src="../js/funcGral.js"></script>
+    <script src="../js/data_entry_mbti.js"></script>
+</body>
+</html>

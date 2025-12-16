@@ -1,0 +1,75 @@
+/* OVO.CSS */
+
+.container {
+    background-color: #fff;
+    width: 300px;
+}
+
+
+
+/* Estilos para tablas */
+
+/* Estilos para listas sin viñetas */
+ul {
+    list-style: none;
+    line-height: 2.0;
+    padding: 0;
+}
+
+li {
+    padding: 10px;
+}
+
+li:nth-child(odd) {
+    background-color: #d8d8d8;
+}
+
+li:nth-child(even) {
+    background-color: #fff;
+}
+
+/* Estilos para elementos de formulario */
+.ingreso {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.ingreso input {
+    flex: 1;
+    padding: 1rem;
+}
+
+.fec {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 1rem;
+}
+
+footer {
+    float: right;
+    clear: both;
+}
+
+@media (max-width: 768px) {
+    .ingreso {
+        flex-direction: column;
+    }
+}
+
+
+/* ------------------------------------------- */
+/* MODIFICACIÓN PARA EL FONDO DEL GRÁFICO (OVO) */
+/* ------------------------------------------- */
+
+/* Asigna un fondo blanco al canvas del gráfico, ya que por defecto es transparente. */
+#myChart {
+    background-color: white; /* Color del fondo del gráfico */
+    padding: 15px; /* Espacio interior alrededor del gráfico */
+    border-radius: 8px; /* Esquinas redondeadas (opcional) */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera (opcional) */
+}
+
