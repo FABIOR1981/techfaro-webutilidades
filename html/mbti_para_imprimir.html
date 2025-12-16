@@ -130,7 +130,14 @@
         /* Estilos de impresión para A4 */
         @page {
             size: A4 portrait;
-            margin: 15mm;
+            /* Margen superior más grande por defecto (aplica a todas las páginas)
+               y se reduce en la primera página mediante @page :first */
+            margin: 25mm 15mm 15mm 15mm; /* top right bottom left */
+        }
+
+        /* Primera página con margen superior ligeramente menor */
+        @page :first {
+            margin-top: 15mm;
         }
 
         @media print {
