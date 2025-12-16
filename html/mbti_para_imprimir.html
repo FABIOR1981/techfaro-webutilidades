@@ -126,6 +126,73 @@
             font-weight: bold;
             text-align: center;
         }
+
+        /* Estilos de impresión para A4 */
+        @page {
+            size: A4 portrait;
+            margin: 15mm;
+        }
+
+        @media print {
+            html, body {
+                height: auto;
+                background: #fff !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+
+            body {
+                padding: 0;
+                margin: 0;
+                display: block;
+            }
+
+            .main-content {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                width: auto !important;
+                max-width: none !important;
+                margin: 0 !important;
+                padding: 10mm !important;
+                background: #fff !important;
+            }
+
+            /* Usar dos columnas en A4 para ahorrar espacio */
+            #preguntas {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 6px !important;
+            }
+
+            .pregunta {
+                background: transparent !important;
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+                padding: 6px !important;
+                font-size: 11px !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            .pregunta h2 {
+                font-size: 0.95em !important;
+                margin-bottom: 6px !important;
+            }
+
+            .opciones-radio {
+                justify-content: space-between;
+                gap: 4px;
+            }
+
+            /* Ocultar elementos interactivos que no aplican en impresión */
+            .botones-container, button { display: none !important; }
+
+            #resultado {
+                border: none !important;
+                background: transparent !important;
+                padding: 0 0 8px 0 !important;
+                font-size: 12px !important;
+            }
+        }
     </style>
 </head>
 <body>
