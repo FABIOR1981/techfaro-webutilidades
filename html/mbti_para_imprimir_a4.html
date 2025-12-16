@@ -27,10 +27,8 @@
         .page::before { content: ''; display:block; height: 6mm; }
 
         /* Encabezado imprimible por hoja (líneas para completar a mano) */
-        .sheet-header-print { display:flex; gap:12px; align-items:center; margin-bottom:6px; font-size:10pt; }
-        .sheet-header-print .print-name { flex: 1 1 auto; min-width:160px; }
-        .sheet-header-print .print-right { display:flex; gap:12px; align-items:center; margin-left:auto; }
-        .sheet-header-print .print-line { display:inline-block; min-width:140px; border-bottom:1px solid #000; padding-bottom:3px; color: #000; }
+        .sheet-header-print { display:flex; gap:8px; align-items:center; margin-bottom:6px; font-size:10pt; flex-wrap:wrap; }
+        .sheet-header-print .print-line { display:inline-block; min-width:120px; border-bottom:1px solid #000; padding-bottom:3px; color: #000; }
         .sheet-header-print .print-label { margin-right:6px; color:#222; font-weight:500; }
         .sheet-header-print .print-field-small { min-width:90px; }
         @media screen {
@@ -66,13 +64,12 @@
         <header>
             <h1>Cuestionario - Versión Imprimible A4</h1>
             
-            <div class="global-header">
-                <label style="flex:1 1 auto; min-width:200px;">Nombre: <input id="globalNombre" type="text" style="width:100%; max-width:100%;"></label>
-                <div style="display:flex; gap:8px; margin-left:auto; align-items:center;">
-                    <label style="white-space:nowrap">Cédula: <input id="globalCedula" type="text" style="width:120px;"></label>
-                    <label style="white-space:nowrap">Fecha: <input id="globalFecha" type="date" style="width:140px;"></label>
-                    <label style="font-size:0.9em; margin-left:8px;"><input type="checkbox" id="copyAll" checked> Copiar a todas las hojas</label>
-                </div>
+            <div class="global-header" style="margin-top:6px; display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap;">
+                <label>Nombre: <input id="globalNombre" type="text" style="width:220px;"></label>
+                <label>Cédula: <input id="globalCedula" type="text" style="width:120px;"></label>
+                <label>Fecha: <input id="globalFecha" type="date" style="width:150px;"></label>
+                <label style="font-size:0.9em;"><input type="checkbox" id="copyAll" checked> Copiar a todas las hojas</label>
+            </div>
                 <label>Nombre: <input id="globalNombre" type="text" style="width:220px;"></label>
                 <label>Cédula: <input id="globalCedula" type="text" style="width:120px;"></label>
                 <label>Fecha: <input id="globalFecha" type="date" style="width:150px;"></label>
@@ -229,11 +226,9 @@
             const fechaVal = (copyAll && globalFecha) ? escapeHtml(globalFecha) : '';
             headerDiv.innerHTML = `
                 <div class="sheet-header-print">
-                    <div class="print-name"><span class="print-label">Nombre:</span> <span class="print-line print-field">${nombreVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
-                    <div class="print-right">
-                        <div><span class="print-label">Cédula:</span> <span class="print-line print-field-small">${cedulaVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
-                        <div><span class="print-label">Fecha:</span> <span class="print-line print-field-small">${fechaVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
-                    </div>
+                    <div><span class="print-label">Nombre:</span> <span class="print-line print-field">${nombreVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+                    <div><span class="print-label">Cédula:</span> <span class="print-line print-field-small">${cedulaVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+                    <div><span class="print-label">Fecha:</span> <span class="print-line print-field-small">${fechaVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
                 </div>
             `;
             page.appendChild(headerDiv);
