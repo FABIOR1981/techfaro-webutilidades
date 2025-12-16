@@ -29,7 +29,8 @@
         /* Encabezado imprimible por hoja (líneas para completar a mano) */
         /* VERSIÓN: Oculto en pantalla y mostrado solo al imprimir (como en la primera versión) */
         .sheet-header-print { display:none !important; gap:8px; align-items:center; margin-bottom:6px; font-size:10pt; flex-wrap:wrap; }
-        .sheet-header-print .print-line { display:inline-block; min-width:120px; border-bottom:1px solid #000; padding-bottom:3px; color: #000; }
+        .sheet-header-print .print-line { display:inline-block; min-width:220px; border-bottom:1px solid #000; padding-bottom:3px; color: #000; }
+        .sheet-header-print .print-field { min-width:220px; display:inline-block; }
         .sheet-header-print .print-label { margin-right:6px; color:#222; font-weight:500; }
         .sheet-header-print .print-field-small { min-width:90px; }
         @media screen {
@@ -70,7 +71,7 @@
             <h1>Cuestionario - Versión Imprimible A4</h1>
             
             <div class="global-header" style="margin-top:6px; display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap;">
-                <label>Nombre: <input id="globalNombre" type="text" style="width:220px;"></label>
+                <label>Nombre: <input id="globalNombre" type="text" style="width:320px;"></label>
                 <label>Cédula: <input id="globalCedula" type="text" style="width:120px;"></label>
                 <label>Fecha: <input id="globalFecha" type="date" style="width:150px;"></label>
                 <label style="font-size:0.9em;"><input type="checkbox" id="copyAll" checked> Copiar a todas las hojas</label>
