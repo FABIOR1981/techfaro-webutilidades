@@ -50,430 +50,307 @@
             gap: 15px;
             padding: 0;
         }
-        /* Contenedor que representa una página imprimible */
-        .print-page {
-            /* altura automática; para impresión cada .print-page se separará */
-            width: 100%;
-            box-sizing: border-box;
-            page-break-after: always;
+
+        .pregunta {
+            border: 1px solid #C8E6C9; 
+            padding: 15px;
+            background-color: #F1F8E9; /* Fondo muy claro para la pregunta */
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
         }
 
-        <!DOCTYPE html>
-        <html lang="es">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Cuestionario MBTI 100 Preguntas</title>
+        .pregunta h2 {
+            margin: 0 0 10px 0;
+            font-size: 1em;
+            font-weight: bold;
+            color: #388E3C; 
+        }
 
-            <style>
-                :root {
-                    --primary-color: #4CAF50; /* Verde principal */
-                    --secondary-color: #F5F5F5; /* Gris claro */
-                    --text-color: #333;
-                    --border-radius: 8px;
-                    --font-family: 'Arial', sans-serif;
-                }
-
-                body {
-                    font-family: var(--font-family);
-                    min-height: 100vh;
-                    margin: 0;
-                    padding: 20px;
-                    background-color: #e0e0e0; /* Fondo gris claro */
-                    color: var(--text-color);
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                }
-
-                .main-content {
-                    width: 95%;
-                    max-width: 1200px; 
-                    margin: 0 auto;
-                    padding: 20px;
-                    background-color: white;
-                    border-radius: var(--border-radius);
-                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-                }
-
-                h1 {
-                    text-align: center;
-                    color: var(--primary-color);
-                    margin-bottom: 20px;
-                }
-
-                /* Estilos de la rejilla de preguntas */
-                #preguntas {
-                    display: grid;
-                    /* Crea columnas flexibles que se ajustan al tamaño de la pantalla */
-                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                    gap: 15px;
-                    padding: 0;
-                }
-
-                .pregunta {
-                    border: 1px solid #C8E6C9; 
-                    padding: 15px;
-                    background-color: #F1F8E9; /* Fondo muy claro para la pregunta */
-                    border-radius: 5px;
-                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-                    font-size: 14px;
-                    display: flex;
-                    flex-direction: column;
-                }
-
-                .pregunta h2 {
-                    margin: 0 0 10px 0;
-                    font-size: 1em;
-                    font-weight: bold;
-                    color: #388E3C; 
-                }
-
-                .opciones-radio {
-                    display: flex;
-                    justify-content: space-between; /* Distribuye las 5 opciones */
-                    margin-top: 10px;
-                    user-select: none; /* Evita que se seleccione el texto al hacer clic */
-                }
+        .opciones-radio {
+            display: flex;
+            justify-content: space-between; /* Distribuye las 5 opciones */
+            margin-top: 10px;
+            user-select: none; /* Evita que se seleccione el texto al hacer clic */
+        }
         
-                .opciones-radio label {
-                    display: flex;
-                    flex-direction: column; 
-                    align-items: center;
-                    cursor: pointer;
-                    font-size: 0.9em;
-                    text-align: center;
-                    color: #666;
-                    padding: 5px;
-                }
+        .opciones-radio label {
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.9em;
+            text-align: center;
+            color: #666;
+            padding: 5px;
+        }
 
-                .opciones-radio input[type="radio"] {
-                    margin-top: 5px;
-                    transform: scale(1.2); 
-                    cursor: pointer;
-                }
+        .opciones-radio input[type="radio"] {
+            margin-top: 5px;
+            transform: scale(1.2); 
+            cursor: pointer;
+        }
         
-                /* Botones y Resultado */
-                .botones-container {
-                    display: flex;
-                    justify-content: center;
-                    gap: 20px;
-                    margin-top: 30px;
-                }
+        /* Botones y Resultado */
+        .botones-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
 
-                button {
-                    background-color: var(--primary-color);
-                    color: white;
-                    padding: 12px 25px;
-                    border: none;
-                    border-radius: var(--border-radius);
-                    cursor: pointer;
-                    transition: background-color 0.3s ease;
-                    font-size: 1.1em;
-                    font-weight: bold;
-                }
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
 
-                button:hover {
-                    background-color: #388E3C;
-                }
+        button:hover {
+            background-color: #388E3C;
+        }
 
-                #resultado {
-                    margin-top: 20px;
-                    padding: 20px;
-                    border: 2px solid #2E7D32;
-                    background-color: #DCEDC8; /* Fondo de resultado */
-                    border-radius: 5px;
-                    font-weight: bold;
-                    text-align: center;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="main-content">
-                <h1>Cuestionario</h1>
+        #resultado {
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px solid #2E7D32;
+            background-color: #DCEDC8; /* Fondo de resultado */
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content">
+        <h1>Cuestionario</h1>
 
-                <form id="miFormulario" onsubmit="event.preventDefault(); calcularResultado();">
+        <form id="miFormulario" onsubmit="event.preventDefault(); calcularResultado();">
             
-                    <div id="preguntas">
-                        </div>
+            <div id="preguntas">
+                </div>
 
             
-                </form>
-            </div>
+        </form>
+    </div>
 
-            <script>
-                // Función auxiliar para obtener el nombre de la característica basado en el grupo
-                function getCaracteristica(grupo, score, maxScore) {
-                    const mitad = maxScore / 2;
-                    switch (grupo) {
-                        // Si el puntaje es ALTO, se inclina por la primera letra (E, S, T, J)
-                        case 1: // E/I
-                            return score > mitad ? 'E (Extroversión)' : 'I (Introversión)';
-                        case 2: // S/N
-                            return score > mitad ? 'S (Sensación)' : 'N (Intuición)';
-                        case 3: // T/F
-                            return score > mitad ? 'T (Pensamiento)' : 'F (Sentimiento)';
-                        case 4: // J/P
-                            return score > mitad ? 'J (Juicio)' : 'P (Percepción)';
-                        default:
-                            return 'Desconocido';
-                    }
-                }
+    <script>
+        // Función auxiliar para obtener el nombre de la característica basado en el grupo
+        function getCaracteristica(grupo, score, maxScore) {
+            const mitad = maxScore / 2;
+            switch (grupo) {
+                // Si el puntaje es ALTO, se inclina por la primera letra (E, S, T, J)
+                case 1: // E/I
+                    return score > mitad ? 'E (Extroversión)' : 'I (Introversión)';
+                case 2: // S/N
+                    return score > mitad ? 'S (Sensación)' : 'N (Intuición)';
+                case 3: // T/F
+                    return score > mitad ? 'T (Pensamiento)' : 'F (Sentimiento)';
+                case 4: // J/P
+                    return score > mitad ? 'J (Juicio)' : 'P (Percepción)';
+                default:
+                    return 'Desconocido';
+            }
+        }
 
-                // =================================================================
-                // DEFINICIÓN DEL ARRAY DE PREGUNTAS (100 PREGUNTAS: 25 por grupo)
-                // Puntajes de 1 (Muy en desacuerdo) a 5 (Muy de acuerdo). 
-                // Un puntaje alto siempre indica la primera letra (E, S, T, J).
-                // =================================================================
+        // =================================================================
+        // DEFINICIÓN DEL ARRAY DE PREGUNTAS (100 PREGUNTAS: 25 por grupo)
+        // Puntajes de 1 (Muy en desacuerdo) a 5 (Muy de acuerdo). 
+        // Un puntaje alto siempre indica la primera letra (E, S, T, J).
+        // =================================================================
 
-                const grupo1_EI = [
-                    { texto: "Me siento lleno de energía después de socializar.", grupo: 1 },
-                    { texto: "Prefiero participar activamente en conversaciones de grupo.", grupo: 1 },
-                    { texto: "Me resulta fácil iniciar una conversación con desconocidos.", grupo: 1 },
-                    { texto: "A menudo busco la compañía de otros.", grupo: 1 },
-                    { texto: "Me gustan los ambientes ruidosos y concurridos.", grupo: 1 },
-                    { texto: "Soy más propenso a hablar que a escuchar.", grupo: 1 },
-                    { texto: "Disfruto expresando mis ideas abiertamente en público.", grupo: 1 },
-                    { texto: "Me considero una persona sociable y animada.", grupo: 1 },
-                    { texto: "Necesito mucha interacción social para sentirme bien.", grupo: 1 },
-                    { texto: "El aislamiento social me cansa rápidamente.", grupo: 1 },
-                    { texto: "Me adapto fácilmente a nuevos grupos sociales.", grupo: 1 },
-                    { texto: "Mis amigos me consideran extrovertido.", grupo: 1 },
-                    { texto: "Tomo la iniciativa en actividades sociales.", grupo: 1 },
-                    { texto: "Prefiero hacer cosas con mucha gente.", grupo: 1 },
-                    { texto: "Me gusta ser el centro de atención.", grupo: 1 },
-                    { texto: "Soy muy accesible para la mayoría de la gente.", grupo: 1 },
-                    { texto: "Me gusta debatir temas complejos en voz alta.", grupo: 1 },
-                    { texto: "Las reuniones grandes me resultan energizantes.", grupo: 1 },
-                    { texto: "Me aburro si estoy solo por mucho tiempo.", grupo: 1 },
-                    { texto: "Me expreso con facilidad y entusiasmo.", grupo: 1 },
-                    { texto: "Suelo actuar antes de pensar demasiado.", grupo: 1 },
-                    { texto: "Soy impulsivo y me gusta la espontaneidad social.", grupo: 1 },
-                    { texto: "La rutina me agobia; prefiero la novedad y la acción.", grupo: 1 },
-                    { texto: "Tengo un círculo amplio de conocidos.", grupo: 1 },
-                    { texto: "Siempre tengo algo que decir.", grupo: 1 }
-                ];
+        const grupo1_EI = [
+            { texto: "Me siento lleno de energía después de socializar.", grupo: 1 },
+            { texto: "Prefiero participar activamente en conversaciones de grupo.", grupo: 1 },
+            { texto: "Me resulta fácil iniciar una conversación con desconocidos.", grupo: 1 },
+            { texto: "A menudo busco la compañía de otros.", grupo: 1 },
+            { texto: "Me gustan los ambientes ruidosos y concurridos.", grupo: 1 },
+            { texto: "Soy más propenso a hablar que a escuchar.", grupo: 1 },
+            { texto: "Disfruto expresando mis ideas abiertamente en público.", grupo: 1 },
+            { texto: "Me considero una persona sociable y animada.", grupo: 1 },
+            { texto: "Necesito mucha interacción social para sentirme bien.", grupo: 1 },
+            { texto: "El aislamiento social me cansa rápidamente.", grupo: 1 },
+            { texto: "Me adapto fácilmente a nuevos grupos sociales.", grupo: 1 },
+            { texto: "Mis amigos me consideran extrovertido.", grupo: 1 },
+            { texto: "Tomo la iniciativa en actividades sociales.", grupo: 1 },
+            { texto: "Prefiero hacer cosas con mucha gente.", grupo: 1 },
+            { texto: "Me gusta ser el centro de atención.", grupo: 1 },
+            { texto: "Soy muy accesible para la mayoría de la gente.", grupo: 1 },
+            { texto: "Me gusta debatir temas complejos en voz alta.", grupo: 1 },
+            { texto: "Las reuniones grandes me resultan energizantes.", grupo: 1 },
+            { texto: "Me aburro si estoy solo por mucho tiempo.", grupo: 1 },
+            { texto: "Me expreso con facilidad y entusiasmo.", grupo: 1 },
+            { texto: "Suelo actuar antes de pensar demasiado.", grupo: 1 },
+            { texto: "Soy impulsivo y me gusta la espontaneidad social.", grupo: 1 },
+            { texto: "La rutina me agobia; prefiero la novedad y la acción.", grupo: 1 },
+            { texto: "Tengo un círculo amplio de conocidos.", grupo: 1 },
+            { texto: "Siempre tengo algo que decir.", grupo: 1 }
+        ];
 
-                const grupo2_SN = [
-                    { texto: "Me concentro en los hechos y detalles tal como son.", grupo: 2 },
-                    { texto: "Confío en la experiencia y los datos verificables.", grupo: 2 },
-                    { texto: "Me preocupo más por el presente que por las posibilidades futuras.", grupo: 2 },
-                    { texto: "Soy práctico y me gusta lo concreto.", grupo: 2 },
-                    { texto: "Prefiero instrucciones claras y directas, paso a paso.", grupo: 2 },
-                    { texto: "Mi memoria para los detalles es excelente.", grupo: 2 },
-                    { texto: "Valoro el sentido común y la realidad inmediata.", grupo: 2 },
-                    { texto: "Busco soluciones que ya han sido probadas.", grupo: 2 },
-                    { texto: "Me gusta usar métodos y herramientas establecidos.", grupo: 2 },
-                    { texto: "Disfruto trabajando con datos tangibles.", grupo: 2 },
-                    { texto: "Encuentro que los temas abstractos son irrelevantes.", grupo: 2 },
-                    { texto: "Soy observador de lo que sucede a mi alrededor.", grupo: 2 },
-                    { texto: "Soy muy minucioso en mis tareas.", grupo: 2 },
-                    { texto: "Me baso en mis cinco sentidos para tomar decisiones.", grupo: 2 },
-                    { texto: "Prefiero mantener los pies en la tierra.", grupo: 2 },
-                    { texto: "Las metáforas y analogías me confunden.", grupo: 2 },
-                    { texto: "Me gusta ver el panorama completo antes de empezar.", grupo: 2 },
-                    { texto: "Soy bueno siguiendo un plan de trabajo detallado.", grupo: 2 },
-                    { texto: "Las teorías no me interesan mucho, a menos que sean aplicables.", grupo: 2 },
-                    { texto: "Tiendo a ser realista sobre mis expectativas.", grupo: 2 },
-                    { texto: "Recuerdo mejor los procedimientos que las ideas.", grupo: 2 },
-                    { texto: "Me molesta cuando la gente se va por las ramas.", grupo: 2 },
-                    { texto: "Tomo las cosas de forma literal.", grupo: 2 },
-                    { texto: "Busco la certeza en la información.", grupo: 2 },
-                    { texto: "Me enfoco en un problema a la vez, con atención.", grupo: 2 }
-                ];
+        const grupo2_SN = [
+            { texto: "Me concentro en los hechos y detalles tal como son.", grupo: 2 },
+            { texto: "Confío en la experiencia y los datos verificables.", grupo: 2 },
+            { texto: "Me preocupo más por el presente que por las posibilidades futuras.", grupo: 2 },
+            { texto: "Soy práctico y me gusta lo concreto.", grupo: 2 },
+            { texto: "Prefiero instrucciones claras y directas, paso a paso.", grupo: 2 },
+            { texto: "Mi memoria para los detalles es excelente.", grupo: 2 },
+            { texto: "Valoro el sentido común y la realidad inmediata.", grupo: 2 },
+            { texto: "Busco soluciones que ya han sido probadas.", grupo: 2 },
+            { texto: "Me gusta usar métodos y herramientas establecidos.", grupo: 2 },
+            { texto: "Disfruto trabajando con datos tangibles.", grupo: 2 },
+            { texto: "Encuentro que los temas abstractos son irrelevantes.", grupo: 2 },
+            { texto: "Soy observador de lo que sucede a mi alrededor.", grupo: 2 },
+            { texto: "Soy muy minucioso en mis tareas.", grupo: 2 },
+            { texto: "Me baso en mis cinco sentidos para tomar decisiones.", grupo: 2 },
+            { texto: "Prefiero mantener los pies en la tierra.", grupo: 2 },
+            { texto: "Las metáforas y analogías me confunden.", grupo: 2 },
+            { texto: "Me gusta ver el panorama completo antes de empezar.", grupo: 2 },
+            { texto: "Soy bueno siguiendo un plan de trabajo detallado.", grupo: 2 },
+            { texto: "Las teorías no me interesan mucho, a menos que sean aplicables.", grupo: 2 },
+            { texto: "Tiendo a ser realista sobre mis expectativas.", grupo: 2 },
+            { texto: "Recuerdo mejor los procedimientos que las ideas.", grupo: 2 },
+            { texto: "Me molesta cuando la gente se va por las ramas.", grupo: 2 },
+            { texto: "Tomo las cosas de forma literal.", grupo: 2 },
+            { texto: "Busco la certeza en la información.", grupo: 2 },
+            { texto: "Me enfoco en un problema a la vez, con atención.", grupo: 2 }
+        ];
 
-                const grupo3_TF = [
-                    { texto: "La lógica y la razón siempre deben guiar mis decisiones.", grupo: 3 },
-                    { texto: "Me considero una persona objetiva y crítica.", grupo: 3 },
-                    { texto: "Busco la justicia y la equidad por encima de la armonía grupal.", grupo: 3 },
-                    { texto: "Prefiero ser honesto aunque hiera sentimientos.", grupo: 3 },
-                    { texto: "Mi fortaleza reside en el análisis imparcial de los problemas.", grupo: 3 },
-                    { texto: "Al decidir, me baso en principios y reglas.", grupo: 3 },
-                    { texto: "Me resulta fácil ver los errores o fallos en un argumento.", grupo: 3 },
-                    { texto: "Me concentro en la verdad, sin dejarme llevar por la compasión.", grupo: 3 },
-                    { texto: "Las críticas no suelen afectarme personalmente.", grupo: 3 },
-                    { texto: "Suelo ser más reservado con mis emociones.", grupo: 3 },
-                    { texto: "Busco soluciones que sean técnicamente sólidas y eficientes.", grupo: 3 },
-                    { texto: "Creo que el respeto se gana con competencia.", grupo: 3 },
-                    { texto: "La eficiencia es crucial en mi trabajo.", grupo: 3 },
-                    { texto: "Me siento más cómodo debatiendo que consolando.", grupo: 3 },
-                    { texto: "Pienso que los sentimientos entorpecen las decisiones.", grupo: 3 },
-                    { texto: "Mantengo la calma en situaciones de conflicto.", grupo: 3 },
-                    { texto: "Es más importante la verdad que la diplomacia.", grupo: 3 },
-                    { texto: "Soy capaz de ser duro si la situación lo requiere.", grupo: 3 },
-                    { texto: "Mis críticas son directas y al grano.", grupo: 3 },
-                    { texto: "Me enorgullece mi capacidad de razonamiento frío.", grupo: 3 },
-                    { texto: "Trato a todos de la misma manera, aplicando reglas.", grupo: 3 },
-                    { texto: "Me es difícil entender reacciones emocionales exageradas.", grupo: 3 },
-                    { texto: "Soy mejor para solucionar problemas que para mediar.", grupo: 3 },
-                    { texto: "Me mantengo distante de los conflictos personales.", grupo: 3 },
-                    { texto: "La lógica es la herramienta más valiosa.", grupo: 3 }
-                ];
+        const grupo3_TF = [
+            { texto: "La lógica y la razón siempre deben guiar mis decisiones.", grupo: 3 },
+            { texto: "Me considero una persona objetiva y crítica.", grupo: 3 },
+            { texto: "Busco la justicia y la equidad por encima de la armonía grupal.", grupo: 3 },
+            { texto: "Prefiero ser honesto aunque hiera sentimientos.", grupo: 3 },
+            { texto: "Mi fortaleza reside en el análisis imparcial de los problemas.", grupo: 3 },
+            { texto: "Al decidir, me baso en principios y reglas.", grupo: 3 },
+            { texto: "Me resulta fácil ver los errores o fallos en un argumento.", grupo: 3 },
+            { texto: "Me concentro en la verdad, sin dejarme llevar por la compasión.", grupo: 3 },
+            { texto: "Las críticas no suelen afectarme personalmente.", grupo: 3 },
+            { texto: "Suelo ser más reservado con mis emociones.", grupo: 3 },
+            { texto: "Busco soluciones que sean técnicamente sólidas y eficientes.", grupo: 3 },
+            { texto: "Creo que el respeto se gana con competencia.", grupo: 3 },
+            { texto: "La eficiencia es crucial en mi trabajo.", grupo: 3 },
+            { texto: "Me siento más cómodo debatiendo que consolando.", grupo: 3 },
+            { texto: "Pienso que los sentimientos entorpecen las decisiones.", grupo: 3 },
+            { texto: "Mantengo la calma en situaciones de conflicto.", grupo: 3 },
+            { texto: "Es más importante la verdad que la diplomacia.", grupo: 3 },
+            { texto: "Soy capaz de ser duro si la situación lo requiere.", grupo: 3 },
+            { texto: "Mis críticas son directas y al grano.", grupo: 3 },
+            { texto: "Me enorgullece mi capacidad de razonamiento frío.", grupo: 3 },
+            { texto: "Trato a todos de la misma manera, aplicando reglas.", grupo: 3 },
+            { texto: "Me es difícil entender reacciones emocionales exageradas.", grupo: 3 },
+            { texto: "Soy mejor para solucionar problemas que para mediar.", grupo: 3 },
+            { texto: "Me mantengo distante de los conflictos personales.", grupo: 3 },
+            { texto: "La lógica es la herramienta más valiosa.", grupo: 3 }
+        ];
 
-                const grupo4_JP = [
-                    { texto: "Soy una persona organizada y planifico mi trabajo con antelación.", grupo: 4 },
-                    { texto: "Prefiero tener las cosas resueltas y cerradas cuanto antes.", grupo: 4 },
-                    { texto: "Me gusta seguir un horario y una lista de tareas.", grupo: 4 },
-                    { texto: "Trabajo mejor cuando tengo fechas límite claras.", grupo: 4 },
-                    { texto: "No me gusta dejar las decisiones para última hora.", grupo: 4 },
-                    { texto: "Disfruto terminando proyectos y pasando al siguiente.", grupo: 4 },
-                    { texto: "Me siento incómodo con los cambios de último momento.", grupo: 4 },
-                    { texto: "Tengo un plan para casi todo.", grupo: 4 },
-                    { texto: "Mis espacios de trabajo suelen estar ordenados y limpios.", grupo: 4 },
-                    { texto: "Busco la estructura, el orden y la previsibilidad.", grupo: 4 },
-                    { texto: "Creo en hacer el trabajo antes que el ocio (trabajo primero, juego después).", grupo: 4 },
-                    { texto: "Soy puntual y valoro la puntualidad de los demás.", grupo: 4 },
-                    { texto: "Cuando viajo, sigo un itinerario detallado.", grupo: 4 },
-                    { texto: "Me siento mejor una vez que he tomado una decisión final.", grupo: 4 },
-                    { texto: "Me gusta tener las cosas bajo control.", grupo: 4 },
-                    { texto: "La improvisación me estresa.", grupo: 4 },
-                    { texto: "Considero que la planificación es clave para el éxito.", grupo: 4 },
-                    { texto: "Soy muy responsable con mis compromisos.", grupo: 4 },
-                    { texto: "Me molesta la ineficiencia y la desorganización.", grupo: 4 },
-                    { texto: "Prefiero la anticipación a la sorpresa.", grupo: 4 },
-                    { texto: "Mis metas están definidas y son claras.", grupo: 4 },
-                    { texto: "Suelo empezar a trabajar mucho antes de la fecha límite.", grupo: 4 },
-                    { texto: "La ambigüedad me resulta frustrante.", grupo: 4 },
-                    { texto: "Me siento satisfecho cuando mi entorno está en orden.", grupo: 4 },
-                    { texto: "Tengo un sistema para organizar mis cosas.", grupo: 4 }
-                ];
+        const grupo4_JP = [
+            { texto: "Soy una persona organizada y planifico mi trabajo con antelación.", grupo: 4 },
+            { texto: "Prefiero tener las cosas resueltas y cerradas cuanto antes.", grupo: 4 },
+            { texto: "Me gusta seguir un horario y una lista de tareas.", grupo: 4 },
+            { texto: "Trabajo mejor cuando tengo fechas límite claras.", grupo: 4 },
+            { texto: "No me gusta dejar las decisiones para última hora.", grupo: 4 },
+            { texto: "Disfruto terminando proyectos y pasando al siguiente.", grupo: 4 },
+            { texto: "Me siento incómodo con los cambios de último momento.", grupo: 4 },
+            { texto: "Tengo un plan para casi todo.", grupo: 4 },
+            { texto: "Mis espacios de trabajo suelen estar ordenados y limpios.", grupo: 4 },
+            { texto: "Busco la estructura, el orden y la previsibilidad.", grupo: 4 },
+            { texto: "Creo en hacer el trabajo antes que el ocio (trabajo primero, juego después).", grupo: 4 },
+            { texto: "Soy puntual y valoro la puntualidad de los demás.", grupo: 4 },
+            { texto: "Cuando viajo, sigo un itinerario detallado.", grupo: 4 },
+            { texto: "Me siento mejor una vez que he tomado una decisión final.", grupo: 4 },
+            { texto: "Me gusta tener las cosas bajo control.", grupo: 4 },
+            { texto: "La improvisación me estresa.", grupo: 4 },
+            { texto: "Considero que la planificación es clave para el éxito.", grupo: 4 },
+            { texto: "Soy muy responsable con mis compromisos.", grupo: 4 },
+            { texto: "Me molesta la ineficiencia y la desorganización.", grupo: 4 },
+            { texto: "Prefiero la anticipación a la sorpresa.", grupo: 4 },
+            { texto: "Mis metas están definidas y son claras.", grupo: 4 },
+            { texto: "Suelo empezar a trabajar mucho antes de la fecha límite.", grupo: 4 },
+            { texto: "La ambigüedad me resulta frustrante.", grupo: 4 },
+            { texto: "Me siento satisfecho cuando mi entorno está en orden.", grupo: 4 },
+            { texto: "Tengo un sistema para organizar mis cosas.", grupo: 4 }
+        ];
 
 
-                // Array principal combinando todos los grupos (100 preguntas)
-                const preguntas = [...grupo1_EI, ...grupo2_SN, ...grupo3_TF, ...grupo4_JP];
+        // Array principal combinando todos los grupos (100 preguntas)
+        const preguntas = [...grupo1_EI, ...grupo2_SN, ...grupo3_TF, ...grupo4_JP];
 
-                // =================================================================
-                // FUNCIÓN DE RENDERIZADO (MUESTRA LAS PREGUNTAS EN EL HTML)
-                // =================================================================
+        // =================================================================
+        // FUNCIÓN DE RENDERIZADO (MUESTRA LAS PREGUNTAS EN EL HTML)
+        // =================================================================
 
-                function renderizarPreguntas() {
-                    const contenedorPreguntas = document.getElementById('preguntas');
-                    contenedorPreguntas.innerHTML = ''; 
+        function renderizarPreguntas() {
+            const contenedorPreguntas = document.getElementById('preguntas');
+            contenedorPreguntas.innerHTML = ''; 
 
-                    const labels = ["1 (Muy en desacuerdo)", "2", "3 (Neutro)", "4", "5 (Muy de acuerdo)"];
+            const labels = ["1 (Muy en desacuerdo)", "2", "3 (Neutro)", "4", "5 (Muy de acuerdo)"];
 
-                    preguntas.forEach((pregunta, index) => {
-                        const numeroPregunta = index + 1;
-                        const divPregunta = document.createElement('div');
-                        divPregunta.classList.add('pregunta');
+            preguntas.forEach((pregunta, index) => {
+                const numeroPregunta = index + 1;
+                const divPregunta = document.createElement('div');
+                divPregunta.classList.add('pregunta');
 
-                        const titulo = document.createElement('h2');
-                        titulo.textContent = `${numeroPregunta}. ${pregunta.texto}`;
-                        divPregunta.appendChild(titulo);
+                const titulo = document.createElement('h2');
+                titulo.textContent = `${numeroPregunta}. ${pregunta.texto}`;
+                divPregunta.appendChild(titulo);
 
-                        const divOpciones = document.createElement('div');
-                        divOpciones.classList.add('opciones-radio');
+                const divOpciones = document.createElement('div');
+                divOpciones.classList.add('opciones-radio');
 
-                        for (let i = 1; i <= 5; i++) {
-                            const label = document.createElement('label');
-                            // Mostrar solo el número, y el texto descriptivo si existe
-                            const textoPrincipal = labels[i-1].includes('(') ? labels[i-1].split(' ')[0] : labels[i-1];
-                            const textoSecundario = labels[i-1].includes('(') ? `<br><span style="font-weight: normal; font-size: 0.75em;">(${labels[i-1].split('(')[1].replace(')', '')})</span>` : '';
+                for (let i = 1; i <= 5; i++) {
+                    const label = document.createElement('label');
+                    // Mostrar solo el número, y el texto descriptivo si existe
+                    const textoPrincipal = labels[i-1].includes('(') ? labels[i-1].split(' ')[0] : labels[i-1];
+                    const textoSecundario = labels[i-1].includes('(') ? `<br><span style="font-weight: normal; font-size: 0.75em;">(${labels[i-1].split('(')[1].replace(')', '')})</span>` : '';
                     
-                            label.innerHTML = `
-                                <input type="radio" name="pregunta${numeroPregunta}" value="${i}" required>
-                                ${textoPrincipal}
-                                ${textoSecundario}
-                            `;
-                            divOpciones.appendChild(label);
-                        }
-                
-                        divPregunta.appendChild(divOpciones);
-                        contenedorPreguntas.appendChild(divPregunta);
-                    });
-                }
-
-                // =================================================================
-                // LÓGICA DE CÁLCULO DE RESULTADOS
-                // =================================================================
-
-                function calcularResultado() {
-                    const resultadoDiv = document.getElementById('resultado');
-            
-                    // El puntaje máximo por grupo es 25 preguntas * 5 puntos = 125
-                    const maxScorePerGroup = 125;
-                    let resultadosPorGrupo = { 1: 0, 2: 0, 3: 0, 4: 0 }; 
-                    let preguntaFaltante = -1;
-
-                    // 1. Recorrer y validar respuestas
-                    for (let i = 1; i <= preguntas.length; i++) {
-                        const radios = document.getElementsByName(`pregunta${i}`);
-                        let preguntaRespondida = false;
-                        let valorPregunta = 0;
-                
-                        // Limpiar estilo de error previo
-                        if(radios[0] && radios[0].closest('.pregunta')) {
-                            radios[0].closest('.pregunta').style.border = '1px solid #C8E6C9'; 
-                        }
-
-                        for (let j = 0; j < radios.length; j++) {
-                            if (radios[j].checked) {
-                                valorPregunta = parseInt(radios[j].value);
-                                preguntaRespondida = true;
-                                break;
-                            }
-                        }
-                
-                        if (!preguntaRespondida) {
-                            preguntaFaltante = i;
-                            break; 
-                        }
-
-                        const grupoPregunta = preguntas[i - 1].grupo; 
-                        resultadosPorGrupo[grupoPregunta] += valorPregunta; 
-                    }
-
-                    // 2. Manejar error si falta alguna respuesta
-                    if (preguntaFaltante !== -1) {
-                        resultadoDiv.innerHTML = `<p style='color: red;'>❌ Por favor, responde la **pregunta ${preguntaFaltante}** antes de continuar.</p>`;
-                
-                        // Resaltar la pregunta y hacer scroll
-                        const elementoFaltante = document.getElementsByName(`pregunta${preguntaFaltante}`)[0];
-                        if (elementoFaltante) {
-                            elementoFaltante.closest('.pregunta').style.border = '2px solid red';
-                            elementoFaltante.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
-                        return;
-                    }
-
-                    // 3. Calcular resultado MBTI
-                    let tipoMBTI = '';
-                    let resumenResultados = "<h3>Resultados por Dimensión (Puntuación sobre 125):</h3>";
-
-                    const res1 = getCaracteristica(1, resultadosPorGrupo[1], maxScorePerGroup);
-                    tipoMBTI += res1.charAt(0);
-                    resumenResultados += `**Dimensión 1 (E/I):** ${resultadosPorGrupo[1]} puntos &rarr; **${res1}**<br>`;
-
-                    const res2 = getCaracteristica(2, resultadosPorGrupo[2], maxScorePerGroup);
-                    tipoMBTI += res2.charAt(0);
-                    resumenResultados += `**Dimensión 2 (S/N):** ${resultadosPorGrupo[2]} puntos &rarr; **${res2}**<br>`;
-
-                    const res3 = getCaracteristica(3, resultadosPorGrupo[3], maxScorePerGroup);
-                    tipoMBTI += res3.charAt(0);
-                    resumenResultados += `**Dimensión 3 (T/F):** ${resultadosPorGrupo[3]} puntos &rarr; **${res3}**<br>`;
-
-                    const res4 = getCaracteristica(4, resultadosPorGrupo[4], maxScorePerGroup);
-                    tipoMBTI += res4.charAt(0);
-                    resumenResultados += `**Dimensión 4 (J/P):** ${resultadosPorGrupo[4]} puntos &rarr; **${res4}**<br>`;
-            
-
-                    // 4. Mostrar el resultado final
-                    resultadoDiv.innerHTML = `
-                        ${resumenResultados}
-                        <hr>
-                        <h2>🎉 Su Tipo de Personalidad MBTI Sugerido es: <span style="color: #FF0000; font-size: 1.6em;">${tipoMBTI}</span></h2>
-                        <p>(${res1.split(' ')[0]} - ${res2.split(' ')[0]} - ${res3.split(' ')[0]} - ${res4.split(' ')[0]})</p>
+                    label.innerHTML = `
+                        <input type="radio" name="pregunta${numeroPregunta}" value="${i}" required>
+                        ${textoPrincipal}
+                        ${textoSecundario}
                     `;
+                    divOpciones.appendChild(label);
+                }
+                
+                divPregunta.appendChild(divOpciones);
+                contenedorPreguntas.appendChild(divPregunta);
+            });
+        }
+
+        // =================================================================
+        // LÓGICA DE CÁLCULO DE RESULTADOS
+        // =================================================================
+
+        function calcularResultado() {
+            const resultadoDiv = document.getElementById('resultado');
             
-                    // Desplazar la vista al resultado
-                    resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // El puntaje máximo por grupo es 25 preguntas * 5 puntos = 125
+            const maxScorePerGroup = 125;
+            let resultadosPorGrupo = { 1: 0, 2: 0, 3: 0, 4: 0 }; 
+            let preguntaFaltante = -1;
+
+            // 1. Recorrer y validar respuestas
+            for (let i = 1; i <= preguntas.length; i++) {
+                const radios = document.getElementsByName(`pregunta${i}`);
+                let preguntaRespondida = false;
+                let valorPregunta = 0;
+                
+                // Limpiar estilo de error previo
+                if(radios[0] && radios[0].closest('.pregunta')) {
+                    radios[0].closest('.pregunta').style.border = '1px solid #C8E6C9'; 
                 }
 
-                // Se asegura que las preguntas se rendericen al cargar la página
-                document.addEventListener('DOMContentLoaded', renderizarPreguntas); 
-            </script>
-        </body>
-        </html>
+                for (let j = 0; j < radios.length; j++) {
+                    if (radios[j].checked) {
+                        valorPregunta = parseInt(radios[j].value);
+                        preguntaRespondida = true;
+                        break;
                     }
                 }
                 
@@ -533,12 +410,7 @@
         }
 
         // Se asegura que las preguntas se rendericen al cargar la página
-        document.addEventListener('DOMContentLoaded', renderizarPreguntas);
-
-        // Re-renderizar antes de imprimir para asegurar paginación correcta
-        window.addEventListener('beforeprint', () => {
-            renderizarPreguntas();
-        });
+        document.addEventListener('DOMContentLoaded', renderizarPreguntas); 
     </script>
 </body>
 </html>
