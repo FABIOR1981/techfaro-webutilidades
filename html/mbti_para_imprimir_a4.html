@@ -23,6 +23,15 @@
         /* Top-safe: espacio extra por si el motor recorta la parte superior */
         .page::before { content: ''; display:block; height: 6mm; }
 
+        /* Encabezado imprimible por hoja (líneas para completar a mano) */
+        .sheet-header-print { display:flex; gap:8px; align-items:center; margin-bottom:6px; font-size:10pt; flex-wrap:wrap; }
+        .sheet-header-print .print-line { display:inline-block; min-width:120px; border-bottom:1px solid #000; padding-bottom:3px; color: #000; }
+        .sheet-header-print .print-label { margin-right:6px; color:#222; font-weight:500; }
+        .sheet-header-print .print-field-small { min-width:90px; }
+        @media screen {
+            .sheet-header-print .print-line { border-bottom:1px dashed #bbb; color:#333; }
+        }
+
         /* Cuadrícula: 3 columnas, 9 filas (27 items por página)*/
         .page-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: minmax(34px, auto); gap: 8px; grid-auto-flow: row; }
 
@@ -203,12 +212,15 @@
 
             // Cabecera por hoja (Nombre / Cédula / Fecha)
             const headerDiv = document.createElement('div');
-            headerDiv.className = 'sheet-header';
+            headerDiv.className = 'sheet-header-print';
+            const nombreVal = (copyAll && globalNombre) ? escapeHtml(globalNombre) : '';
+            const cedulaVal = (copyAll && globalCedula) ? escapeHtml(globalCedula) : '';
+            const fechaVal = (copyAll && globalFecha) ? escapeHtml(globalFecha) : '';
             headerDiv.innerHTML = `
-                <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px; font-size:10pt; flex-wrap:wrap;">
-                    <label style="min-width:160px">Nombre: <input type="text" class="sheet-nombre" name="nombre_page_${pageIdx+1}" style="width:220px" value="${escapeHtmlAttr(copyAll?globalNombre:'')}"></label>
-                    <label style="min-width:110px">Cédula: <input type="text" class="sheet-cedula" name="cedula_page_${pageIdx+1}" style="width:120px" value="${escapeHtmlAttr(copyAll?globalCedula:'')}"></label>
-                    <label>Fecha: <input type="date" class="sheet-fecha" name="fecha_page_${pageIdx+1}" style="width:140px" value="${copyAll?globalFecha:''}"></label>
+                <div class="sheet-header-print">
+                    <div><span class="print-label">Nombre:</span> <span class="print-line print-field">${nombreVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+                    <div><span class="print-label">Cédula:</span> <span class="print-line print-field-small">${cedulaVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+                    <div><span class="print-label">Fecha:</span> <span class="print-line print-field-small">${fechaVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
                 </div>
             `;
             page.appendChild(headerDiv);
@@ -248,9 +260,9 @@
         const f = document.getElementById('globalFecha')?.value || '';
         if(!copyAll) return;
         document.querySelectorAll('.page').forEach(page=>{
-            const sN = page.querySelector('.sheet-nombre'); if(sN) sN.value = n;
-            const sC = page.querySelector('.sheet-cedula'); if(sC) sC.value = c;
-            const sF = page.querySelector('.sheet-fecha'); if(sF) sF.value = f;
+            const sN = page.querySelector('.print-line.print-field'); if(sN) sN.innerHTML = n ? escapeHtml(n) : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            const sC = page.querySelector('.print-line.print-field-small'); if(sC) sC.innerHTML = c ? escapeHtml(c) : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            const sF = page.querySelectorAll('.print-line.print-field-small')[1]; if(sF) sF.innerHTML = f ? escapeHtml(f) : '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         });
     }
 
