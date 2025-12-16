@@ -132,7 +132,7 @@
             size: A4 portrait;
             /* Margen superior más grande por defecto (aplica a todas las páginas)
                y se reduce en la primera página mediante @page :first */
-            margin: 25mm 15mm 15mm 15mm; /* top right bottom left */
+            margin: 35mm 15mm 15mm 15mm; /* top right bottom left */
         }
 
         /* Primera página con margen superior ligeramente menor */
@@ -148,10 +148,21 @@
                 color-adjust: exact;
             }
 
+            /* Forzar un espacio superior en todas las páginas usando margen del body.
+               Luego reducimos visualmente ese espacio en la primera página tirando
+               hacia arriba el primer contenedor. Esto suele respetarse aun cuando
+               algunos drivers ignoran @page margins. */
             body {
                 padding: 0;
                 margin: 0;
                 display: block;
+                /* margen superior que actuará como espacio en cada página */
+                margin-top: 35mm !important;
+            }
+
+            /* Reducir el espacio visual en la PRIMERA página solo */
+            .main-content:first-child {
+                margin-top: -20mm !important; /* ajusta este valor según necesites */
             }
 
             .main-content {
