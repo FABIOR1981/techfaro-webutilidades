@@ -174,30 +174,7 @@ document.getElementById('resultados').style.display = 'block';
 					});
 				}
 
-				function imprimirLo(divId){
-
-
-					let nombre = document.getElementById('nombre').value;
-					let cedula = document.getElementById('cedula').value;
-					
-					nombre = limpiarTexto(nombre);
-					cedula = limpiarTexto(cedula);
-					
-					
-					
-					// 1. Verificar si hay al menos una respuesta marcada en el formulario (#myForm)
-					// El selector :checked busca cualquier input de tipo radio que esté seleccionado.
-					const algunaRespuestaMarcada = document.querySelector('#myForm input[type="checkbox"]:checked');
-										
-					 if (algunaRespuestaMarcada &&(!nombre || !cedula)) {
-						alert("Por favor ingrese tanto el nombre como la cédula antes de impirmir.");
-						return;
-					}
-								
-					const divAImprimir = document.getElementById(divId);
-					divAImprimir.focus();
-					window.print();
-				}
+				// Uso de `imprimirLo(divId)` proporcionado por `js/utils.js`.
 				
 
 

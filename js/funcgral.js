@@ -1,32 +1,36 @@
 //sessionStorage.setItem('Produccion', false);
 
 
-function darUrl(cadena) {
-	const modo=true;
-
-
- // URLs base para producción y desarrollo
-  const URL_PRODUCCION = 'https://techfaro-webutilidades.netlify.app/';
-  //const URL_DESARROLLO = 'E:/Users/FABIOR/Desktop/pruebas/techfaro-webutilidades/';
-  const URL_DESARROLLO = 'D:/Cosas/Programacion/Desarrollo/TechFaRo-webUtilidades/';
-  
-  
- 
-
+function darUrl(cadena, config) {
   try {
-    
-	if(cadena!='index.html'){
-		cadena='html/'+cadena;
-	}
+    // Configuración con valores por defecto. Se puede sobrescribir mediante:
+    // - pasar `config` como segundo parámetro
+    // - definir `window.__TF_CONFIG__` como objeto global
+    // - guardar JSON en sessionStorage bajo la clave 'TF_CONFIG'
+    const defaultConfig = {
+      mode: 'production', // 'production' | 'development'
+      baseUrls: {
+        production: 'https://techfaro-webutilidades.netlify.app/',
+        development: 'D:/Cosas/Programacion/Desarrollo/TechFaRo-webUtilidades/'
+      }
+    };
 
-    // Construir la URL según el modo	
-    if (modo) {
-		
-      return URL_PRODUCCION + cadena;
-    } else {
-		
-      return URL_DESARROLLO + cadena;
+    let cfg = defaultConfig;
+    try {
+      if (config && typeof config === 'object') cfg = { ...cfg, ...config };
+      else if (window && window.__TF_CONFIG__ && typeof window.__TF_CONFIG__ === 'object') cfg = { ...cfg, ...window.__TF_CONFIG__ };
+      else if (sessionStorage.getItem('TF_CONFIG')) cfg = { ...cfg, ...JSON.parse(sessionStorage.getItem('TF_CONFIG')) };
+    } catch (e) {
+      console.warn('No se pudo parsear TF_CONFIG, usando valores por defecto.', e);
     }
+
+    let ruta = cadena;
+    if (cadena !== 'index.html') ruta = 'html/' + cadena;
+
+    const base = (cfg.mode === 'development' || cfg.mode === 'dev') ? (cfg.baseUrls && cfg.baseUrls.development ? cfg.baseUrls.development : cfg.developmentBaseUrl) : (cfg.baseUrls && cfg.baseUrls.production ? cfg.baseUrls.production : cfg.productionBaseUrl);
+    if (!base) throw new Error('Base URL no definida en la configuración');
+
+    return base + ruta;
   } catch (error) {
     console.error('Error al construir la URL:', error);
     return 'URL inválida';
@@ -117,23 +121,10 @@ function limpiarTexto(texto) {
 }
 
 				
-
-
-
-
+/* Utilidades comunes movidas a `js/utils.js`.
+   Ahora `validarCedulaUruguaya`, `parsearLinea`, `codificar`,
+   `limpiarTexto` y `leerArchivoYObtenerObjeto` están disponibles globalmente
+   desde `js/utils.js` (y en `window.__TF_UTILS__`). */
 function leerArchivoYObtenerObjeto(archivo) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const cadena = event.target.result.split('\n').filter(cedula => cedula.trim());
-      const objeto = [];
-      cadena.forEach(linea => {
-        objeto.push(parsearLinea(linea,';'));
-      });
-      resolve(objeto);
-    };
-    reader.onerror = error => reject(error);
-    reader.readAsText(archivo);
-  });
-}
 
+  return new Promise((resolve, reject) => {

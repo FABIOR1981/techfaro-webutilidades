@@ -298,8 +298,4 @@ function calcularResultado() {
         </h3>`;
 }
 
-function imprimirLo(divId){
-	const divAImprimir = document.getElementById(divId);
-	divAImprimir.focus();
-	window.print();
-}
+// Uso de `imprimirLo(divId)` proporcionado por `js/utils.js`.
