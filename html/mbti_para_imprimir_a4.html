@@ -39,6 +39,8 @@
         @media print {
             /* Mostrar encabezado por hoja solamente al imprimir */
             .sheet-header-print { display:flex !important; }
+            /* Numeración de hoja (visible en impresión) */
+            .sheet-page-number { font-weight:600; font-size:10pt; margin-left:12px; color:#222; white-space:nowrap; }
         }
 
         /* Cuadrícula: 3 columnas, 9 filas (27 items por página)*/
@@ -214,6 +216,7 @@
         const globalNombre = document.getElementById('globalNombre')?.value || '';
         const globalCedula = document.getElementById('globalCedula')?.value || '';
         const globalFecha = document.getElementById('globalFecha')?.value || '';
+        const totalPages = Math.ceil(preguntas.length / perPage); // Total de hojas (para numeración) 
 
         for (let i = 0, pageIdx = 0; i < preguntas.length; i += perPage, pageIdx++) {
             const page = document.createElement('div');
@@ -226,10 +229,13 @@
             const cedulaVal = (copyAll && globalCedula) ? escapeHtml(globalCedula) : '';
             const fechaVal = (copyAll && globalFecha) ? escapeHtml(globalFecha) : '';
             headerDiv.innerHTML = `
-                <div class="sheet-header-print">
-                    <div><span class="print-label">Nombre:</span> <span class="print-line print-field">${nombreVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
-                    <div><span class="print-label">Cédula:</span> <span class="print-line print-field-small">${cedulaVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
-                    <div><span class="print-label">Fecha:</span> <span class="print-line print-field-small">${fechaVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+                <div class="sheet-header-print" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="display:flex; gap:12px; align-items:center;">
+                        <div><span class="print-label">Nombre:</span> <span class="print-line print-field">${nombreVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+                        <div><span class="print-label">Cédula:</span> <span class="print-line print-field-small">${cedulaVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+                        <div><span class="print-label">Fecha:</span> <span class="print-line print-field-small">${fechaVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
+                    </div>
+                    <div class="sheet-page-number">Hoja ${pageIdx + 1}/${totalPages}</div>
                 </div>
             `;
             page.appendChild(headerDiv);
