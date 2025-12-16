@@ -58,6 +58,15 @@
             page-break-after: always;
         }
 
+        /* Grid interior por página: asegurar flujo por filas (izq->centro->der)
+           y mantener alineación horizontal consistente */
+        .page-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-flow: row; /* importante: llenar filas left->right */
+            gap: 6px;
+            align-items: start;
+        }
         .pregunta {
             border: 1px solid #C8E6C9; 
             padding: 15px;
@@ -197,6 +206,11 @@
                 line-height: 1.1 !important;
                 page-break-inside: avoid !important;
                 break-inside: avoid !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+                /* altura mínima para mantener filas alineadas */
+                min-height: 28mm !important;
             }
 
             .pregunta h2 {
