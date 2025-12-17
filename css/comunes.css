@@ -5,10 +5,24 @@ button, .btn, input[type="button"], input[type="submit"] {
 button:focus-visible, .btn:focus-visible, input[type="button"]:focus-visible, input[type="submit"]:focus-visible {
     outline: var(--focus-outline);
     outline-offset: 2px;
+    #contIzq {
+        width: 15%;
+        min-width: 260px;
+        max-width: 350px;
+        background-color: rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+    }
     box-shadow: 0 0 0 3px #c8e6c9;
 }
 
 /* Botones de alto contraste */
+    #contDer {
+        width: 85%;
+        min-width: 320px;
+        max-width: 1200px;
+        background-color: rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+    }
 .btn-high-contrast, button.high-contrast {
     background: #222 !important;
     color: #fff !important;
@@ -18,7 +32,17 @@ button:focus-visible, .btn:focus-visible, input[type="button"]:focus-visible, in
     outline: 2px solid #fff;
     outline-offset: 2px;
 }
-
+    .container {
+        padding: 20px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        background: #fff;
+        flex-grow: 1;
+        min-width: 260px;
+        max-width: 400px;
+        margin-bottom: 24px;
+        overflow: visible;
+    }
 /* Texto de alto contraste */
 .text-high-contrast {
     color: #fff !important;
@@ -27,7 +51,18 @@ button:focus-visible, .btn:focus-visible, input[type="button"]:focus-visible, in
     border-radius: 3px;
 }
 
-/* Mejorar contraste en enlaces */
+    input, select, textarea {
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: var(--border-radius-sm);
+        border: 1px solid #bbb;
+        font-size: 1em;
+        transition: var(--transition);
+        outline: none;
+        max-width: 350px;
+        width: 100%;
+        box-sizing: border-box;
+    }
 a {
     color: var(--info-color);
     text-decoration-thickness: 2px;
@@ -39,6 +74,21 @@ a:focus, a:hover {
     outline-offset: 2px;
 }
 
+    input[type="submit"], button, .btn {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: var(--border-radius-sm);
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: 600;
+        transition: var(--transition);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+        max-width: 350px;
+        width: 100%;
+        box-sizing: border-box;
+    }
 :root {
     --primary-color: #388E3C;
     --primary-color-dark: #256029;
