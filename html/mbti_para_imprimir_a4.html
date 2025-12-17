@@ -90,8 +90,8 @@
 <body>
     <div class="wrapper">
         <header>
-            <h1>Cuestionario - Versión Imprimible A4</h1>
-            
+            <h1 style="text-align:center; margin-bottom:0; font-size:22pt; color:#2a7a2a;">Cuestionario Imprimible A4 (3x6)</h1>
+            <h2 style="text-align:center; margin-top:4px; font-size:15pt; color:#245f24;">Cuestionario - Versión Imprimible A4</h2>
             <div class="global-header" style="margin-top:6px; display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap;">
                 <label>Nombre: <input id="globalNombre" type="text" style="width:320px;"></label>
                 <label>Cédula: <input id="globalCedula" type="text" style="width:120px;"></label>
@@ -244,20 +244,24 @@
             const page = document.createElement('div');
             page.className = 'page';
 
-            // Cabecera por hoja (Nombre / Cédula / Fecha)
+            // Cabecera por hoja (Nombre / Cédula / Fecha + Título centrado)
             const headerDiv = document.createElement('div');
             headerDiv.className = 'sheet-header-print';
             const nombreVal = (copyAll && globalNombre) ? escapeHtml(globalNombre) : '';
             const cedulaVal = (copyAll && globalCedula) ? escapeHtml(globalCedula) : '';
             const fechaVal = (copyAll && globalFecha) ? escapeHtml(globalFecha) : '';
             headerDiv.innerHTML = `
-                <div class="sheet-header-print" style="display:flex; justify-content:space-between; align-items:center;">
-                    <div style="display:flex; gap:12px; align-items:center;">
+                <div class="sheet-header-print" style="display:flex; flex-direction:column; align-items:center; gap:6px;">
+                    <div style="text-align:center; width:100%;">
+                        <span style="font-size:17pt; color:#2a7a2a; font-weight:bold;">Cuestionario Imprimible A4 (3x6)</span><br>
+                        <span style="font-size:12pt; color:#245f24;">Cuestionario - Versión Imprimible A4</span>
+                    </div>
+                    <div style="display:flex; gap:12px; align-items:center; justify-content:center;">
                         <div><span class="print-label">Nombre:</span> <span class="print-line print-field">${nombreVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
                         <div><span class="print-label">Cédula:</span> <span class="print-line print-field-small">${cedulaVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
                         <div><span class="print-label">Fecha:</span> <span class="print-line print-field-small">${fechaVal || '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}</span></div>
                     </div>
-                    <div class="sheet-page-number">Hoja ${pageIdx + 1}/${totalPages}</div>
+                    <div class="sheet-page-number" style="align-self:flex-end;">Hoja ${pageIdx + 1}/${totalPages}</div>
                 </div>
             `;
             page.appendChild(headerDiv);
