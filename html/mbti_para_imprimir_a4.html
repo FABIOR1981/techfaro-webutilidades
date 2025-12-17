@@ -53,12 +53,13 @@
         .opciones label { display:flex; flex-direction:column; align-items:center; font-weight:400; }
         .opciones input { margin-top:4px; transform: scale(1.05); }
         /* Mostrar leyendas solo en impresión (no modificar maquetación en pantalla) */
-        .opciones label::before { content: ''; display: none; }
+        /* Usar ::after para que la leyenda aparezca debajo del radio (en impresión) */
+        .opciones label::after { content: ''; display: none; }
         @media print {
-            .opciones label::before { display: block; font-size:8pt; margin-bottom:3px; color:#000; height:auto; }
-            .opciones label:nth-child(1)::before { content: 'muy en desacuerdo'; }
-            .opciones label:nth-child(3)::before { content: 'neutro'; }
-            .opciones label:nth-child(5)::before { content: 'muy deacuerdo'; }
+            .opciones label::after { display: block; font-size:8pt; margin-top:3px; color:#000; height:auto; }
+            .opciones label:nth-child(1)::after { content: 'muy en desacuerdo'; }
+            .opciones label:nth-child(3)::after { content: 'neutro'; }
+            .opciones label:nth-child(5)::after { content: 'muy deacuerdo'; }
         }
 
         /* Controles */
