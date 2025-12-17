@@ -8,8 +8,42 @@ if(sessionStorage.getItem("verificado")){
 
 	// Mapeo interno: 1=-2, 2=-1, 3=0, 4=1, 5=2 (Se calcula como Raw Score - 3)
 
-	// Usar la implementación compartida en `js/utils.js`
-	// `getCaracteristica(grupo, netScore)` se expone globalmente por `js/utils.js`.
+	/**
+	 * Función auxiliar para obtener la característica (letra y nombre)
+	 * a partir de la Puntuación Neta (Net Score).
+	 */
+	function getCaracteristica(grupo, netScore) {
+		let letra = "";
+		let nombre = "";
+
+		switch (grupo) {
+			case 1: // E/I (Positivo = E, Negativo = I)
+				if (netScore > 0) { letra = 'E'; nombre = "Extroversión"; } 
+				else if (netScore < 0) { letra = 'I'; nombre = "Introversión"; }
+				else { letra = '-'; nombre = "Sin preferencia clara"; }
+				return { letra: letra, nombre: nombre, id: "E/I" };
+
+			case 2: // S/N (Positivo = S, Negativo = N)
+				if (netScore > 0) { letra = 'S'; nombre = "Sensación"; } 
+				else if (netScore < 0) { letra = 'N'; nombre = "Intuición"; }
+				else { letra = '-'; nombre = "Sin preferencia clara"; }
+				return { letra: letra, nombre: nombre, id: "S/N" };
+
+			case 3: // T/F (Positivo = T, Negativo = F)
+				if (netScore > 0) { letra = 'T'; nombre = "Pensamiento"; } 
+				else if (netScore < 0) { letra = 'F'; nombre = "Sentimiento"; }
+				else { letra = '-'; nombre = "Sin preferencia clara"; }
+				return { letra: letra, nombre: nombre, id: "T/F" };
+
+			case 4: // J/P (Positivo = J, Negativo = P)
+				if (netScore > 0) { letra = 'J'; nombre = "Juicio"; } 
+				else if (netScore < 0) { letra = 'P'; nombre = "Percepción"; }
+				else { letra = '-'; nombre = "Sin preferencia clara"; }
+				return { letra: letra, nombre: nombre, id: "J/P" };
+			default:
+				return { letra: 'X', nombre: 'Desconocido', id: 'X/X' };
+		}
+	}
 
 	/**
 	 * Genera la interpretación detallada del nivel de preferencia según la magnitud del Net Score.
