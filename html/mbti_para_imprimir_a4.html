@@ -10,7 +10,23 @@
         @media print {
             html, body { height: auto; }
             body { margin: 0; }
-            .page { page-break-after: always; }
+            /* Forzar que cada .page ocupe exactamente la hoja imprimible y evitar cortes internos */
+            .page {
+                box-sizing: border-box;
+                page-break-after: always;
+                break-after: page;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                /* ajustar altura a la zona imprimible: A4 (297mm) menos márgenes top/bottom */
+                height: calc(297mm - 30mm - 12mm);
+                padding: 6mm 8mm 6mm 8mm;
+                -webkit-print-color-adjust: exact;
+            }
+            /* Quitar el top-safe en impresión para no sumar espacio extra */
+            .page::before { display: none !important; }
+            /* Ajustes de grid para que 9 filas quepan de forma estable */
+            .page-grid { grid-template-rows: repeat(9, 1fr); height: calc(100% - 18mm); }
+            .pregunta { page-break-inside: avoid; break-inside: avoid; overflow: visible; }
             /* Ocultar controles y formulario global en la versión impresa/PDF */
             .global-header, .controls { display: none !important; }
         }
