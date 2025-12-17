@@ -71,32 +71,24 @@ async function imprimirElemento({ selector, modo = 'print', titulo = '', pdfNomb
 //sessionStorage.setItem('Produccion', false);
 
 
+
 function darUrl(cadena) {
-	const modo=true;
-
-
- // URLs base para producción y desarrollo
-  const URL_PRODUCCION = 'https://techfaro-webutilidades.netlify.app/';
-  //const URL_DESARROLLO = 'E:/Users/FABIOR/Desktop/pruebas/techfaro-webutilidades/';
-  const URL_DESARROLLO = 'D:/Cosas/Programacion/Desarrollo/TechFaRo-webUtilidades/';
-  
-  
- 
-
+  // Detectar si estamos en Netlify y en qué rama
+  let baseUrl = '';
+  const host = window.location.hostname;
+  // Si es Netlify branch deploy (rama1--techfaro-webutilidades.netlify.app)
+  if (host.endsWith('.netlify.app')) {
+    baseUrl = window.location.origin + '/';
+  } else {
+    // Local/dev fallback
+    // const URL_DESARROLLO = 'E:/Users/FABIOR/Desktop/pruebas/techfaro-webutilidades/';
+    baseUrl = 'D:/Cosas/Programacion/Desarrollo/TechFaRo-webUtilidades/';
+  }
   try {
-    
-	if(cadena!='index.html'){
-		cadena='html/'+cadena;
-	}
-
-    // Construir la URL según el modo	
-    if (modo) {
-		
-      return URL_PRODUCCION + cadena;
-    } else {
-		
-      return URL_DESARROLLO + cadena;
+    if (cadena !== 'index.html') {
+      cadena = 'html/' + cadena;
     }
+    return baseUrl + cadena;
   } catch (error) {
     console.error('Error al construir la URL:', error);
     return 'URL inválida';
