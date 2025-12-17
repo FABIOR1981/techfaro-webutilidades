@@ -51,6 +51,7 @@
         .pregunta h2 { margin:0 0 6px 0; font-size:10.5pt; color:#1f5d1f; font-weight:600; }
         .opciones { display:flex; justify-content:space-between; font-size:9pt; }
         .opciones label { display:flex; flex-direction:column; align-items:center; font-weight:400; }
+        .opciones label small { font-size:8pt; margin-top:4px; color:#333; }
         .opciones input { margin-top:4px; transform: scale(1.05); }
 
         /* Controles */
@@ -251,11 +252,11 @@
                 const numero = i + idx + 1;
                 q.innerHTML = `<h2>${numero}. ${escapeHtml(p.texto)}</h2>` +
                     `<div class="opciones">` +
-                    `<label>1<br><input type="radio" name="pregunta${numero}" value="1"></label>` +
+                    `<label>1<br><small>muy en desacuerdo</small><br><input type="radio" name="pregunta${numero}" value="1"></label>` +
                     `<label>2<br><input type="radio" name="pregunta${numero}" value="2"></label>` +
-                    `<label>3<br><input type="radio" name="pregunta${numero}" value="3"></label>` +
+                    `<label>3<br><small>neutro</small><br><input type="radio" name="pregunta${numero}" value="3"></label>` +
                     `<label>4<br><input type="radio" name="pregunta${numero}" value="4"></label>` +
-                    `<label>5<br><input type="radio" name="pregunta${numero}" value="5"></label>` +
+                    `<label>5<br><small>muy deacuerdo</small><br><input type="radio" name="pregunta${numero}" value="5"></label>` +
                     `</div>`;
                 grid.appendChild(q);
             });
