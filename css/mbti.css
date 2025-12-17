@@ -1,31 +1,13 @@
-:root {
-    --primary-color: #4CAF50; /* Verde principal */
-    --secondary-color: #F5F5F5; /* Gris claro */
-    --text-color: #333;
-    --border-radius: 8px;
-    --font-family: 'Arial', sans-serif;
-}
 
-body {
-    font-family: var(--font-family);
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px;
-    background-color: #e0e0e0; /* Fondo gris claro */
-    color: var(--text-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
 .main-content {
     width: 95%;
-    max-width: 1200px; 
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background-color: white;
+    background: #fff;
     border-radius: var(--border-radius);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow);
 }
 
 h1 {
@@ -94,28 +76,16 @@ h1 {
     flex-wrap: wrap; /* Para que se adapten mejor en móviles */
 }
 
-button {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 1.1em;
-    font-weight: bold;
-}
 
-button:hover {
-    background-color: #388E3C;
-}
 
 /* Estilo especial para el botón de test */
+
+/* Botón especial test */
 #btnAutoCompletar {
-    background-color: #f39c12; /* Naranja/Amarillo para test */
+    background: var(--accent-color);
 }
 #btnAutoCompletar:hover {
-    background-color: #e67e22; 
+    background: var(--accent-color-dark);
 }
 
 #resultado {

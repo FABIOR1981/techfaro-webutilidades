@@ -85,7 +85,7 @@
             <p style="text-align: center; font-style: italic; color: #555;">
                 Ingrese el resultado de cada dimensión (rango: **-50** a **+50**).
             </p>
-            <form id="directEntryForm" onsubmit="event.preventDefault(); calcularResultadoDirecto();">
+            <form id="directEntryForm" onsubmit="event.preventDefault(); calcularResultadoDirecto();" role="form" aria-label="Carga directa MBTI">
                 <div style="display: flex; justify-content: space-around; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
                     <div>
                         <label for="netEI">E/I:</label>
@@ -105,7 +105,7 @@
                     </div>
                 </div>
                 <div class="botones-container" style="text-align: center;">
-                    <button type="submit" style="background-color: #f39c12; color: white;">Calcular Resultado Directo</button>
+                    <button type="submit" aria-label="Calcular resultado directo" class="btn-high-contrast">Calcular Resultado Directo</button>
                 </div>
             </form>
         </div>
@@ -114,14 +114,14 @@
             Ingrese los valores de 1 a 5 para cada una de las 100 preguntas.
         </p>
 
-        <form id="dataEntryForm" onsubmit="event.preventDefault(); calcularResultadoManual();">
+        <form id="dataEntryForm" onsubmit="event.preventDefault(); calcularResultadoManual();" role="form" aria-label="Carga manual de 100 respuestas MBTI">
             
             <div id="dataInputs">
                 </div>
 
             <div class="botones-container" style="text-align: center;">
-                <button type="submit" style="background-color: #4CAF50; color: white;">Calcular Resultado Manual</button>
-                <button type="button" onclick="imprimirResultado()" style="background-color: #3498db; color: white;">Imprimir Solo Resultado</button>
+                <button type="submit" aria-label="Calcular resultado manual" class="btn-high-contrast">Calcular Resultado Manual</button>
+                <button type="button" onclick="imprimirResultado()" aria-label="Imprimir solo resultado" class="btn-high-contrast">Imprimir Solo Resultado</button>
             </div>
         </form>
         <div id="resultado" style="margin-top: 30px; padding: 20px; border-top: 2px dashed #ccc;">

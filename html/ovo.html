@@ -22,7 +22,7 @@
 		  <input type="date" id="fechaingreso" name="fechaingreso" min="1900-01-01" max="2033-12-31">
 		</div>
 		
-        <form id="myForm">
+        <form id="myForm" role="form" aria-label="Cuestionario OVO">
 			<div class="ingreso">
 					<label for="name">Nombre:</label>
 					<input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
@@ -33,9 +33,8 @@
 			</div>	
             <ul id="preguntas"></ul>
         </form>
-        <button id="btnContarRespuestas" onclick="contarRespuestas()">Contar respuestas</button>
-        
-		<button id="btnImprimir" onclick="imprimirLo('contDer')">Imprimir</button>
+        <button id="btnContarRespuestas" onclick="contarRespuestas()" aria-label="Contar respuestas seleccionadas" class="btn-high-contrast">Contar respuestas</button>
+        <button id="btnImprimir" onclick="imprimirElemento({selector:'#contDer', modo:'print', titulo:'Cuestionario O.V.O.'})" aria-label="Imprimir cuestionario OVO" class="btn-high-contrast">Imprimir</button>
 		
         <div id="resultados">
             <table id="tablaResultados">

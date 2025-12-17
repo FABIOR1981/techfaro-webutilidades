@@ -1,3 +1,73 @@
+// ===============================
+// FUNCIÓN UNIFICADA DE IMPRESIÓN Y PDF
+// ===============================
+// Uso: imprimirElemento({ selector, modo, titulo, pdfNombre })
+// selector: string (CSS selector del elemento a imprimir)
+// modo: 'print' | 'pdf' | 'preview' (por defecto 'print')
+// titulo: string opcional para encabezado
+// pdfNombre: nombre del archivo PDF (solo modo 'pdf')
+async function imprimirElemento({ selector, modo = 'print', titulo = '', pdfNombre = 'documento.pdf' }) {
+  const elemento = document.querySelector(selector);
+  if (!elemento) {
+    alert('No se encontró el contenido a imprimir.');
+    return;
+  }
+
+  // Clonar el nodo para no alterar el DOM original
+  const contenido = elemento.cloneNode(true);
+  let wrapper = document.createElement('div');
+  wrapper.style.padding = '24px';
+  wrapper.style.fontFamily = 'Arial, sans-serif';
+  wrapper.style.background = '#fff';
+  wrapper.style.color = '#222';
+  wrapper.style.maxWidth = '900px';
+  wrapper.style.margin = '0 auto';
+  if (titulo) {
+    const h2 = document.createElement('h2');
+    h2.textContent = titulo;
+    h2.style.textAlign = 'center';
+    h2.style.marginBottom = '16px';
+    wrapper.appendChild(h2);
+  }
+  wrapper.appendChild(contenido);
+
+  if (modo === 'preview') {
+    // Abrir vista previa en nueva ventana
+    const win = window.open('', '_blank');
+    win.document.write('<html><head><title>Vista previa</title><style>body{background:#f2f2f2;} .preview-content{background:#fff;padding:24px;margin:24px auto;max-width:900px;box-shadow:0 2px 12px #0002;}</style></head><body><div class="preview-content">');
+    win.document.body.appendChild(wrapper);
+    win.document.write('</div></body></html>');
+    win.document.close();
+    return;
+  }
+
+  if (modo === 'pdf') {
+    // Requiere jsPDF y html2canvas cargados globalmente
+    if (!window.jspdf || !window.html2canvas) {
+      alert('jsPDF o html2canvas no están cargados.');
+      return;
+    }
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'pt', 'a4');
+    await window.html2canvas(wrapper, { scale: 2 }).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = pageWidth;
+      const imgHeight = canvas.height * pageWidth / canvas.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      pdf.save(pdfNombre);
+    });
+    return;
+  }
+
+  // Modo impresión estándar
+  const originalBody = document.body.innerHTML;
+  document.body.innerHTML = '';
+  document.body.appendChild(wrapper);
+  window.print();
+  document.body.innerHTML = originalBody;
+}
 //sessionStorage.setItem('Produccion', false);
 
 

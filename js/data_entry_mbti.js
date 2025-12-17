@@ -3,77 +3,9 @@ if(sessionStorage.getItem("verificado")){
 	// CONSTANTES Y FUNCIÓN AUXILIAR
 	// =================================================================
 
-	const totalPreguntasPorGrupo = 25; 
-	const totalPreguntas = 100;
 
-	// Mapeo interno: 1=-2, 2=-1, 3=0, 4=1, 5=2 (Se calcula como Raw Score - 3)
-
-	/**
-	 * Función auxiliar para obtener la característica (letra y nombre)
-	 * a partir de la Puntuación Neta (Net Score).
-	 */
-	function getCaracteristica(grupo, netScore) {
-		let letra = "";
-		let nombre = "";
-
-		switch (grupo) {
-			case 1: // E/I (Positivo = E, Negativo = I)
-				if (netScore > 0) { letra = 'E'; nombre = "Extroversión"; } 
-				else if (netScore < 0) { letra = 'I'; nombre = "Introversión"; }
-				else { letra = '-'; nombre = "Sin preferencia clara"; }
-				return { letra: letra, nombre: nombre, id: "E/I" };
-
-			case 2: // S/N (Positivo = S, Negativo = N)
-				if (netScore > 0) { letra = 'S'; nombre = "Sensación"; } 
-				else if (netScore < 0) { letra = 'N'; nombre = "Intuición"; }
-				else { letra = '-'; nombre = "Sin preferencia clara"; }
-				return { letra: letra, nombre: nombre, id: "S/N" };
-
-			case 3: // T/F (Positivo = T, Negativo = F)
-				if (netScore > 0) { letra = 'T'; nombre = "Pensamiento"; } 
-				else if (netScore < 0) { letra = 'F'; nombre = "Sentimiento"; }
-				else { letra = '-'; nombre = "Sin preferencia clara"; }
-				return { letra: letra, nombre: nombre, id: "T/F" };
-
-			case 4: // J/P (Positivo = J, Negativo = P)
-				if (netScore > 0) { letra = 'J'; nombre = "Juicio"; } 
-				else if (netScore < 0) { letra = 'P'; nombre = "Percepción"; }
-				else { letra = '-'; nombre = "Sin preferencia clara"; }
-				return { letra: letra, nombre: nombre, id: "J/P" };
-			default:
-				return { letra: 'X', nombre: 'Desconocido', id: 'X/X' };
-		}
-	}
-
-	/**
-	 * Genera la interpretación detallada del nivel de preferencia según la magnitud del Net Score.
-	 * Rango total: ±50.
-	 * Clasificación:
-	 * - Net Score = 0: Sin preferencia clara
-	 * - |Net Score| > 0 a 9: Ligera preferencia
-	 * - |Net Score| 10 a 19: Preferencia moderada
-	 * - |Net Score| >= 20: Fuerte preferencia
-	 */
-	function generateInterpretation(netScore, dim) {
-		if (dim.letra === '-') {
-			return "Sin preferencia clara";
-		}
-
-		const absScore = Math.abs(netScore);
-		let intensidad = "";
-
-		if (absScore >= 20) {
-			intensidad = "Fuerte preferencia";
-		} else if (absScore >= 10) {
-			intensidad = "Preferencia moderada";
-		} else if (absScore > 0) {
-			intensidad = "Ligera preferencia";
-		} else {
-			return "Sin preferencia clara"; 
-		}
-
-		return `${intensidad} por **${dim.nombre}**`;
-	}
+// Importar funciones centrales desde mbti_core.js
+import { RAW_SCORE_VALUES, TOTAL_PREGUNTAS, TOTAL_PREGUNTAS_POR_GRUPO, calcularNetScores, getCaracteristica, generateInterpretation, validarRespuestas, obtenerTipoMBTI } from './mbti_core.js';
 
 
 	// =================================================================
@@ -87,13 +19,13 @@ if(sessionStorage.getItem("verificado")){
 		for (let g = 1; g <= 4; g++) { // Iterar sobre los 4 grupos
 			const divGroup = document.createElement('div');
 			divGroup.classList.add('data-group');
-			divGroup.innerHTML = `<h3>Dimensión ${g}: ${dimensionNombres[g-1]} (Preguntas ${((g - 1) * totalPreguntasPorGrupo) + 1} - ${g * totalPreguntasPorGrupo})</h3>`;
-			
+			divGroup.innerHTML = `<h3>Dimensión ${g}: ${dimensionNombres[g-1]} (Preguntas ${((g - 1) * TOTAL_PREGUNTAS_POR_GRUPO) + 1} - ${g * TOTAL_PREGUNTAS_POR_GRUPO})</h3>`;
+
 			const divGrid = document.createElement('div');
 			divGrid.classList.add('input-grid');
 
-			const inicio = (g - 1) * totalPreguntasPorGrupo + 1;
-			const fin = g * totalPreguntasPorGrupo;
+			const inicio = (g - 1) * TOTAL_PREGUNTAS_POR_GRUPO + 1;
+			const fin = g * TOTAL_PREGUNTAS_POR_GRUPO;
 
 			for (let i = inicio; i <= fin; i++) {
 				const input = document.createElement('input');
@@ -104,10 +36,22 @@ if(sessionStorage.getItem("verificado")){
 				input.setAttribute('placeholder', `P${i}`);
 				input.setAttribute('required', 'true');
 				input.setAttribute('data-grupo', g); // Asignar el grupo para el cálculo
+				input.setAttribute('title', 'Ingrese un valor del 1 (Muy en desacuerdo) al 5 (Muy de acuerdo)');
+
+				// Validación visual en tiempo real
+				input.addEventListener('input', function() {
+					if (this.value === '' || this.value < 1 || this.value > 5) {
+						this.style.border = '2px solid #e74c3c';
+						this.setCustomValidity('Debe ingresar un número entre 1 y 5');
+					} else {
+						this.style.border = '1px solid #2ecc40';
+						this.setCustomValidity('');
+					}
+				});
 
 				divGrid.appendChild(input);
 			}
-			
+
 			divGroup.appendChild(divGrid);
 			contenedor.appendChild(divGroup);
 		}
@@ -115,37 +59,17 @@ if(sessionStorage.getItem("verificado")){
 
 
 	// =================================================================
-	// FUNCIÓN DE IMPRESIÓN DE RESULTADOS
+	// FUNCIÓN DE IMPRESIÓN DE RESULTADOS (UNIFICADA)
 	// =================================================================
 	function imprimirResultado() {
 		const resultadoDiv = document.getElementById('resultado');
 		const contenidoAImprimir = resultadoDiv.innerHTML;
-		
-		// Validar si ya hay un resultado calculado
 		if (!contenidoAImprimir || !contenidoAImprimir.includes('Tipo de Personalidad Sugerido')) {
 			alert("Primero, debe calcular un resultado (Modo 1 o Modo 2) para poder imprimirlo.");
 			return;
 		}
-
-		// 1. Guardar el contenido original del cuerpo
-		const originalBody = document.body.innerHTML;
-		
-		// 2. Reemplazar el cuerpo con el contenido de resultados (optimizado para impresión)
-		document.body.innerHTML = `
-			<div style="padding: 10px; font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; line-height: 1.4;">
-				${contenidoAImprimir}
-				<p style="text-align: center; margin-top: 20px; font-size: 0.7em; color: #666;"></p>
-			</div>
-		`;
-		
-		// 3. Imprimir
-		window.print();
-		
-		// 4. Restaurar el contenido original del cuerpo
-		document.body.innerHTML = originalBody;
-		
-		// 5. Es crucial volver a ejecutar la función de renderizado de inputs para re-vincular los eventos
-		renderDataEntryInputs();
+		// Usar la función global unificada
+		imprimirElemento({ selector: '#resultado', modo: 'print', titulo: 'Resultado MBTI (Entrada Manual)' });
 	}
 
 
@@ -253,98 +177,56 @@ if(sessionStorage.getItem("verificado")){
 
 
 	// =================================================================
+
 	// LÓGICA DE CÁLCULO DE RESULTADOS PARA ENTRADA MANUAL (MODO 2)
 	// =================================================================
 	function calcularResultadoManual() {
 		const resultadoDiv = document.getElementById('resultado');
-		
-		// 0. Obtener datos de identificación de los campos GLOBALES
-		const nombre = document.getElementById('nombreGlobal').value.trim();
-		const cedula = document.getElementById('cedulaGlobal').value.trim();
-
-		let resultadosPorGrupoNet = { 1: 0, 2: 0, 3: 0, 4: 0 }; 
-		let tipoMBTI = "";
-		let tablaDimensionesHTML = '';
-		const dimensionesTexto = ["E/I (Extroversión/Introversión)", "S/N (Sensación/Intuición)", "T/F (Pensamiento/Sentimiento)", "J/P (Juicio/Percepción)"];
-
-
-		// 1. Recorrer los 100 campos de entrada y calcular/validar
-		for (let i = 1; i <= totalPreguntas; i++) {
+		const respuestas = [];
+		for (let i = 1; i <= TOTAL_PREGUNTAS; i++) {
 			const input = document.getElementById(`q${i}`);
-			
-			// Validación básica 
 			if (!input.value || parseInt(input.value) < 1 || parseInt(input.value) > 5) {
 				resultadoDiv.innerHTML = `<p style='color: red;'>❌ Por favor, revisa la **pregunta ${i}**. El valor debe ser entre 1 y 5.</p>`;
 				input.focus();
 				input.style.border = '2px solid red';
 				return;
 			}
-
-			input.style.border = '1px solid #ccc'; // Limpiar error
-			
-			const valorRawScore = parseInt(input.value); 
-			const valorPreguntaNet = valorRawScore - 3; 
-			const grupoPregunta = parseInt(input.getAttribute('data-grupo'));
-			
-			resultadosPorGrupoNet[grupoPregunta] += valorPreguntaNet; 
+			input.style.border = '1px solid #ccc';
+			respuestas.push(parseInt(input.value));
 		}
-
-		// 2. Generar la tabla de resultados y determinar el MBTI
+		if (!validarRespuestas(respuestas)) {
+			resultadoDiv.innerHTML = `<p style='color: red;'>❌ Hay respuestas inválidas. Verifica los valores ingresados.</p>`;
+			return;
+		}
+		const resultadosPorGrupoNet = calcularNetScores(respuestas);
+		let tipoMBTI = obtenerTipoMBTI(resultadosPorGrupoNet);
+		const dimensionesTexto = ["E/I (Extroversión/Introversión)", "S/N (Sensación/Intuición)", "T/F (Pensamiento/Sentimiento)", "J/P (Juicio/Percepción)"];
 		let grupoContador = 0;
-		
-		tablaDimensionesHTML += `<table style="width: 100%; border-collapse: collapse; margin-top: 5px; font-size: 0.9em;">
-			<thead style="background-color: #e9e9e9;">
-				<tr>
-					<th style="padding: 5px; border: 1px solid #ddd;">Dimensión</th>
-					<th style="padding: 5px; border: 1px solid #ddd; text-align: center;">Net Score (±50)</th>
-					<th style="padding: 5px; border: 1px solid #ddd; text-align: center;">Letra Resultante</th>
-					<th style="padding: 5px; border: 1px solid #ddd;">Interpretación de Preferencia</th>
-				</tr>
-			</thead>
-			<tbody>`;
-
+		let tablaDimensionesHTML = `<table style=\"width: 100%; border-collapse: collapse; margin-top: 5px; font-size: 0.9em;\"><thead style=\"background-color: #e9e9e9;\"><tr><th style=\"padding: 5px; border: 1px solid #ddd;\">Dimensión</th><th style=\"padding: 5px; border: 1px solid #ddd; text-align: center;\">Net Score (±50)</th><th style=\"padding: 5px; border: 1px solid #ddd; text-align: center;\">Letra Resultante</th><th style=\"padding: 5px; border: 1px solid #ddd;\">Interpretación de Preferencia</th></tr></thead><tbody>`;
 		for (const grupo in resultadosPorGrupoNet) {
 			const netScore = resultadosPorGrupoNet[grupo];
 			const dim = getCaracteristica(parseInt(grupo), netScore);
-					
-			// *** AQUÍ USAMOS LA FUNCIÓN DE INTERPRETACIÓN DETALLADA ***
 			const interpretacionCompleta = generateInterpretation(netScore, dim);
-					
 			const letraFinal = dim.letra === '-' ? dim.id.charAt(0) : dim.letra;
-			tipoMBTI += letraFinal;
-
-			tablaDimensionesHTML += `
-				<tr>
-					<td style="padding: 5px; border: 1px solid #ddd;">${dimensionesTexto[grupoContador]}</td>
-					<td style="padding: 5px; border: 1px solid #ddd; text-align: center;">${netScore}</td>
-					<td style="padding: 5px; border: 1px solid #ddd; font-weight: bold; color: #1c4e7f; text-align: center;">${letraFinal}</td>
-					<td style="padding: 5px; border: 1px solid #ddd;">${interpretacionCompleta.replace('**', '<strong>').replace('**', '</strong>')}</td>
-				</tr>
-			`;
-					
+			tablaDimensionesHTML += `<tr><td style=\"padding: 5px; border: 1px solid #ddd;\">${dimensionesTexto[grupoContador]}</td><td style=\"padding: 5px; border: 1px solid #ddd; text-align: center;\">${netScore}</td><td style=\"padding: 5px; border: 1px solid #ddd; font-weight: bold; color: #1c4e7f; text-align: center;\">${letraFinal}</td><td style=\"padding: 5px; border: 1px solid #ddd;\">${interpretacionCompleta.replace('**', '<strong>').replace('**', '</strong>')}</td></tr>`;
 			grupoContador++;
 		}
-		
 		tablaDimensionesHTML += `</tbody></table>`;
-				
-		// 3. Mostrar el resultado final con formato de informe (Compacto)
+		const nombre = document.getElementById('nombreGlobal').value.trim();
+		const cedula = document.getElementById('cedulaGlobal').value.trim();
 		resultadoDiv.innerHTML = `
 			<div class="informe-mbti-resultado" style="padding: 10px; border: 2px solid #1c4e7f; border-radius: 8px; background-color: #f0f8ff; font-family: Arial, sans-serif;">
-				
 				<h2 style="text-align: center; color: #1c4e7f; margin-top: 0; margin-bottom: 10px; font-size: 1.4em; border-bottom: 1px solid #1c4e7f; padding-bottom: 5px;">INFORME DE PERFIL DE PERSONALIDAD MBTI</h2>
-				
 				<section style="border: 1px solid #ccc; padding: 8px; margin-bottom: 10px; background-color: white; border-radius: 5px;">
 					<h3 style="margin-top: 0; color: #333; border-bottom: 1px solid #eee; padding-bottom: 3px; font-size: 1em;">Datos del Candidato</h3>
 					<p style="margin: 3px 0; font-size: 0.85em;"><strong>Nombre Completo:</strong> ${nombre || 'N/A'}</p>
 					<p style="margin: 3px 0; font-size: 0.85em;"><strong>Cédula/DNI:</strong> ${cedula || 'N/A'}</p>
 					<p style="margin: 3px 0; font-size: 0.85em;"><strong>Documento generado el:</strong> ${new Date().toLocaleDateString('es-ES')}</p>
 				</section>
-
 				<section style="margin-bottom: 15px;">
 					<h3 style="color: #4CAF50; font-size: 1em;">Resultados por Dimensión (Puntuación Neta)</h3>
 					${tablaDimensionesHTML}
 				</section>
-
 				<section style="text-align: center; padding: 10px; background-color: #d9edf7; border: 1px solid #bce8f1; border-radius: 5px;">
 					<h3 style="color: #31708f; margin-top: 0; font-size: 1.1em;">Tipo de Personalidad Sugerido</h3>
 					<p style="font-size: 0.9em; margin: 5px 0;">El perfil resultante es:</p>
@@ -352,8 +234,6 @@ if(sessionStorage.getItem("verificado")){
 				</section>
 			</div>
 		`;
-				
-		// Desplazar la vista al resultado
 		resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
 	}
 

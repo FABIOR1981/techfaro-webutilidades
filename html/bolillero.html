@@ -11,13 +11,13 @@
        
     </div>
 	<div class="container"id="contDer">
-	<form>
+    <form role="form" aria-label="Bolillero selector de cédulas">
         <h1>Bolillero - Selector de Cédulas Aleatorias</h1>
         <input type="file" id="archivoCedulas" accept=".txt">
         <label for="cantidadCedulasPorGrupo">Cantidad por grupo:</label>
         <input type="number" id="cantidadCedulasPorGrupo" min="1" required>
 	</form>
-        <button onclick="generarListas()">Generar</button>
+        <button onclick="generarListas()" aria-label="Generar lista aleatoria" class="btn-high-contrast">Generar</button>
 		
         <div id="resultados">
             <ul id="listaCedulas"></ul>

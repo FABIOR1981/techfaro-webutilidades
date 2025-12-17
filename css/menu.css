@@ -58,28 +58,41 @@ nav {
 /* ---------------------------------- */
 /* Estilos del Submenú (OVO, MBTI, etc.) */
 /* ---------------------------------- */
+/* Submenú con animación de transición y accesibilidad */
 .submenu {
     display: none;
+    opacity: 0;
     position: absolute;
-    
-    /* Configuración para que el submenú se despliegue lateralmente */
-    top: 0; /* Alineado con el borde superior del ítem padre */
-    left: 100%; /* Desplegado a la derecha del ítem padre */
-    
-    min-width: 200px; 
+    top: 0;
+    left: 100%;
+    min-width: 200px;
     z-index: 10;
     list-style: none;
     padding: 5px 0;
     margin: 0;
-    
-    background-color: #333; /* Fondo más oscuro para el submenú */
+    background-color: #333;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
     border-radius: var(--border-radius);
+    pointer-events: none;
+    transition: opacity 0.25s cubic-bezier(.4,0,.2,1);
+}
+
+.menu-item:focus-within > .submenu,
+.menu-item:hover > .submenu,
+.menu-item.open > .submenu {
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
 }
 
 /* Muestra el submenú al hacer hover sobre el ítem principal */
-.menu-item:hover > .submenu {
-    display: block;
+/* Eliminado: ahora se usa :focus-within, .open y :hover para accesibilidad */
+/* Mejora visual de foco */
+.menu-item > a:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    background-color: var(--primary-color);
+    color: #fff;
 }
 
 /* Estilos de los ítems del Submenú */

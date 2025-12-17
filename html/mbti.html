@@ -14,7 +14,7 @@
         <p style="text-align: center; font-style: italic; color: #555;">
         </p>
 
-        <form id="miFormulario" onsubmit="event.preventDefault(); calcularResultado();">
+        <form id="miFormulario" onsubmit="event.preventDefault(); calcularResultado();" role="form" aria-label="Cuestionario MBTI">
             
             <div id="preguntas">
                 </div>
@@ -24,12 +24,10 @@
             </div>
             
             <div class="botones-container">
-                <button type="button" id="btnAutoCompletar" onclick="autoCompletar()">Auto-Completar (Test)</button>
-                
-                <button type="submit">Calcular Resultado</button>
-				
-                <button id="btnImprimir" type="button" onclick="window.print()">Imprimir Cuestionario</button>
-				<button type="button" id="btnImprimirVacio" onclick="window.open('mbti_para_imprimir_a4.html', '_blank')">Imprimir Vacío</button>
+                <button type="button" id="btnAutoCompletar" onclick="autoCompletar()" aria-label="Auto-completar el test" class="btn-high-contrast">Auto-Completar (Test)</button>
+                <button type="submit" aria-label="Calcular resultado del cuestionario" class="btn-high-contrast">Calcular Resultado</button>
+                <button id="btnImprimir" type="button" onclick="imprimirElemento({selector:'.main-content', modo:'print', titulo:'Cuestionario de Personalidad MBTI'})" aria-label="Imprimir cuestionario" class="btn-high-contrast">Imprimir Cuestionario</button>
+                <button type="button" id="btnImprimirVacio" onclick="window.open('mbti_para_imprimir_a4.html', '_blank')" aria-label="Imprimir cuestionario vacío" class="btn-high-contrast">Imprimir Vacío</button>
             </div>
         </form>
     </div>

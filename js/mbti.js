@@ -1,40 +1,7 @@
-// VALORES BRUTOS: 1, 2, 3, 4, 5 (Visibles en el HTML y la interfaz)
-const RAW_SCORE_VALUES = [1, 2, 3, 4, 5];
-// Mapeo interno: 1=-2, 2=-1, 3=0, 4=1, 5=2 (Se calcula como Raw Score - 3)
 
-// Función auxiliar para obtener la característica
-function getCaracteristica(grupo, netScore) {
-    let letra = "";
-    let nombre = "";
-
-    switch (grupo) {
-        case 1: // E/I (Positivo = E, Negativo = I)
-            if (netScore > 0) { letra = 'E'; nombre = "Extroversión"; } 
-            else if (netScore < 0) { letra = 'I'; nombre = "Introversión"; }
-            else { letra = '-'; nombre = "Sin preferencia clara"; }
-            return { letra: letra, nombre: nombre, id: "E/I" };
-
-        case 2: // S/N (Positivo = S, Negativo = N)
-            if (netScore > 0) { letra = 'S'; nombre = "Sensación"; } 
-            else if (netScore < 0) { letra = 'N'; nombre = "Intuición"; }
-            else { letra = '-'; nombre = "Sin preferencia clara"; }
-            return { letra: letra, nombre: nombre, id: "S/N" };
-
-        case 3: // T/F (Positivo = T, Negativo = F)
-            if (netScore > 0) { letra = 'T'; nombre = "Pensamiento"; } 
-            else if (netScore < 0) { letra = 'F'; nombre = "Sentimiento"; }
-            else { letra = '-'; nombre = "Sin preferencia clara"; }
-            return { letra: letra, nombre: nombre, id: "T/F" };
-
-        case 4: // J/P (Positivo = J, Negativo = P)
-            if (netScore > 0) { letra = 'J'; nombre = "Juicio"; } 
-            else if (netScore < 0) { letra = 'P'; nombre = "Percepción"; }
-            else { letra = '-'; nombre = "Sin preferencia clara"; }
-            return { letra: letra, nombre: nombre, id: "J/P" };
-        default:
-            return { letra: 'X', nombre: 'Desconocido', id: 'X/X' };
-    }
-}
+// Importar funciones centrales desde mbti_core.js
+// Si usas módulos ES6, asegúrate de que el HTML incluya type="module" en el script
+import { RAW_SCORE_VALUES, calcularNetScores, getCaracteristica, generateInterpretation, validarRespuestas, obtenerTipoMBTI } from './mbti_core.js';
     
 // =================================================================
 // FUNCIÓN DE AUTO-COMPLETAR (PARA PRUEBAS)
@@ -216,27 +183,45 @@ function renderizarPreguntas() {
         const divOpciones = document.createElement('div');
         divOpciones.classList.add('opciones-radio');
 
-        for (let i = 0; i < 5; i++) { // Iteramos de 0 a 4
+        for (let i = 0; i < 5; i++) {
             const label = document.createElement('label');
-            const valorRawScore = RAW_SCORE_VALUES[i]; // 1, 2, 3, 4, 5
-            
+            const valorRawScore = RAW_SCORE_VALUES[i];
             let textoSecundario = '';
+            let tooltip = '';
             if (valorRawScore === 1) {
                 textoSecundario = `<br><span style="font-weight: normal; font-size: 0.75em;">(Muy en desacuerdo)</span>`;
+                tooltip = 'Muy en desacuerdo';
             } else if (valorRawScore === 3) {
                 textoSecundario = `<br><span style="font-weight: normal; font-size: 0.75em;">(Neutro)</span>`;
+                tooltip = 'Neutro';
             } else if (valorRawScore === 5) {
                 textoSecundario = `<br><span style="font-weight: normal; font-size: 0.75em;">(Muy de acuerdo)</span>`;
+                tooltip = 'Muy de acuerdo';
+            } else if (valorRawScore === 2) {
+                tooltip = 'En desacuerdo';
+            } else if (valorRawScore === 4) {
+                tooltip = 'De acuerdo';
             }
-            
             label.innerHTML = `
-                <input type="radio" name="pregunta${numeroPregunta}" value="${valorRawScore}" required>
+                <input type="radio" name="pregunta${numeroPregunta}" value="${valorRawScore}" required title="${tooltip}" aria-label="${tooltip}">
                 ${labels[i]}
                 ${textoSecundario}
             `;
+            // Validación visual en tiempo real para radio
+            label.querySelector('input').addEventListener('change', function() {
+                // Limpiar todos los radios de la pregunta
+                const radios = document.getElementsByName(`pregunta${numeroPregunta}`);
+                radios.forEach(radio => {
+                    radio.closest('label').style.border = '';
+                });
+                // Marcar el seleccionado
+                if (this.checked) {
+                    label.style.border = '2px solid #2ecc40';
+                }
+            });
             divOpciones.appendChild(label);
         }
-        
+
         divPregunta.appendChild(divOpciones);
         contenedorPreguntas.appendChild(divPregunta);
     });
@@ -249,46 +234,21 @@ function renderizarPreguntas() {
 
 function calcularResultado() {
     const resultadoDiv = document.getElementById('resultado');
-            
-    // Máximo de puntuación neta: 25 preguntas * 2 puntos = 50
-    let resultadosPorGrupoNet = { 1: 0, 2: 0, 3: 0, 4: 0 }; 
+    const respuestas = [];
     let preguntaFaltante = -1;
-    let tipoMBTI = "";
-    const dimensionesTexto = ["Dimensión 1 (E/I)", "Dimensión 2 (S/N)", "Dimensión 3 (T/F)", "Dimensión 4 (J/P)"];
-    let letrasFinales = [];
-
-
-    // 1. Recorrer y validar respuestas y aplicar el Mapeo Interno
     for (let i = 1; i <= preguntas.length; i++) {
         const checkedRadio = document.querySelector(`input[name="pregunta${i}"]:checked`);
-                
-        // Limpiar estilo de error previo
         if (document.getElementsByName(`pregunta${i}`)[0]) {
             document.getElementsByName(`pregunta${i}`)[0].closest('.pregunta').style.border = '1px solid #C8E6C9';
         }
-
         if (!checkedRadio) {
             preguntaFaltante = i;
-            break; 
+            break;
         }
-
-        // El valor del input es el RAW SCORE (1 a 5)
-        const valorRawScore = parseInt(checkedRadio.value); 
-                
-        // *** APLICACIÓN DEL MAPEO INTERNO: Net Score = Raw Score - 3 ***
-        const valorPreguntaNet = valorRawScore - 3; 
-                
-        const grupoPregunta = preguntas[i - 1].grupo; 
-                
-        // Sumamos la puntuación NETA
-        resultadosPorGrupoNet[grupoPregunta] += valorPreguntaNet; 
+        respuestas.push(parseInt(checkedRadio.value));
     }
-
-    // 2. Manejar error si falta alguna respuesta
     if (preguntaFaltante !== -1) {
         resultadoDiv.innerHTML = `<p style='color: red;'>❌ Por favor, responde la **pregunta ${preguntaFaltante}** antes de continuar.</p>`;
-                
-        // Resaltar la pregunta y hacer scroll
         const elementoFaltante = document.getElementsByName(`pregunta${preguntaFaltante}`)[0];
         if (elementoFaltante) {
             elementoFaltante.closest('.pregunta').style.border = '2px solid red';
@@ -296,48 +256,31 @@ function calcularResultado() {
         }
         return;
     }
-
-    // 3. Determinar el MBTI y generar el resumen estructurado
+    if (!validarRespuestas(respuestas)) {
+        resultadoDiv.innerHTML = `<p style='color: red;'>❌ Hay respuestas inválidas. Verifica los valores ingresados.</p>`;
+        return;
+    }
+    const resultadosPorGrupoNet = calcularNetScores(respuestas);
+    let tipoMBTI = obtenerTipoMBTI(resultadosPorGrupoNet);
+    const dimensionesTexto = ["Dimensión 1 (E/I)", "Dimensión 2 (S/N)", "Dimensión 3 (T/F)", "Dimensión 4 (J/P)"];
     let resumenResultados = `<h3>Resultados por Dimensión (Puntuación Neta: -50 a +50):</h3>`;
     let grupoContador = 0;
-
+    let letrasFinales = [];
     for (const grupo in resultadosPorGrupoNet) {
         const netScore = resultadosPorGrupoNet[grupo];
         const dim = getCaracteristica(parseInt(grupo), netScore);
-                
-        // La letra final es la calculada (E, I, S, N, T, F, J, P) o el primer caracter del ID si es neutro.
         const letraFinal = dim.letra === '-' ? dim.id.charAt(0) : dim.letra;
-        tipoMBTI += letraFinal;
-        letrasFinales.push(dim.letra === '-' ? dim.id.charAt(0) : dim.letra);
-
-
-        let interpretacion;
-        if (netScore > 0) {
-            interpretacion = `Preferencia por: **${dim.nombre}**`;
-        } else if (netScore < 0) {
-            // Cuando la puntuación neta es negativa, la preferencia es por la SEGUNDA letra del par.
-            // Por ejemplo, en E/I, netScore < 0 indica I (Introversión).
-            // La función getCaracteristica ya maneja esto.
-            interpretacion = `Preferencia por: **${dim.nombre}**`;
-        } else {
-            interpretacion = `Sin preferencia clara.`;
-        }
-
-        // FORMATO: **Dimensión X (A/B):** [Net Score] puntos. (Preferencia por: ...)
+        letrasFinales.push(letraFinal);
+        let interpretacion = generateInterpretation(netScore, dim);
         resumenResultados += `**${dimensionesTexto[grupoContador]}:** ${netScore} puntos. (${interpretacion})<br>`;
-                
         grupoContador++;
     }
-            
-    // 4. Mostrar el resultado final
     resultadoDiv.innerHTML = `
         ${resumenResultados}
         <hr>
         <h2>🎉 Su Tipo de Personalidad MBTI Sugerido es: <span style="color: #FF0000; font-size: 1.6em;">${tipoMBTI}</span></h2>
         <p>(${letrasFinales.join(' - ')})</p>
     `;
-            
-    // Desplazar la vista al resultado
     resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 

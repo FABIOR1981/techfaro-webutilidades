@@ -1,9 +1,6 @@
 /* OVO.CSS */
 
-.container {
-    background-color: #fff;
-    width: 300px;
-}
+
 
 
 
@@ -49,10 +46,7 @@ li:nth-child(even) {
     padding: 1rem;
 }
 
-footer {
-    float: right;
-    clear: both;
-}
+
 
 @media (max-width: 768px) {
     .ingreso {

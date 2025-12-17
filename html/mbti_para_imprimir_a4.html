@@ -102,8 +102,9 @@
 
         <div class="controls">
             <label style="font-size:0.9em; color:#333; margin-right:12px;">Preguntas por página: <strong id="perPageLabel">18</strong></label>
-            <button id="btnImprimir3x6">Imprimir / Generar PDF (3x6)</button>
-            <button id="btnImprimir3x9" style="margin-left:8px;">Imprimir / Generar PDF (3x9)</button>
+            <button id="btnImprimir3x6" onclick="imprimirElemento({selector:'.wrapper', modo:'print', titulo:'Cuestionario Imprimible A4 (3x6)'})">Imprimir / Generar PDF (3x6)</button>
+            <button id="btnImprimir3x9" style="margin-left:8px;" onclick="imprimirElemento({selector:'.wrapper', modo:'pdf', titulo:'Cuestionario Imprimible A4 (3x9)', pdfNombre:'mbti_3x9.pdf'})">Imprimir / Generar PDF (3x9)</button>
+            <script src="../js/funcgral.js"></script>
         </div>
 
         <div id="pagesContainer"></div>

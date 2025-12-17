@@ -98,7 +98,8 @@
 
         <div class="controls">
             <label style="font-size:0.9em; color:#333; margin-right:12px;">Preguntas por página: <strong id="perPageLabel">27</strong></label>
-            <button id="btnImprimir">Imprimir / Generar PDF</button>
+            <button id="btnImprimir" onclick="imprimirElemento({selector:'.wrapper', modo:'print', titulo:'Cuestionario Imprimible A4 (3x9)'})">Imprimir / Generar PDF</button>
+            <script src="../js/funcgral.js"></script>
         </div>
 
         <div id="pagesContainer"></div>

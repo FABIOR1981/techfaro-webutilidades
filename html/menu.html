@@ -10,35 +10,34 @@
 <body>
 <div class="container-flex">
 	<div class="container" id="contIzq" >
-	  <nav>
-		<ul class="menu">
-		  <li class="menu-item">
-			<a href="#">Cuestionarios</a>
-			<ul class="submenu">
-			  <li><a href="#" data-url="ovo.html" >OVO</a></li>		 
-            
-              <li class="menu-item">
-                <a href="#">MBTI</a>
-                <ul class="submenu">
-                    <li><a href="#" data-url="mbti.html" >MBTI Formulario</a></li>
-                    <li><a href="#" data-url="data_entry_mbti.html" >MBTI Corrector</a></li>
-                </ul>
-            </li>
-              <li><a href="#">Subitem 3</a></li>
-			</ul>
-		  </li>
-		  <li class="menu-item">
-			<a href="#">Bolilleros</a>
-			<ul class="submenu">	
-			  <li><a href="#" data-url="bolillero.html">Por CI</a></li>
-			  <li><a href="#" data-url="bolilleroCompleto.html">Datos Completo</a></li>		  
-			  <li><a href="#">Subitem 3</a></li>
-			</ul>
-		  </li>
-		</ul>
-	  </nav>
-	  <script src="../js/funcGral.js"></script>
-	  <script src="../js/Menu.js"></script>
+	<nav role="navigation" aria-label="Menú principal">
+  <ul class="menu" role="menubar">
+    <li class="menu-item" role="none">
+      <a href="#" role="menuitem" aria-haspopup="true" aria-expanded="false" tabindex="0" class="btn-high-contrast">Cuestionarios</a>
+      <ul class="submenu" role="menu" aria-label="Submenú Cuestionarios">
+        <li role="none"><a href="#" data-url="ovo.html" role="menuitem" tabindex="-1" class="btn-high-contrast">OVO</a></li>
+        <li class="menu-item" role="none">
+          <a href="#" role="menuitem" aria-haspopup="true" aria-expanded="false" tabindex="-1" class="btn-high-contrast">MBTI</a>
+          <ul class="submenu" role="menu" aria-label="Submenú MBTI">
+            <li role="none"><a href="#" data-url="mbti.html" role="menuitem" tabindex="-1" class="btn-high-contrast">MBTI Formulario</a></li>
+            <li role="none"><a href="#" data-url="data_entry_mbti.html" role="menuitem" tabindex="-1" class="btn-high-contrast">MBTI Corrector</a></li>
+          </ul>
+        </li>
+        <li role="none"><a href="#" role="menuitem" tabindex="-1" class="btn-high-contrast">Subitem 3</a></li>
+      </ul>
+    </li>
+    <li class="menu-item" role="none">
+      <a href="#" role="menuitem" aria-haspopup="true" aria-expanded="false" tabindex="0" class="btn-high-contrast">Bolilleros</a>
+      <ul class="submenu" role="menu" aria-label="Submenú Bolilleros">
+        <li role="none"><a href="#" data-url="bolillero.html" role="menuitem" tabindex="-1" class="btn-high-contrast">Por CI</a></li>
+        <li role="none"><a href="#" data-url="bolilleroCompleto.html" role="menuitem" tabindex="-1" class="btn-high-contrast">Datos Completo</a></li>
+        <li role="none"><a href="#" role="menuitem" tabindex="-1" class="btn-high-contrast">Subitem 3</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  <script src="../js/funcGral.js"></script>
+  <script src="../js/menu-accesible.js"></script>
 	</div>
 	<div class="container"id="contDer">
 	</div>
