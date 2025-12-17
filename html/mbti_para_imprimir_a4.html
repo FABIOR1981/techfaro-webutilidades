@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>MBTI - Imprimir A4 (3 columnas x 9 filas)</title>
+    <title>MBTI - Imprimir A4 (3 columnas x 6 filas)</title>
     <style>
         /* Página A4 y margen superior amplio para evitar recortes */
         @page { size: A4; margin: 30mm 12mm 12mm 12mm; }
@@ -24,8 +24,8 @@
             }
             /* Quitar el top-safe en impresión para no sumar espacio extra */
             .page::before { display: none !important; }
-            /* Ajustes de grid para que 9 filas quepan de forma estable */
-            .page-grid { grid-template-rows: repeat(9, 1fr); height: calc(100% - 18mm); }
+            /* Ajustes de grid para que 6 filas quepan de forma estable */
+            .page-grid { grid-template-rows: repeat(6, 1fr); height: calc(100% - 18mm); }
             .pregunta { page-break-inside: avoid; break-inside: avoid; overflow: visible; }
             /* Ocultar controles y formulario global en la versión impresa/PDF */
             .global-header, .controls { display: none !important; }
@@ -59,7 +59,7 @@
             .sheet-page-number { font-weight:600; font-size:10pt; margin-left:12px; color:#222; white-space:nowrap; }
         }
 
-        /* Cuadrícula: 3 columnas, 9 filas (27 items por página)*/
+        /* Cuadrícula: 3 columnas, 6 filas (18 items por página)*/
         .page-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: minmax(34px, auto); gap: 8px; grid-auto-flow: row; }
 
         /* Cada pregunta ocupa una celda. Evitar cortes dentro del elemento */
@@ -101,7 +101,7 @@
         </header>
 
         <div class="controls">
-            <label style="font-size:0.9em; color:#333; margin-right:12px;">Preguntas por página: <strong id="perPageLabel">27</strong></label>
+            <label style="font-size:0.9em; color:#333; margin-right:12px;">Preguntas por página: <strong id="perPageLabel">18</strong></label>
             <button id="btnImprimir">Imprimir / Generar PDF</button>
         </div>
 
@@ -224,8 +224,8 @@
 
     const preguntas = [...grupo1_EI, ...grupo2_SN, ...grupo3_TF, ...grupo4_JP];
 
-    // RENDER: paginar en bloques de 27 (3x9) y respetar orden por filas (left->center->right)
-    const perPage = 27;
+    // RENDER: paginar en bloques de 18 (3x6) y respetar orden por filas (left->center->right)
+    const perPage = 18;
     const pagesContainer = document.getElementById('pagesContainer');
 
     function escapeHtmlAttr(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
