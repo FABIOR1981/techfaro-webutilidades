@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>MBTI - Imprimir A4 (3 columnas x 6 filas)</title>
+    <title>MBTI - Imprimir A4 (3 columnas x 9 filas)</title>
     <style>
         /* Página A4 y margen superior amplio para evitar recortes */
         @page { size: A4; margin: 30mm 12mm 12mm 12mm; }
@@ -24,8 +24,8 @@
             }
             /* Quitar el top-safe en impresión para no sumar espacio extra */
             .page::before { display: none !important; }
-            /* Ajustes de grid para que 6 filas quepan de forma estable */
-            .page-grid { grid-template-rows: repeat(6, 1fr); height: calc(100% - 18mm); }
+            /* Ajustes de grid para que 9 filas quepan de forma estable */
+            .page-grid { grid-template-rows: repeat(9, 1fr); height: calc(100% - 18mm); }
             .pregunta { page-break-inside: avoid; break-inside: avoid; overflow: visible; }
             /* Ocultar controles y formulario global en la versión impresa/PDF */
             .global-header, .controls { display: none !important; }
@@ -43,7 +43,6 @@
         .page::before { content: ''; display:block; height: 6mm; }
 
         /* Encabezado imprimible por hoja (líneas para completar a mano) */
-        /* VERSIÓN: Oculto en pantalla y mostrado solo al imprimir (como en la primera versión) */
         .sheet-header-print { display:none !important; gap:8px; align-items:center; margin-bottom:6px; font-size:10pt; flex-wrap:wrap; }
         .sheet-header-print .print-line { display:inline-block; min-width:220px; border-bottom:1px solid #000; padding-bottom:3px; color: #000; }
         .sheet-header-print .print-field { min-width:220px; display:inline-block; }
@@ -59,7 +58,7 @@
             .sheet-page-number { font-weight:600; font-size:10pt; margin-left:12px; color:#222; white-space:nowrap; }
         }
 
-        /* Cuadrícula: 3 columnas, 6 filas (18 items por página)*/
+        /* Cuadrícula: 3 columnas, 9 filas (27 items por página)*/
         .page-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: minmax(34px, auto); gap: 8px; grid-auto-flow: row; }
 
         /* Cada pregunta ocupa una celda. Evitar cortes dentro del elemento */
@@ -90,7 +89,7 @@
 <body>
     <div class="wrapper">
         <header>
-            <h1>Cuestionario - Versión Imprimible A4</h1>
+            <h1>Cuestionario - Versión Imprimible A4 (3x9)</h1>
             
             <div class="global-header" style="margin-top:6px; display:flex; gap:8px; justify-content:center; align-items:center; flex-wrap:wrap;">
                 <label>Nombre: <input id="globalNombre" type="text" style="width:320px;"></label>
@@ -101,9 +100,8 @@
         </header>
 
         <div class="controls">
-            <label style="font-size:0.9em; color:#333; margin-right:12px;">Preguntas por página: <strong id="perPageLabel">18</strong></label>
-            <button id="btnImprimir3x6">Imprimir / Generar PDF (3x6)</button>
-            <button id="btnImprimir3x9" style="margin-left:8px;">Imprimir / Generar PDF (3x9)</button>
+            <label style="font-size:0.9em; color:#333; margin-right:12px;">Preguntas por página: <strong id="perPageLabel">27</strong></label>
+            <button id="btnImprimir">Imprimir / Generar PDF</button>
         </div>
 
         <div id="pagesContainer"></div>
@@ -225,8 +223,8 @@
 
     const preguntas = [...grupo1_EI, ...grupo2_SN, ...grupo3_TF, ...grupo4_JP];
 
-    // RENDER: paginar en bloques de 18 (3x6) y respetar orden por filas (left->center->right)
-    const perPage = 18;
+    // RENDER: paginar en bloques de 27 (3x9) y respetar orden por filas (left->center->right)
+    const perPage = 27;
     const pagesContainer = document.getElementById('pagesContainer');
 
     function escapeHtmlAttr(s){ return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -318,17 +316,22 @@
         if(el) el.addEventListener('input', () => propagateGlobalToPages());
     });
 
-    document.getElementById('btnImprimir3x6').addEventListener('click', () => {
-        // actualizar antes de imprimir (3x6)
+    document.getElementById('btnImprimir').addEventListener('click', () => {
+        // actualizar antes de imprimir
         buildPages();
         window.print();
     });
 
-    // Abrir la versión 3x9 en una nueva pestaña y, si se solicita, iniciar impresión automática
-    document.getElementById('btnImprimir3x9').addEventListener('click', () => {
-        const url = 'mbti_para_imprimir_a4_3X9.html?print=true';
-        window.open(url, '_blank');
-    });
+    // Si se abrió con ?print=true, iniciar impresión automática al cargar
+    (function(){
+        try{
+            const q = new URLSearchParams(location.search);
+            if(q.get('print') === 'true'){
+                // construir y lanzar impresión después de renderizado
+                document.addEventListener('DOMContentLoaded', ()=>{ buildPages(); setTimeout(()=>window.print(), 200); });
+            }
+        }catch(e){}
+    })();
 
     // Volver a construir y propagar antes de imprimir por si cambia el layout
     window.addEventListener('beforeprint', () => { buildPages(); propagateGlobalToPages(); });
