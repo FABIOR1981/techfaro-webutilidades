@@ -203,9 +203,12 @@ if(sessionStorage.getItem("verificado")){
 			
 			// *** AQUÍ USAMOS LA FUNCIÓN DE INTERPRETACIÓN DETALLADA ***
 			const interpretacionCompleta = generateInterpretation(netScore, dim);
-					
-			const letraFinal = dim.letra === '-' ? dim.id.charAt(0) : dim.letra;
-			tipoMBTI += letraFinal;
+			// Si netScore es 0, usar la pareja de letras (E/I, S/N, T/F, J/P)
+			let letraFinal = dim.letra;
+			if (netScore === 0) {
+				letraFinal = dim.id; // Ejemplo: E/I
+			}
+			tipoMBTI += (netScore === 0) ? dim.id : dim.letra;
 
 			tablaDimensionesHTML += `
 				<tr>
@@ -215,7 +218,6 @@ if(sessionStorage.getItem("verificado")){
 					<td style="padding: 5px; border: 1px solid #ddd;">${interpretacionCompleta.replace('**', '<strong>').replace('**', '</strong>')}</td>
 				</tr>
 			`;
-					
 			grupoContador++;
 		}
 		
@@ -309,9 +311,12 @@ if(sessionStorage.getItem("verificado")){
 					
 			// *** AQUÍ USAMOS LA FUNCIÓN DE INTERPRETACIÓN DETALLADA ***
 			const interpretacionCompleta = generateInterpretation(netScore, dim);
-					
-			const letraFinal = dim.letra === '-' ? dim.id.charAt(0) : dim.letra;
-			tipoMBTI += letraFinal;
+			// Si netScore es 0, usar la pareja de letras (E/I, S/N, T/F, J/P)
+			let letraFinal = dim.letra;
+			if (netScore === 0) {
+				letraFinal = dim.id; // Ejemplo: E/I
+			}
+			tipoMBTI += (netScore === 0) ? dim.id : dim.letra;
 
 			tablaDimensionesHTML += `
 				<tr>
@@ -321,7 +326,6 @@ if(sessionStorage.getItem("verificado")){
 					<td style="padding: 5px; border: 1px solid #ddd;">${interpretacionCompleta.replace('**', '<strong>').replace('**', '</strong>')}</td>
 				</tr>
 			`;
-					
 			grupoContador++;
 		}
 		
