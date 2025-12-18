@@ -85,22 +85,22 @@ export function calcularNetScores(respuestas) {
 
 // Obtener tipo MBTI final
 export function obtenerTipoMBTI(resultados) {
-    let tipo = '';
+    let partes = [];
     let buffer = '';
     for (let grupo = 1; grupo <= 4; grupo++) {
         const letra = getCaracteristica(grupo, resultados[grupo]).letra;
         if (letra.includes('/')) {
             if (buffer.length > 0) {
-                tipo += buffer + '-';
+                partes.push(buffer);
                 buffer = '';
             }
-            tipo += letra;
+            partes.push(letra);
         } else {
             buffer += letra;
         }
     }
-    if (buffer.length > 0) tipo += buffer;
-    return tipo;
+    if (buffer.length > 0) partes.push(buffer);
+    return partes.join('-');
 }
 
 // Exportar constantes si se requiere
