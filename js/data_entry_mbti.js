@@ -1,5 +1,7 @@
 // Importar funciones centrales desde mbti_core.js
-import { RAW_SCORE_VALUES, TOTAL_PREGUNTAS, TOTAL_PREGUNTAS_POR_GRUPO, calcularNetScores, getCaracteristica, generateInterpretation, validarRespuestas, obtenerTipoMBTI } from './mbti_core.js';
+import { RAW_SCORE_VALUES, TOTAL_PREGUNTAS, TOTAL_PREGUNTAS_POR_GRUPO, calcularNetScores, getCaracteristica, generateInterpretation, validarRespuestas, obtenerTipoMBTI, testObtenerTipoMBTI } from './mbti_core.js';
+// Ejecutar test unitario de formato MBTI al cargar
+testObtenerTipoMBTI();
 
 if(sessionStorage.getItem("verificado")){
 	// =================================================================
