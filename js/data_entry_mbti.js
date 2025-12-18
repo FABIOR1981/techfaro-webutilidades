@@ -118,13 +118,9 @@ if(sessionStorage.getItem("verificado")){
 		for (const grupo in resultadosPorGrupoNet) {
 			const netScore = resultadosPorGrupoNet[grupo];
 			const dim = getCaracteristica(parseInt(grupo), netScore);
-			
 			// *** AQUÍ USAMOS LA FUNCIÓN DE INTERPRETACIÓN DETALLADA ***
 			const interpretacionCompleta = generateInterpretation(netScore, dim);
-					
 			const letraFinal = dim.letra === '-' ? dim.id.charAt(0) : dim.letra;
-			tipoMBTI += letraFinal;
-
 			tablaDimensionesHTML += `
 				<tr>
 					<td style="padding: 5px; border: 1px solid #ddd;">${dimensionesTexto[grupoContador]}</td>
@@ -133,9 +129,10 @@ if(sessionStorage.getItem("verificado")){
 					<td style="padding: 5px; border: 1px solid #ddd;">${interpretacionCompleta.replace('**', '<strong>').replace('**', '</strong>')}</td>
 				</tr>
 			`;
-					
 			grupoContador++;
 		}
+		// Usar la función obtenerTipoMBTI para el perfil final correctamente formateado
+		tipoMBTI = obtenerTipoMBTI(resultadosPorGrupoNet);
 		
 		tablaDimensionesHTML += `</tbody></table>`;
 				
