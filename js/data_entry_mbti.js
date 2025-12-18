@@ -163,6 +163,8 @@ if(sessionStorage.getItem("verificado")){
 		const dimensionesTexto = ["E/I (Extroversión/Introversión)", "S/N (Sensación/Intuición)", "T/F (Pensamiento/Sentimiento)", "J/P (Juicio/Percepción)"];
 		let resultadosPorGrupoNet = {};
 		let tipoMBTI = "";
+		let tipoMBTIArray = [];
+		let parejaIndex = -1;
 		let tablaDimensionesHTML = '';
 
 		// 1. Recorrer los 4 campos de entrada directa y calcular/validar
@@ -208,7 +210,12 @@ if(sessionStorage.getItem("verificado")){
 			if (netScore === 0) {
 				letraFinal = dim.id; // Ejemplo: E/I
 			}
-			tipoMBTI += (netScore === 0) ? dim.id : dim.letra;
+			if (netScore === 0) {
+				tipoMBTIArray.push(dim.id);
+				parejaIndex = grupoContador;
+			} else {
+				tipoMBTIArray.push(dim.letra);
+			}
 
 			tablaDimensionesHTML += `
 				<tr>
@@ -224,11 +231,19 @@ if(sessionStorage.getItem("verificado")){
 		tablaDimensionesHTML += `</tbody></table>`;
 				
 		// 3. Mostrar el resultado final con formato de informe (Compacto)
+		// Armar el perfil resultante según el formato solicitado
+		if (parejaIndex === -1) {
+			tipoMBTI = tipoMBTIArray.join("");
+		} else {
+			const left = tipoMBTIArray.slice(0, parejaIndex).join("");
+			const right = tipoMBTIArray.slice(parejaIndex + 1).join("");
+			tipoMBTI = (left ? left + "-" : "") + tipoMBTIArray[parejaIndex] + (right ? "-" + right : "");
+		}
 		resultadoDiv.innerHTML = `
 			<div class="informe-mbti-resultado" style="padding: 10px; border: 2px solid #1c4e7f; border-radius: 8px; background-color: #f0f8ff; font-family: Arial, sans-serif;">
-				
+                
 				<h2 style="text-align: center; color: #1c4e7f; margin-top: 0; margin-bottom: 10px; font-size: 1.4em; border-bottom: 1px solid #1c4e7f; padding-bottom: 5px;">INFORME DE PERFIL DE PERSONALIDAD MBTI</h2>
-				
+                
 				<section style="border: 1px solid #ccc; padding: 8px; margin-bottom: 10px; background-color: white; border-radius: 5px;">
 					<h3 style="margin-top: 0; color: #333; border-bottom: 1px solid #eee; padding-bottom: 3px; font-size: 1em;">Datos del Candidato</h3>
 					<p style="margin: 3px 0; font-size: 0.85em;"><strong>Nombre Completo:</strong> ${nombre || 'N/A'}</p>
@@ -266,6 +281,8 @@ if(sessionStorage.getItem("verificado")){
 
 		let resultadosPorGrupoNet = { 1: 0, 2: 0, 3: 0, 4: 0 }; 
 		let tipoMBTI = "";
+		let tipoMBTIArray = [];
+		let parejaIndex = -1;
 		let tablaDimensionesHTML = '';
 		const dimensionesTexto = ["E/I (Extroversión/Introversión)", "S/N (Sensación/Intuición)", "T/F (Pensamiento/Sentimiento)", "J/P (Juicio/Percepción)"];
 
@@ -315,8 +332,11 @@ if(sessionStorage.getItem("verificado")){
 			let letraFinal = dim.letra;
 			if (netScore === 0) {
 				letraFinal = dim.id; // Ejemplo: E/I
+				tipoMBTIArray.push(dim.id);
+				parejaIndex = grupoContador;
+			} else {
+				tipoMBTIArray.push(dim.letra);
 			}
-			tipoMBTI += (netScore === 0) ? dim.id : dim.letra;
 
 			tablaDimensionesHTML += `
 				<tr>
@@ -330,8 +350,16 @@ if(sessionStorage.getItem("verificado")){
 		}
 		
 		tablaDimensionesHTML += `</tbody></table>`;
-				
-		// 3. Mostrar el resultado final con formato de informe (Compacto)
+			
+			// 3. Mostrar el resultado final con formato de informe (Compacto)
+			// Armar el perfil resultante según el formato solicitado
+			if (parejaIndex === -1) {
+				tipoMBTI = tipoMBTIArray.join("");
+			} else {
+				const left = tipoMBTIArray.slice(0, parejaIndex).join("");
+				const right = tipoMBTIArray.slice(parejaIndex + 1).join("");
+				tipoMBTI = (left ? left + "-" : "") + tipoMBTIArray[parejaIndex] + (right ? "-" + right : "");
+			}
 		resultadoDiv.innerHTML = `
 			<div class="informe-mbti-resultado" style="padding: 10px; border: 2px solid #1c4e7f; border-radius: 8px; background-color: #f0f8ff; font-family: Arial, sans-serif;">
 				
