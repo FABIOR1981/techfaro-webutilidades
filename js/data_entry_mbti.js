@@ -67,6 +67,8 @@ if(sessionStorage.getItem("verificado")){
 		// Usar la función global unificada
 		imprimirElemento({ selector: '#resultado', modo: 'print', titulo: 'Resultado MBTI (Entrada Manual)' });
 	}
+	// Exponer imprimirResultado en window para el HTML
+	window.imprimirResultado = imprimirResultado;
 
 
 	// =================================================================
