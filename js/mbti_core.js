@@ -100,8 +100,7 @@ export function obtenerTipoMBTI(resultados) {
         }
     }
     if (buffer.length > 0) tipo += buffer;
-    // Si hay más de una dupla, asegurarse de que cada una esté precedida por guion
-    return tipo.replace(/([A-Z]+)(?=[A-Z]\/[A-Z])/g, '$1-');
+    return tipo;
 }
 
 // Exportar constantes si se requiere
