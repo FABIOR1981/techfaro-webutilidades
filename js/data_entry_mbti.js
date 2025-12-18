@@ -3,6 +3,18 @@ import { RAW_SCORE_VALUES, TOTAL_PREGUNTAS, TOTAL_PREGUNTAS_POR_GRUPO, calcularN
 // Ejecutar test unitario de formato MBTI al cargar
 testObtenerTipoMBTI();
 
+function imprimirResultado() {
+	const resultadoDiv = document.getElementById('resultado');
+	const contenidoAImprimir = resultadoDiv.innerHTML;
+	if (!contenidoAImprimir || !contenidoAImprimir.includes('Tipo de Personalidad Sugerido')) {
+		alert("Primero, debe calcular un resultado (Modo 1 o Modo 2) para poder imprimirlo.");
+		return;
+	}
+	// Usar la función global unificada
+	imprimirElemento({ selector: '#resultado', modo: 'print', titulo: 'Resultado MBTI (Entrada Manual)' });
+}
+window.imprimirResultado = imprimirResultado;
+
 if(sessionStorage.getItem("verificado")){
 	// =================================================================
 	// FUNCIÓN DE RENDERIZADO DE LOS CAMPOS DE ENTRADA MANUAL (MODO 2)
