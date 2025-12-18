@@ -10,10 +10,14 @@ export function testObtenerTipoMBTI() {
         // Test solicitado por el usuario
         { in: {1: 'E/I', 2: 'S', 3: 'T', 4: 'J'}, esperado: 'E/I-STJ', net: {1:0,2:16,3:17,4:21} },
     ];
+    let resumen = '';
     for(const caso of casos) {
         const res = obtenerTipoMBTI(caso.net);
-        console.log(`Input: ${JSON.stringify(caso.net)} => ${res} | Esperado: ${caso.esperado} | ${res === caso.esperado ? '✅' : '❌'}`);
+        const linea = `Input: ${JSON.stringify(caso.net)} => ${res} | Esperado: ${caso.esperado} | ${res === caso.esperado ? '✅' : '❌'}`;
+        console.log(linea);
+        resumen += linea + '\n';
     }
+    alert('Resultados test obtenerTipoMBTI:\n' + resumen);
 }
 // mbti_core.js
 // Módulo centralizado para lógica de MBTI: validación, cálculo y utilidades
