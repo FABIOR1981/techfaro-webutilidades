@@ -66,9 +66,17 @@ export function calcularNetScores(respuestas) {
 export function obtenerTipoMBTI(resultados) {
     let tipo = '';
     for (let grupo = 1; grupo <= 4; grupo++) {
-        tipo += getCaracteristica(grupo, resultados[grupo]).letra;
+        const letra = getCaracteristica(grupo, resultados[grupo]).letra;
+        if (letra.includes('/')) {
+            // Si hay letras acumuladas antes, separa con guion
+            if (tipo.length > 0) tipo += '-';
+            tipo += letra;
+        } else {
+            tipo += letra;
+        }
     }
-    return tipo;
+    // Si hay una dupla al final, asegurarse de que no quede guion extra
+    return tipo.replace(/([A-Z]{1,3})([A-Z]\/.[A-Z])/,'$1-$2');
 }
 
 // Exportar constantes si se requiere
