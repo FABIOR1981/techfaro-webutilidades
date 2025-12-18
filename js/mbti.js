@@ -1,7 +1,9 @@
 
 // Importar funciones centrales desde mbti_core.js
 // Si usas módulos ES6, asegúrate de que el HTML incluya type="module" en el script
-import { RAW_SCORE_VALUES, calcularNetScores, getCaracteristica, generateInterpretation, validarRespuestas, obtenerTipoMBTI } from './mbti_core.js';
+import { RAW_SCORE_VALUES, calcularNetScores, getCaracteristica, generateInterpretation, validarRespuestas, obtenerTipoMBTI, testObtenerTipoMBTI } from './mbti_core.js';
+    // Ejecutar test unitario de formato MBTI al cargar
+    testObtenerTipoMBTI();
     
 // =================================================================
 // FUNCIÓN DE AUTO-COMPLETAR (PARA PRUEBAS)

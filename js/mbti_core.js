@@ -1,3 +1,20 @@
+// TEST UNITARIO: Verificar formato de obtenerTipoMBTI
+export function testObtenerTipoMBTI() {
+    const casos = [
+        { in: {1: 'E/I', 2: 'S', 3: 'T', 4: 'J'}, esperado: 'E/I-STJ', net: {1:0,2:1,3:1,4:1} },
+        { in: {1: 'E', 2: 'S', 3: 'T/F', 4: 'J'}, esperado: 'ES-T/F-J', net: {1:1,2:1,3:0,4:1} },
+        { in: {1: 'E', 2: 'S', 3: 'T', 4: 'J/P'}, esperado: 'EST-J/P', net: {1:1,2:1,3:1,4:0} },
+        { in: {1: 'E', 2: 'S/N', 3: 'T', 4: 'J'}, esperado: 'E-S/N-TJ', net: {1:1,2:0,3:1,4:1} },
+        { in: {1: 'E/I', 2: 'S/N', 3: 'T/F', 4: 'J/P'}, esperado: 'E/I-S/N-T/F-J/P', net: {1:0,2:0,3:0,4:0} },
+        { in: {1: 'E', 2: 'S', 3: 'T', 4: 'J'}, esperado: 'ESTJ', net: {1:1,2:1,3:1,4:1} },
+        // Test solicitado por el usuario
+        { in: {1: 'E/I', 2: 'S', 3: 'T', 4: 'J'}, esperado: 'E/I-STJ', net: {1:0,2:16,3:17,4:21} },
+    ];
+    for(const caso of casos) {
+        const res = obtenerTipoMBTI(caso.net);
+        console.log(`Input: ${JSON.stringify(caso.net)} => ${res} | Esperado: ${caso.esperado} | ${res === caso.esperado ? '✅' : '❌'}`);
+    }
+}
 // mbti_core.js
 // Módulo centralizado para lógica de MBTI: validación, cálculo y utilidades
 
