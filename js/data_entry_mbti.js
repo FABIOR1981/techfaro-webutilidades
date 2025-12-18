@@ -1,13 +1,7 @@
-if(sessionStorage.getItem("verificado")){
-	// =================================================================
-	// CONSTANTES Y FUNCIÓN AUXILIAR
-	// =================================================================
-
-
 // Importar funciones centrales desde mbti_core.js
 import { RAW_SCORE_VALUES, TOTAL_PREGUNTAS, TOTAL_PREGUNTAS_POR_GRUPO, calcularNetScores, getCaracteristica, generateInterpretation, validarRespuestas, obtenerTipoMBTI } from './mbti_core.js';
 
-
+if(sessionStorage.getItem("verificado")){
 	// =================================================================
 	// FUNCIÓN DE RENDERIZADO DE LOS CAMPOS DE ENTRADA MANUAL (MODO 2)
 	// =================================================================
@@ -239,6 +233,9 @@ import { RAW_SCORE_VALUES, TOTAL_PREGUNTAS, TOTAL_PREGUNTAS_POR_GRUPO, calcularN
 
 	// Asegura que los campos de entrada se rendericen al cargar la página
 	document.addEventListener('DOMContentLoaded', renderDataEntryInputs);
+	// Exponer funciones al scope global para el HTML
+	window.calcularResultadoDirecto = calcularResultadoDirecto;
+	window.calcularResultadoManual = calcularResultadoManual;
 }else{
 		//window.location.href ='https://techfaro-webutilidades.netlify.app';
 	//window.location.href ='E:/Users/FABIOR/Desktop/pruebas/techfaro-webutilidades';
