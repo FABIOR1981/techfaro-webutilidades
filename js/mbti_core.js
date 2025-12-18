@@ -14,22 +14,22 @@ export function getCaracteristica(grupo, netScore) {
         case 1:
             if (netScore > 0) { letra = 'E'; nombre = "Extroversión"; }
             else if (netScore < 0) { letra = 'I'; nombre = "Introversión"; }
-            else { letra = '-'; nombre = "Sin preferencia clara"; }
+            else { letra = 'E/I'; nombre = "Sin preferencia clara"; }
             return { letra, nombre, id: "E/I" };
         case 2:
             if (netScore > 0) { letra = 'S'; nombre = "Sensación"; }
             else if (netScore < 0) { letra = 'N'; nombre = "Intuición"; }
-            else { letra = '-'; nombre = "Sin preferencia clara"; }
+            else { letra = 'S/N'; nombre = "Sin preferencia clara"; }
             return { letra, nombre, id: "S/N" };
         case 3:
             if (netScore > 0) { letra = 'T'; nombre = "Pensamiento"; }
             else if (netScore < 0) { letra = 'F'; nombre = "Sentimiento"; }
-            else { letra = '-'; nombre = "Sin preferencia clara"; }
+            else { letra = 'T/F'; nombre = "Sin preferencia clara"; }
             return { letra, nombre, id: "T/F" };
         case 4:
             if (netScore > 0) { letra = 'J'; nombre = "Juicio"; }
             else if (netScore < 0) { letra = 'P'; nombre = "Percepción"; }
-            else { letra = '-'; nombre = "Sin preferencia clara"; }
+            else { letra = 'J/P'; nombre = "Sin preferencia clara"; }
             return { letra, nombre, id: "J/P" };
         default:
             return { letra: 'X', nombre: 'Desconocido', id: 'X/X' };
