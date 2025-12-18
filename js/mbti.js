@@ -265,12 +265,9 @@ function calcularResultado() {
     const dimensionesTexto = ["Dimensión 1 (E/I)", "Dimensión 2 (S/N)", "Dimensión 3 (T/F)", "Dimensión 4 (J/P)"];
     let resumenResultados = `<h3>Resultados por Dimensión (Puntuación Neta: -50 a +50):</h3>`;
     let grupoContador = 0;
-    let letrasFinales = [];
     for (const grupo in resultadosPorGrupoNet) {
         const netScore = resultadosPorGrupoNet[grupo];
         const dim = getCaracteristica(parseInt(grupo), netScore);
-        const letraFinal = dim.letra === '-' ? dim.id.charAt(0) : dim.letra;
-        letrasFinales.push(letraFinal);
         let interpretacion = generateInterpretation(netScore, dim);
         resumenResultados += `**${dimensionesTexto[grupoContador]}:** ${netScore} puntos. (${interpretacion})<br>`;
         grupoContador++;
@@ -279,7 +276,6 @@ function calcularResultado() {
         ${resumenResultados}
         <hr>
         <h2>🎉 Su Tipo de Personalidad MBTI Sugerido es: <span style="color: #FF0000; font-size: 1.6em;">${tipoMBTI}</span></h2>
-        <p>(${letrasFinales.join(' - ')})</p>
     `;
     resultadoDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
