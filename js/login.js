@@ -36,40 +36,33 @@ document.querySelector('form').addEventListener('submit', (event) => {
 });
 
 
-function validarUsuario(usuario, contrasenia,listaUsuarios) {
-	
-	usuario=limpiarTexto(usuario).toUpperCase();
-	
-	
-	//usuario=usuario.toUpperCase();
-	
-	
-	
+function validarUsuario(usuario, contrasenia, listaUsuarios) {
+    // Limpiar y normalizar
+    let usuarioLimpio = limpiarTexto(usuario).toUpperCase();
+    let contraseniaLimpia = limpiarTexto(contrasenia);
+
     // Validaciones básicas
-    if (!usuario || !contrasenia) {
+    if (!usuarioLimpio || !contraseniaLimpia) {
         return "Por favor, ingresa tu usuario y contraseña.";
     }
 
     // Validaciones más específicas (ejemplo: longitud mínima)
-    if (usuario.length < 5) {
+    if (usuarioLimpio.length < 5) {
         return "El usuario debe tener al menos 5 caracteres.";
     }
-    if (contrasenia.length < 8) {
+    if (contraseniaLimpia.length < 8) {
         return "La contraseña debe tener al menos 8 caracteres.";
     }
-	
-	usuario=codificar(usuario)
-	contrasenia=codificar(contrasenia);
-	
-	
-	
-		for (const user of listaUsuarios) {
-			if (usuario === user.usuario && contrasenia === user.contrasenia) {
-			return true;
-			}
-		
-		}
-		return "Usaurio y/o contraseña incorrecto/s";
-    
+
+    // Codificar para comparar
+    let usuarioCodificado = codificar(usuarioLimpio);
+    let contraseniaCodificada = codificar(contraseniaLimpia);
+
+    for (const user of listaUsuarios) {
+        if (usuarioCodificado === user.usuario && contraseniaCodificada === user.contrasenia) {
+            return true;
+        }
+    }
+    return "Usuario y/o contraseña incorrecto/s";
 }
 
