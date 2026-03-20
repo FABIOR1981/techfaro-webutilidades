@@ -1,53 +1,60 @@
 :root {
-    --primary-color: #4CAF50;
-    --secondary-color: #F5F5F5;
-    --text-color: #333;
-    --border-radius: 10px;
-    --font-family: 'Roboto', sans-serif;
+    --primary-color: #43a047;
+    --secondary-color: #f8fafc;
+    --accent-color: #00bfae;
+    --text-color: #222;
+    --border-radius: 16px;
+    --font-family: 'Inter', 'Roboto', Arial, sans-serif;
+    --shadow: 0 4px 16px rgba(0,0,0,0.12);
 }
 
 body {
     font-family: var(--font-family);
-    display: flex;
-    flex-direction: column;
     min-height: 100vh;
     margin: 0;
-    padding: 20px;
-	
-	background-image: url("../imagenes/fondo1.jpg");
-    background-repeat: repeat;
-    background-position: center center;
-    background-size: cover;
-	height: 100vh; /* Para que el fondo ocupe toda la altura de la pantalla */
+    padding: 0;
+    background: linear-gradient(135deg, var(--secondary-color) 60%, var(--accent-color) 100%);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
 
 .container-flex {
     display: flex;
     flex-grow: 1;
+    gap: 32px;
+    flex-wrap: wrap;
 }
 
 .container {
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    padding: 32px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
     flex-grow: 1;
+    background: #fff;
+    margin-bottom: 32px;
 }
 
 
 #contIzq {
-    width: 15%;
-    /*background-color: var(--secondary-color);*/
-	background-color: rgba(0, 0, 0, 0.1); /* Con 20% de opacidad */
-	
+    width: 18%;
+    background: rgba(67,160,71,0.08);
 }
 
 #contDer {
-    width: 85%;
-    background-color: rgba(0, 0, 0, 0.1);
+    width: 82%;
+    background: rgba(0,191,174,0.08);
 }
 
 form {
     display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
     flex-direction: column;
 }
 

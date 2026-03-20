@@ -35,24 +35,27 @@ nav {
 /* Estilos de Enlaces (Items Principales: Cuestionarios, Bolilleros) */
 /* ---------------------------------- */
 .menu-item a {
-    display: block;
-    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 24px;
     text-decoration: none;
-    
-    /* Fondo y texto oscuros para un aspecto moderno y buen contraste */
-    color: #f0f0f0; /* Color gris claro para el texto */
-    background-color: #444; /* Fondo gris oscuro */
-    
-    transition: all 0.3s ease;
-    font-size: 1.1rem; /* Buen tamaño para lectura */
-    font-weight: 500;
+    color: #fff;
+    background: linear-gradient(90deg, #43a047 80%, #00bfae 100%);
+    border-radius: 12px;
+    margin: 8px 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(67,160,71,0.08);
+    transition: background 0.3s, transform 0.2s;
+    outline: none;
 }
 
 /* Efecto Hover para Items Principales (Hover/Foco) */
 .menu-item:hover > a, .menu-item a:focus {
-    /* Uso del color primario (verde) al hacer hover para unificar la interacción */
-    background-color: var(--primary-color); 
-    color: white; /* Texto blanco sobre el verde */
+    background: #00bfae;
+    color: #222;
+    transform: scale(1.04);
 }
 
 /* ---------------------------------- */

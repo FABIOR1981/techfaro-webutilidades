@@ -1,53 +1,56 @@
 :root {
-    --primary-color: #4CAF50; /* Verde principal */
-    --secondary-color: #F5F5F5; /* Gris claro */
-    --text-color: #333;
-    --border-radius: 8px;
-    --font-family: 'Arial', sans-serif;
+    --primary-color: #43a047;
+    --secondary-color: #f8fafc;
+    --accent-color: #00bfae;
+    --text-color: #222;
+    --border-radius: 16px;
+    --font-family: 'Inter', 'Roboto', Arial, sans-serif;
+    --shadow: 0 4px 16px rgba(0,0,0,0.12);
 }
 
 body {
     font-family: var(--font-family);
     min-height: 100vh;
     margin: 0;
-    padding: 20px;
-    background-color: #e0e0e0; /* Fondo gris claro */
+    padding: 0;
+    background: linear-gradient(135deg, var(--secondary-color) 60%, var(--accent-color) 100%);
     color: var(--text-color);
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
 }
 
 .main-content {
-    width: 95%;
-    max-width: 1200px; 
-    margin: 0 auto;
-    padding: 20px;
-    background-color: white;
+    width: 100%;
+    max-width: 900px;
+    margin: 32px auto;
+    padding: 32px;
+    background: #fff;
     border-radius: var(--border-radius);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow);
 }
 
 h1 {
     text-align: center;
     color: var(--primary-color);
-    margin-bottom: 20px;
+    margin-bottom: 32px;
+    font-size: 2.2rem;
 }
 
 /* Estilos de la rejilla de preguntas */
 #preguntas {
     display: grid;
-    /* Crea columnas flexibles que se ajustan al tamaño de la pantalla */
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
     padding: 0;
 }
 
 .pregunta {
-    border: 1px solid #C8E6C9; 
-    padding: 15px;
-    background-color: #F1F8E9; /* Fondo muy claro para la pregunta */
-    border-radius: 5px;
+    border: 1px solid #C8E6C9;
+    padding: 24px;
+    background: #F1F8E9;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     font-size: 14px;
     display: flex;
@@ -95,19 +98,28 @@ h1 {
 }
 
 button {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 12px 25px;
+    background: var(--primary-color);
+    color: #fff;
+    padding: 16px 32px;
     border: none;
     border-radius: var(--border-radius);
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-size: 1.1rem;
+    font-weight: 600;
+    box-shadow: var(--shadow);
+    margin: 8px;
+    transition: background 0.3s, transform 0.2s;
+    outline: none;
+    border: 2px solid transparent;
+    animation: fadeIn 0.4s;
     font-size: 1.1em;
     font-weight: bold;
 }
 
 button:hover {
-    background-color: #388E3C;
+    background: var(--accent-color);
+    transform: scale(1.04);
+    border-color: var(--primary-color);
 }
 
 /* Estilo especial para el botón de test */
