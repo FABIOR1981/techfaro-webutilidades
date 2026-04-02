@@ -41,36 +41,23 @@ function loadPageInContainer(filePath) {
   const containerDestino = document.getElementById('contDer');
   if (!containerDestino) return;
 
-  fetch(filePath)
-    .then(response => {
-      if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
-      return response.text();
-    })
-    .then(data => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(data, 'text/html');
+  // Cargar el HTML completo en un iframe para preservar scripts, estilos y comportamiento original
+  containerDestino.innerHTML = '';
+  const frame = document.createElement('iframe');
+  frame.id = 'moduleFrame';
+  frame.src = filePath;
+  frame.style.width = '100%';
+  frame.style.height = 'calc(100vh - 130px)';
+  frame.style.border = 'none';
+  frame.style.minHeight = '640px';
+  frame.allow = 'clipboard-read clipboard-write';
 
-      // Priorizar el contenido de #contDer en el HTML cargado
-      const contenidoRemoto = doc.querySelector('#contDer')?.innerHTML || doc.body.innerHTML;
-      containerDestino.innerHTML = contenidoRemoto;
+  frame.onload = () => {
+    // Estilo y scroll independiente
+    frame.contentWindow.document.body.style.background = 'transparent';
+  };
 
-      // Si el HTML remoto define scripts, cargarlos para ejecutar los comportamientos específicos
-      const scripts = doc.querySelectorAll('script[src]');
-      scripts.forEach(script => {
-        const newScript = document.createElement('script');
-        newScript.src = script.src;
-        newScript.async = false;
-        document.body.appendChild(newScript);
-      });
-
-      // Aplicar título opcional de la página remota
-      const titleRemote = doc.querySelector('title')?.textContent;
-      if (titleRemote) document.title = titleRemote;
-    })
-    .catch(error => {
-      console.error('Error al cargar el contenido:', error);
-      containerDestino.innerHTML = `<p style="color:#e53935;">No se pudo cargar la página: ${error.message}</p>`;
-    });
+  containerDestino.appendChild(frame);
 }
 
 enlaces.forEach(enlace => {
