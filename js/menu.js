@@ -1,30 +1,24 @@
 const menuItems = document.querySelectorAll('.menu-item');
 
+if (sessionStorage.getItem('verificado')) {
+    menuItems.forEach((item) => {
+        const submenu = item.querySelector('.submenu');
+        const anchor = item.querySelector(':scope > a');
 
+        if (submenu && anchor) {
+            // Permite expandir/contraer submenú en móvil
+            anchor.addEventListener('click', (event) => {
+                if (window.matchMedia('(max-width: 900px)').matches) {
+                    event.preventDefault();
+                    item.classList.toggle('open');
+                }
+            });
 
-if(sessionStorage.getItem("verificado")){
-	//sessionStorage.removeItem("verificado");
-		menuItems.forEach(item => {
-		  item.addEventListener('mouseenter', () => {
-			item.querySelector('.submenu').style.display = 'block';
-		  });
-
-		  item.addEventListener('mouseleave', () => {
-			const submenu = item.querySelector('.submenu');
-			submenu.addEventListener('click', (event) => {
-			  event.stopPropagation();
-			});
-
-			// Ocultar el submenú después de un retraso (opcional)
-			setTimeout(() => {
-			  submenu.style.display = 'none';
-			}, 300);
-		  });
-		});
-}else{
-	
-	
-	//window.location.href ='https://techfaro-webutilidades.netlify.app';
-	//window.location.href ='E:/Users/FABIOR/Desktop/pruebas/techfaro-webutilidades';
-	window.location.href=darUrl('index.html');
+            item.addEventListener('blur', () => {
+                item.classList.remove('open');
+            });
+        }
+    });
+} else {
+    window.location.href = darUrl('index.html');
 }
