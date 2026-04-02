@@ -37,29 +37,42 @@ function darUrl(cadena) {
 // Seleccionar todos los enlaces con el atributo data-url
 const enlaces = document.querySelectorAll('a[data-url]');
 
+function loadPageInContainer(filePath) {
+  const containerDestino = document.getElementById('contDer');
+  if (!containerDestino) return;
+
+  fetch(filePath)
+    .then(response => {
+      if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
+      return response.text();
+    })
+    .then(data => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(data, 'text/html');
+      const inner = doc.querySelector('main')?.innerHTML || doc.body.innerHTML;
+      containerDestino.innerHTML = inner;
+    })
+    .catch(error => {
+      console.error('Error al cargar el contenido:', error);
+      containerDestino.innerHTML = `<p style="color:#e53935;">No se pudo cargar la página: ${error.message}</p>`;
+    });
+}
+
 enlaces.forEach(enlace => {
   enlace.addEventListener('click', (event) => {
     event.preventDefault();
     const urlBase = enlace.dataset.url;
     const nuevaUrl = darUrl(urlBase);
-    window.location.href = nuevaUrl;
-	//document.getElementById('contDer').innerHTML =nuevaUrl;
-	
-	/*fetch(nuevaUrl)
-       .then(response => response.text())
-      .then(data => {
-        document.getElementById('contDer').innerHTML = data;
-      })
-      .catch(error => {
-        console.error('Error al cargar el contenido:', error);
-        // Puedes mostrar un mensaje de error al usuario
-      });*/
-	
-	
-	
-	
+    const containerDestino = document.getElementById('contDer');
+    if (containerDestino) {
+      loadPageInContainer(urlBase);
+      window.history.replaceState(null, '', nuevaUrl);
+    } else {
+      window.location.href = nuevaUrl;
+    }
   });
 });
+
 
 
 
