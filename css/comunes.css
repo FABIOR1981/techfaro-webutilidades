@@ -88,6 +88,44 @@ main {
     color: #e2e8f0;
 }
 
+/* Refuerza contraste en modo oscuro para cuestionarios / tarjetas que usan colores claros por defecto */
+[data-theme='dark'] .main-content,
+[data-theme='dark'] .pregunta,
+[data-theme='dark'] .container,
+[data-theme='dark'] #contIzq,
+[data-theme='dark'] #contDer {
+    background-color: #0a1225;
+    border-color: #24304f;
+    color: #e2e8f0;
+}
+
+[data-theme='dark'] .pregunta {
+    background: #0f1a33;
+    border: 1px solid #2e4269;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.45);
+}
+
+[data-theme='dark'] .pregunta h2 {
+    color: #7ee4a0;
+}
+
+[data-theme='dark'] .opciones-radio label {
+    color: #cbd5e1;
+}
+
+[data-theme='dark'] #resultado {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: #1f2f48;
+}
+
+[data-theme='dark'] button,
+[data-theme='dark'] #btnAutoCompletar,
+[data-theme='dark'] input[type='submit'] {
+    background-color: #22c55e;
+    color: #0f172a;
+    border-color: #1e293b;
+}
+
 .container-flex {
     display: flex;
     gap: 20px;
