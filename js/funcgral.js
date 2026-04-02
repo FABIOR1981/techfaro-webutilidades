@@ -68,23 +68,10 @@ function loadPageInContainer(filePath) {
     `;
     prime.head.appendChild(styleTag);
 
-    // Ajuste dinámico de ancho según contenido y espacio disponible
-    const contentWidth = Math.max(prime.documentElement.scrollWidth, prime.body.scrollWidth);
-    const sidebarWidth = document.getElementById('contIzq')?.offsetWidth || 280;
-    const available = Math.max(window.innerWidth - sidebarWidth - 48, 420);
-
-    if (contentWidth > available) {
-      frame.style.width = `${available}px`;
-      const scale = available / contentWidth;
-      frame.style.transformOrigin = 'top left';
-      frame.style.transform = `scale(${scale})`;
-      const contentHeight = Math.max(prime.documentElement.scrollHeight, prime.body.scrollHeight);
-      frame.style.height = `${Math.ceil(contentHeight * scale)}px`;
-    } else {
-      frame.style.width = `${Math.max(contentWidth, available * 0.85)}px`;
-      frame.style.transform = 'none';
-      frame.style.height = `calc(100vh - 150px)`;
-    }
+    // Mantener ancho al 100% del contenedor y evitar cortes por scroll externo
+    frame.style.width = '100%';
+    frame.style.transform = 'none';
+    frame.style.height = 'calc(100vh - 130px)';
   };
 
   containerDestino.appendChild(frame);
