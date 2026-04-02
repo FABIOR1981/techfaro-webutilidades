@@ -50,11 +50,23 @@ function loadPageInContainer(filePath) {
   frame.style.height = 'calc(100vh - 130px)';
   frame.style.border = 'none';
   frame.style.minHeight = '640px';
-  frame.allow = 'clipboard-read clipboard-write';
+  frame.setAttribute('allow', 'clipboard-read clipboard-write');
 
   frame.onload = () => {
     // Estilo y scroll independiente
-    frame.contentWindow.document.body.style.background = 'transparent';
+    const prime = frame.contentWindow.document;
+    prime.body.style.background = 'transparent';
+    prime.documentElement.style.overflowX = 'hidden';
+    prime.body.style.overflowX = 'hidden';
+    prime.body.style.minWidth = '100%';
+
+    // Forzar quebra de contenido muy ancho en el iframe
+    const styleTag = prime.createElement('style');
+    styleTag.textContent = `
+      * { max-width: 100% !important; overflow-wrap: anywhere !important; }
+      input, textarea, select, table { max-width: 100% !important; }
+    `;
+    prime.head.appendChild(styleTag);
   };
 
   containerDestino.appendChild(frame);

@@ -113,17 +113,32 @@ main {
 }
 
 #contDer {
-    flex: 1 1 720px;
-    min-width: 420px;
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: calc(100vw - 320px);
     background-color: rgba(255, 255, 255, 0.92);
     overflow-x: hidden;
     word-wrap: break-word;
+}
+
+#contDer iframe {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: calc(100vh - 150px);
+    border: none;
+    overflow-x: hidden;
+}
+
+.container-flex {
+    overflow-x: hidden;
 }
 
 body,
 html {
     overflow-x: hidden;
 }
+
 
 form {
     display: flex;
