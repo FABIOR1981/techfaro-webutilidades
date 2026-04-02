@@ -49,8 +49,23 @@ function loadPageInContainer(filePath) {
     .then(data => {
       const parser = new DOMParser();
       const doc = parser.parseFromString(data, 'text/html');
-      const inner = doc.querySelector('main')?.innerHTML || doc.body.innerHTML;
-      containerDestino.innerHTML = inner;
+
+      // Priorizar el contenido de #contDer en el HTML cargado
+      const contenidoRemoto = doc.querySelector('#contDer')?.innerHTML || doc.body.innerHTML;
+      containerDestino.innerHTML = contenidoRemoto;
+
+      // Si el HTML remoto define scripts, cargarlos para ejecutar los comportamientos específicos
+      const scripts = doc.querySelectorAll('script[src]');
+      scripts.forEach(script => {
+        const newScript = document.createElement('script');
+        newScript.src = script.src;
+        newScript.async = false;
+        document.body.appendChild(newScript);
+      });
+
+      // Aplicar título opcional de la página remota
+      const titleRemote = doc.querySelector('title')?.textContent;
+      if (titleRemote) document.title = titleRemote;
     })
     .catch(error => {
       console.error('Error al cargar el contenido:', error);
