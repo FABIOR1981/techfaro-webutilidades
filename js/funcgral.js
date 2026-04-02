@@ -56,17 +56,35 @@ function loadPageInContainer(filePath) {
     // Estilo y scroll independiente
     const prime = frame.contentWindow.document;
     prime.body.style.background = 'transparent';
-    prime.documentElement.style.overflowX = 'hidden';
-    prime.body.style.overflowX = 'hidden';
+    prime.documentElement.style.overflowX = 'auto';
+    prime.body.style.overflowX = 'auto';
     prime.body.style.minWidth = '100%';
 
-    // Forzar quebra de contenido muy ancho en el iframe
+    // Forzar quiebra de contenido muy ancho en el iframe
     const styleTag = prime.createElement('style');
     styleTag.textContent = `
       * { max-width: 100% !important; overflow-wrap: anywhere !important; }
       input, textarea, select, table { max-width: 100% !important; }
     `;
     prime.head.appendChild(styleTag);
+
+    // Ajuste dinámico de ancho según contenido y espacio disponible
+    const contentWidth = Math.max(prime.documentElement.scrollWidth, prime.body.scrollWidth);
+    const sidebarWidth = document.getElementById('contIzq')?.offsetWidth || 280;
+    const available = Math.max(window.innerWidth - sidebarWidth - 48, 420);
+
+    if (contentWidth > available) {
+      frame.style.width = `${available}px`;
+      const scale = available / contentWidth;
+      frame.style.transformOrigin = 'top left';
+      frame.style.transform = `scale(${scale})`;
+      const contentHeight = Math.max(prime.documentElement.scrollHeight, prime.body.scrollHeight);
+      frame.style.height = `${Math.ceil(contentHeight * scale)}px`;
+    } else {
+      frame.style.width = `${Math.max(contentWidth, available * 0.85)}px`;
+      frame.style.transform = 'none';
+      frame.style.height = `calc(100vh - 150px)`;
+    }
   };
 
   containerDestino.appendChild(frame);
