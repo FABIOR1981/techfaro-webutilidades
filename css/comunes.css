@@ -113,8 +113,16 @@ main {
 }
 
 #contDer {
-    flex: 1 1 640px;
+    flex: 1 1 720px;
+    min-width: 420px;
     background-color: rgba(255, 255, 255, 0.92);
+    overflow-x: hidden;
+    word-wrap: break-word;
+}
+
+body,
+html {
+    overflow-x: hidden;
 }
 
 form {
