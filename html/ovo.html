@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>O.V.O. — Orientación Vocacional</title>
-    <link rel="stylesheet" href="../css/ovo.css">
+    <link rel="stylesheet" href="../css/ovo_mejorado.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -73,11 +73,12 @@
         </div>
 
         <button class="btn-restart" onclick="location.reload()">🔄 Realizar de nuevo</button>
+        <button class="btn-download" onclick="openDatosModal()">🖨️ Descargar cuestionario en PDF</button>
     </div>
 
 </div>
 
-<!-- LOGIN MODAL -->
+<!-- LOGIN MODAL (para ver resultados) -->
 <div id="loginModal" class="modal-overlay hidden">
     <div class="modal-box">
         <div class="lock-icon">🔒</div>
@@ -99,7 +100,33 @@
     </div>
 </div>
 
-<script src="../js/ovo.js"></script>
+<!-- DATOS MODAL (para descargar PDF) -->
+<div id="datosModal" class="modal-overlay hidden">
+    <div class="modal-box">
+        <div class="lock-icon">📄</div>
+        <h3>Descargar cuestionario</h3>
+        <p class="modal-sub">Ingresa los datos del evaluado para generar el PDF</p>
+        <div class="modal-field">
+            <label>Nombre completo</label>
+            <input type="text" id="pdfNombre" placeholder="Ej: Juan Pérez" autocomplete="off">
+        </div>
+        <div class="modal-field">
+            <label>Cédula de identidad</label>
+            <input type="text" id="pdfCedula" placeholder="Ej: 1.234.567-8" autocomplete="off">
+        </div>
+        <div class="modal-field">
+            <label>Fecha</label>
+            <input type="text" id="pdfFecha" placeholder="Ej: 08/08/2026" autocomplete="off">
+        </div>
+        <div class="modal-error" id="pdfError"></div>
+        <div class="modal-actions">
+            <button class="modal-btn-cancel" onclick="closeDatosModal()">Cancelar</button>
+            <button class="modal-btn-confirm" onclick="confirmarDescarga()">Generar PDF</button>
+        </div>
+    </div>
+</div>
+
+<script src="../js/ovo_mejorado.js"></script>
 
 </body>
 </html>

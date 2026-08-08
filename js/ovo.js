@@ -84,11 +84,11 @@ const preguntas = [
 ];
 
 const areaInfo = {
-    1: { name: "Área I", desc: "Artística", color: "#e11d48", bg: "rgba(225,29,72,0.1)" },
-    2: { name: "Área II", desc: "Humanística", color: "#2563eb", bg: "rgba(37,99,235,0.1)" },
-    3: { name: "Área III", desc: "Administrativa", color: "#d97706", bg: "rgba(217,119,6,0.1)" },
-    4: { name: "Área IV", desc: "Científica-Técnica", color: "#059669", bg: "rgba(5,150,105,0.1)" },
-    5: { name: "Área V", desc: "Salud-Biológica", color: "#7c3aed", bg: "rgba(124,58,237,0.1)" }
+    1: { name: "Área I", desc: "Artística", color: "#e11d48" },
+    2: { name: "Área II", desc: "Humanística", color: "#2563eb" },
+    3: { name: "Área III", desc: "Administrativa", color: "#d97706" },
+    4: { name: "Área IV", desc: "Científica-Técnica", color: "#059669" },
+    5: { name: "Área V", desc: "Salud-Biológica", color: "#7c3aed" }
 };
 
 const STEP_SIZE = 10;
@@ -97,19 +97,22 @@ let currentStep = 0;
 let answers = new Array(preguntas.length).fill(null);
 let chartInstance = null;
 
-// ===== AUTH (misma lógica que login.js del repo) =====
+// ===== AUTH (usuarios exactos del login.js del repo) =====
 const usuariosAuth = [
     { usuario: "RkFCSU9S", contrasenia: "MzAwNDE1UkZj", Persona: "Fabio" },
     { usuario: "UklUQU0=", contrasenia: "Q2FuZGVsYXJpYTIwMTU=", Persona: "Rita" },
     { usuario: "Q0FOREVMQVJJQVJN", contrasenia: "MjAxNUNhbmRl", Persona: "Candelaria" }
 ];
 
+// CORREGIDO: el guion va al FINAL del character class para no crear rango
 function limpiarTexto(texto) {
-    return texto.replace(/[.,-_/\!'"()[\]{}@#$%^&+*=~]/g, '');
+    return texto.replace(/[.,_/\\!?'"()[\]{}@#$%^&+*=~\-]/g, '');
 }
+
 function codificar(param) {
     return btoa(param);
 }
+
 function validarUsuario(usuario, contrasenia, listaUsuarios) {
     let usuarioLimpio = limpiarTexto(usuario).toUpperCase();
     let contraseniaLimpia = limpiarTexto(contrasenia);
@@ -264,7 +267,7 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') prevStep();
 });
 
-// ===== LOGIN MODAL =====
+// ===== LOGIN MODAL (para ver resultados) =====
 function showResults() {
     const unanswered = answers.filter(a => a === null).length;
     if (unanswered > 0) {
@@ -299,11 +302,187 @@ function checkLoginAndShow() {
     }
 }
 
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !document.getElementById('loginModal').classList.contains('hidden')) {
-        checkLoginAndShow();
+// ===== DATOS MODAL (para descargar PDF) =====
+function openDatosModal() {
+    const unanswered = answers.filter(a => a === null).length;
+    if (unanswered > 0) {
+        alert(`Faltan ${unanswered} preguntas por responder. Completa todo antes de descargar.`);
+        return;
     }
-});
+    document.getElementById('datosModal').classList.remove('hidden');
+    document.getElementById('pdfNombre').focus();
+}
+
+function closeDatosModal() {
+    document.getElementById('datosModal').classList.add('hidden');
+    document.getElementById('pdfError').textContent = '';
+    document.getElementById('pdfNombre').value = '';
+    document.getElementById('pdfCedula').value = '';
+    document.getElementById('pdfFecha').value = '';
+}
+
+function confirmarDescarga() {
+    const nombre = document.getElementById('pdfNombre').value.trim();
+    const cedula = document.getElementById('pdfCedula').value.trim();
+    const fecha = document.getElementById('pdfFecha').value.trim();
+    const errorDiv = document.getElementById('pdfError');
+
+    if (!nombre || !cedula || !fecha) {
+        errorDiv.textContent = 'Por favor completa todos los campos.';
+        return;
+    }
+
+    errorDiv.textContent = '';
+    generarPDF(nombre, cedula, fecha);
+    closeDatosModal();
+}
+
+// ===== GENERAR PDF (HTML de impresión) =====
+function generarPDF(nombre, cedula, fecha) {
+    let preguntasHTML = '';
+    preguntas.forEach((p, i) => {
+        const siMarcado = answers[i] === true ? '<span style="font-weight:700;font-size:10pt;">✕</span>' : '';
+        const noMarcado = answers[i] === false ? '<span style="font-weight:700;font-size:10pt;">✕</span>' : '';
+        preguntasHTML += `
+        <div style="display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px dotted #bbb;page-break-inside:avoid;">
+            <span style="font-weight:700;font-size:10.5pt;min-width:22px;text-align:right;flex-shrink:0;">${p.n}.</span>
+            <span style="flex:1;padding-top:1px;font-size:10.5pt;">${p.t}</span>
+            <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
+                    <span style="width:14px;height:14px;border:1.5px solid #000;border-radius:50%;display:flex;align-items:center;justify-content:center;">${siMarcado}</span>
+                    <span style="font-size:7pt;font-weight:700;">SI</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
+                    <span style="width:14px;height:14px;border:1.5px solid #000;border-radius:50%;display:flex;align-items:center;justify-content:center;">${noMarcado}</span>
+                    <span style="font-size:7pt;font-weight:700;">NO</span>
+                </div>
+            </div>
+        </div>`;
+    });
+
+    const htmlContent = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>O.V.O. - ${nombre}</title>
+<style>
+@page { size: A4; margin: 14mm 16mm; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.3;
+    color: #000;
+    background: #fff;
+    padding: 10mm;
+}
+.header {
+    border-bottom: 2px solid #000;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+}
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+}
+.header-top h1 {
+    font-size: 20pt;
+    letter-spacing: 3px;
+    margin: 0;
+}
+.header-top .version {
+    font-size: 8pt;
+    color: #444;
+    text-align: right;
+}
+.header-sub {
+    font-size: 9pt;
+    color: #333;
+    margin-bottom: 8px;
+}
+.datos {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+.campo {
+    flex: 1;
+    min-width: 140px;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+.campo label {
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.campo .line {
+    flex: 1;
+    border-bottom: 1px solid #000;
+    min-width: 60px;
+    height: 16px;
+    padding-left: 4px;
+    font-size: 10pt;
+}
+.instrucciones {
+    background: #f5f5f5;
+    border-left: 3px solid #000;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    font-size: 9pt;
+}
+.footer {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 7.5pt;
+    color: #555;
+    border-top: 1px solid #ccc;
+    padding-top: 5px;
+}
+</style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-top">
+            <h1>O.V.O.</h1>
+            <div class="version">Versión Imprimible<br>TechFaRo © 2024</div>
+        </div>
+        <div class="header-sub">Orientación Vocacional y Ocupacional — Cuestionario de Intereses</div>
+        <div class="datos">
+            <div class="campo"><label>Nombre completo</label><div class="line">${nombre}</div></div>
+            <div class="campo"><label>Cédula de identidad</label><div class="line">${cedula}</div></div>
+            <div class="campo"><label>Fecha</label><div class="line">${fecha}</div></div>
+        </div>
+    </div>
+    <div class="instrucciones">
+        <strong>Instrucciones:</strong> Lee cada actividad y marca con una <strong>X</strong> dentro del círculo si te <strong>gustaría</strong> realizarla (SI), o déjalo en blanco si <strong>no te interesa</strong> (NO). No hay respuestas correctas ni incorrectas. Sé honesto/a contigo mismo/a.
+    </div>
+    ${preguntasHTML}
+    <div class="footer">
+        O.V.O. — Orientación Vocacional y Ocupacional | TechFaRo © 2024
+    </div>
+    <script>window.onload = function() { setTimeout(function() { window.print(); }, 500); };</script>
+</body>
+</html>`;
+
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, '_blank');
+    if (!w) {
+        // Fallback: descargar el archivo
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `OVO_${nombre.replace(/\s+/g, '_')}.html`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+}
 
 // ===== RESULTS =====
 function mostrarResultadosFinales() {
