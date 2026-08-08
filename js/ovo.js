@@ -124,6 +124,8 @@ if(sessionStorage.getItem("verificado")){
 				document.getElementById('preguntas').addEventListener('change', actualizarProgreso);
 				actualizarProgreso();
 
+				let ovoChartInstance = null;
+
 				function contarRespuestas() {
 					const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 					const respuestas = {Area_I: 0, Area_II: 0, Area_III: 0, Area_IV: 0, Area_V: 0};
@@ -132,48 +134,60 @@ if(sessionStorage.getItem("verificado")){
 						if (checkbox.checked) respuestas[grupo]++;
 					});
 
-					const labels = Object.keys(respuestas);
-					const data = Object.values(respuestas);
-
-					const ctx = document.getElementById('myChart').getContext('2d');
-					new Chart(ctx, {
-						type: 'bar',
-						data: {
-							labels: labels,
-							datasets: [{
-								label: 'Número de respuestas por grupo',
-								data: data,
-								backgroundColor: [
-									'rgba(255, 99, 132, 0.2)',
-									'rgba(54, 162, 235, 0.2)',
-									'rgba(255, 206, 86, 0.2)',
-									'rgba(75, 192, 192, 0.2)',
-									'rgba(153, 102, 255, 0.2)'
-								],
-								borderColor: [
-									'rgba(255, 99, 132, 1)',
-									'rgba(54, 162, 235, 1)',
-									'rgba(255, 206, 86, 1)',
-									'rgba(75, 192, 192, 1)',
-									'rgba(153, 102, 255, 1)'
-								],
-								borderWidth: 1
-							}]
-						},
-						options: {
-							scales: {y: {beginAtZero: true}},
-							plugins: {
-								title: {display: true, text: 'Resultados O.V.O.'}
-							}
-						}
-					});
-document.getElementById('resultados').style.display = 'block';
+					// 1. Mostrar resultados y llenar la tabla PRIMERO, para que
+					// se vean aunque el gráfico falle por cualquier motivo.
+					document.getElementById('resultados').style.display = 'block';
 					mostrarResultadosTabla(respuestas);
-					
-					// Ocultar la tabla después de mostrar los resultados
-		  document.getElementById('tablaResultados').style.display = 'none';
-		  document.getElementById('btnContarRespuestas').style.display = 'none';
-		  
+
+					// Ocultar la tabla y el botón después de mostrar los resultados
+					document.getElementById('tablaResultados').style.display = 'none';
+					document.getElementById('btnContarRespuestas').style.display = 'none';
+
+					// 2. Intentar dibujar el gráfico. Si Chart.js no cargó a tiempo
+					// o ya existe un gráfico previo, no debe romper lo anterior.
+					try {
+						const labels = Object.keys(respuestas);
+						const data = Object.values(respuestas);
+						const ctx = document.getElementById('myChart').getContext('2d');
+
+						if (ovoChartInstance) {
+							ovoChartInstance.destroy();
+						}
+
+						ovoChartInstance = new Chart(ctx, {
+							type: 'bar',
+							data: {
+								labels: labels,
+								datasets: [{
+									label: 'Número de respuestas por grupo',
+									data: data,
+									backgroundColor: [
+										'rgba(255, 99, 132, 0.2)',
+										'rgba(54, 162, 235, 0.2)',
+										'rgba(255, 206, 86, 0.2)',
+										'rgba(75, 192, 192, 0.2)',
+										'rgba(153, 102, 255, 0.2)'
+									],
+									borderColor: [
+										'rgba(255, 99, 132, 1)',
+										'rgba(54, 162, 235, 1)',
+										'rgba(255, 206, 86, 1)',
+										'rgba(75, 192, 192, 1)',
+										'rgba(153, 102, 255, 1)'
+									],
+									borderWidth: 1
+								}]
+							},
+							options: {
+								scales: {y: {beginAtZero: true}},
+								plugins: {
+									title: {display: true, text: 'Resultados O.V.O.'}
+								}
+							}
+						});
+					} catch (error) {
+						console.error('No se pudo dibujar el gráfico de resultados:', error);
+					}
 				}
 
 				function mostrarResultadosTabla(respuestas) {

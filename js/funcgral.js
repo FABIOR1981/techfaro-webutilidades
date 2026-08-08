@@ -50,7 +50,7 @@ function loadPageInContainer(filePath) {
   frame.style.height = 'calc(100vh - 130px)';
   frame.style.border = 'none';
   frame.style.minHeight = '640px';
-  frame.setAttribute('allow', 'clipboard-read clipboard-write');
+  frame.setAttribute('allow', 'clipboard-read; clipboard-write');
 
   frame.onload = () => {
     // Estilo y scroll independiente
