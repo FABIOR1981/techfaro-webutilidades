@@ -97,6 +97,11 @@ let currentStep = 0;
 let answers = new Array(preguntas.length).fill(null);
 let chartInstance = null;
 
+// Datos del evaluado (pueden quedar vacíos)
+let evalNombre = '';
+let evalCedula = '';
+let evalFecha = '';
+
 // ===== AUTH (usuarios exactos del login.js del repo) =====
 const usuariosAuth = [
     { usuario: "RkFCSU9S", contrasenia: "MzAwNDE1UkZj", Persona: "Fabio" },
@@ -104,9 +109,8 @@ const usuariosAuth = [
     { usuario: "Q0FOREVMQVJJQVJN", contrasenia: "MjAxNUNhbmRl", Persona: "Candelaria" }
 ];
 
-// CORREGIDO: el guion va al FINAL del character class para no crear rango
 function limpiarTexto(texto) {
-    return texto.replace(/[.,_/\\!?'"()[\]{}@#$%^&+*=~\-]/g, '');
+    return texto.replace(/[.,_/\\!?'"()[\]{}@#$%^&+*=~-]/g, '');
 }
 
 function codificar(param) {
@@ -150,13 +154,36 @@ function toggleTheme() {
     document.documentElement.setAttribute('data-theme', saved);
 })();
 
-// ===== NAVIGATION =====
-function startQuiz() {
+// ===== DATOS MODAL (antes de empezar) =====
+function openDatosModal() {
+    document.getElementById('datosModal').classList.remove('hidden');
+    document.getElementById('datosNombre').focus();
+}
+
+function closeDatosModal() {
+    document.getElementById('datosModal').classList.add('hidden');
+    document.getElementById('datosError').textContent = '';
+}
+
+function guardarDatosYOmitir() {
+    evalNombre = document.getElementById('datosNombre').value.trim();
+    evalCedula = document.getElementById('datosCedula').value.trim();
+    evalFecha = document.getElementById('datosFecha').value.trim();
+    closeDatosModal();
+    iniciarQuiz();
+}
+
+function iniciarQuiz() {
     document.getElementById('welcome').classList.add('hidden');
     document.getElementById('quiz').classList.remove('hidden');
     renderDots();
     renderStep();
     updateProgress();
+}
+
+// ===== NAVIGATION =====
+function startQuiz() {
+    openDatosModal();
 }
 
 function renderDots() {
@@ -204,7 +231,15 @@ function renderStep() {
 
     document.getElementById('btnPrev').disabled = currentStep === 0;
     const btnNext = document.getElementById('btnNext');
-    btnNext.textContent = currentStep === TOTAL_STEPS - 1 ? 'Ver resultados ✓' : 'Siguiente →';
+    const btnPrint = document.getElementById('btnPrint');
+
+    if (currentStep === TOTAL_STEPS - 1) {
+        btnNext.textContent = 'Ver resultados ✓';
+        btnPrint.classList.remove('hidden');
+    } else {
+        btnNext.textContent = 'Siguiente →';
+        btnPrint.classList.add('hidden');
+    }
 }
 
 function answer(index, value) {
@@ -241,7 +276,7 @@ function nextStep() {
         renderStep();
         updateProgress();
     } else {
-        showResults();
+        showLoginForResults();
     }
 }
 
@@ -267,8 +302,8 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') prevStep();
 });
 
-// ===== LOGIN MODAL (para ver resultados) =====
-function showResults() {
+// ===== LOGIN MODAL (solo para ver resultados) =====
+function showLoginForResults() {
     const unanswered = answers.filter(a => a === null).length;
     if (unanswered > 0) {
         alert(`Faltan ${unanswered} preguntas por responder. Completa el cuestionario antes de ver los resultados.`);
@@ -302,43 +337,16 @@ function checkLoginAndShow() {
     }
 }
 
-// ===== DATOS MODAL (para descargar PDF) =====
-function openDatosModal() {
-    const unanswered = answers.filter(a => a === null).length;
-    if (unanswered > 0) {
-        alert(`Faltan ${unanswered} preguntas por responder. Completa todo antes de descargar.`);
-        return;
-    }
-    document.getElementById('datosModal').classList.remove('hidden');
-    document.getElementById('pdfNombre').focus();
+// ===== IMPRIMIR (sin login) =====
+function imprimirCuestionario() {
+    generarPDF(evalNombre, evalCedula, evalFecha);
 }
 
-function closeDatosModal() {
-    document.getElementById('datosModal').classList.add('hidden');
-    document.getElementById('pdfError').textContent = '';
-    document.getElementById('pdfNombre').value = '';
-    document.getElementById('pdfCedula').value = '';
-    document.getElementById('pdfFecha').value = '';
-}
-
-function confirmarDescarga() {
-    const nombre = document.getElementById('pdfNombre').value.trim();
-    const cedula = document.getElementById('pdfCedula').value.trim();
-    const fecha = document.getElementById('pdfFecha').value.trim();
-    const errorDiv = document.getElementById('pdfError');
-
-    if (!nombre || !cedula || !fecha) {
-        errorDiv.textContent = 'Por favor completa todos los campos.';
-        return;
-    }
-
-    errorDiv.textContent = '';
-    generarPDF(nombre, cedula, fecha);
-    closeDatosModal();
-}
-
-// ===== GENERAR PDF (HTML de impresión) =====
 function generarPDF(nombre, cedula, fecha) {
+    const nombreDisplay = nombre || '';
+    const cedulaDisplay = cedula || '';
+    const fechaDisplay = fecha || '';
+
     let preguntasHTML = '';
     preguntas.forEach((p, i) => {
         const siMarcado = answers[i] === true ? '<span style="font-weight:700;font-size:10pt;">✕</span>' : '';
@@ -364,7 +372,7 @@ function generarPDF(nombre, cedula, fecha) {
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>O.V.O. - ${nombre}</title>
+<title>O.V.O. - ${nombreDisplay || 'Cuestionario'}</title>
 <style>
 @page { size: A4; margin: 14mm 16mm; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -454,9 +462,9 @@ body {
         </div>
         <div class="header-sub">Orientación Vocacional y Ocupacional — Cuestionario de Intereses</div>
         <div class="datos">
-            <div class="campo"><label>Nombre completo</label><div class="line">${nombre}</div></div>
-            <div class="campo"><label>Cédula de identidad</label><div class="line">${cedula}</div></div>
-            <div class="campo"><label>Fecha</label><div class="line">${fecha}</div></div>
+            <div class="campo"><label>Nombre completo</label><div class="line">${nombreDisplay}</div></div>
+            <div class="campo"><label>Cédula de identidad</label><div class="line">${cedulaDisplay}</div></div>
+            <div class="campo"><label>Fecha</label><div class="line">${fechaDisplay}</div></div>
         </div>
     </div>
     <div class="instrucciones">
@@ -474,10 +482,9 @@ body {
     const url = URL.createObjectURL(blob);
     const w = window.open(url, '_blank');
     if (!w) {
-        // Fallback: descargar el archivo
         const a = document.createElement('a');
         a.href = url;
-        a.download = `OVO_${nombre.replace(/\s+/g, '_')}.html`;
+        a.download = `OVO_${(nombreDisplay || 'cuestionario').replace(/\s+/g, '_')}.html`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

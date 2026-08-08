@@ -203,6 +203,7 @@ body {
     justify-content: space-between;
     margin-top: 24px;
     gap: 12px;
+    flex-wrap: wrap;
 }
 .btn-nav {
     padding: 12px 28px;
@@ -223,6 +224,14 @@ body {
 }
 .btn-next:hover:not(:disabled) {
     background: var(--accent-hover);
+    transform: translateY(-1px);
+}
+.btn-print {
+    background: var(--yes);
+    color: white;
+}
+.btn-print:hover:not(:disabled) {
+    background: #059669;
     transform: translateY(-1px);
 }
 
@@ -373,21 +382,6 @@ body {
 }
 .btn-restart:hover { background: var(--accent-hover); transform: translateY(-1px); }
 
-.btn-download {
-    display: block;
-    margin: 16px auto 0;
-    padding: 12px 32px;
-    background: var(--yes);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.btn-download:hover { background: #059669; transform: translateY(-1px); }
-
 .keyboard-hint {
     text-align: center;
     font-size: 11px;
@@ -492,6 +486,12 @@ body {
 .modal-btn-login:hover { background: var(--accent-hover); }
 .modal-btn-confirm { background: var(--yes); color: white; }
 .modal-btn-confirm:hover { background: #059669; }
+.modal-btn-skip {
+    background: transparent;
+    color: var(--text-light);
+    border: 1.5px solid var(--border) !important;
+}
+.modal-btn-skip:hover { background: var(--border); }
 
 .area-1 { color: #e11d48; }
 .area-2 { color: #2563eb; }
