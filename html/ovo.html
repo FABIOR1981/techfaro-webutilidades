@@ -3,81 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>O.V.O.</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" async></script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" async></script>
+    <title>O.V.O. — Orientación Vocacional</title>
+    <link rel="stylesheet" href="../css/ovo_mejorado.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="../css/comunes.css">
-	<link rel="stylesheet" href="../css/ovo.css">
 </head>
 <body>
- <div class="container-flex">
-    <div class="container" id="contIzq">
-        <div class="resumen-panel">
-            <div class="brand-mark">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="4" y="2" width="16" height="20" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
-                    <path d="M8 7h8M8 11h8M8 15h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                </svg>
-                <span>O.V.O.</span>
-            </div>
-            <p class="resumen-desc">Test de Orientación Vocacional y Ocupacional. Marcá las actividades que te gustaría realizar.</p>
 
-            <div class="progreso-wrap">
-                <div class="progreso-header">
-                    <span>Progreso</span>
-                    <span id="progresoTexto">0 / 0</span>
-                </div>
-                <div class="progreso-barra-bg">
-                    <div class="progreso-barra" id="progresoBarra" style="width:0%"></div>
-                </div>
-            </div>
-
-            <p class="resumen-hint">Al terminar, presioná <strong>"Contar respuestas"</strong> para ver tu perfil.</p>
-        </div>
+<div class="app-header">
+    <div class="app-header-inner">
+        <div class="logo">O.V.O.<span>Orientación Vocacional y Ocupacional</span></div>
+        <button class="theme-btn" onclick="toggleTheme()" title="Cambiar tema"></button>
     </div>
-	<div class="container"id="contDer">
-        <header class="encabezado">
-            <h1>Cuestionario O.V.O.</h1>
-            <p class="subtitulo">Orientación Vocacional y Ocupacional</p>
-        </header>
-		<div class="fec">
-		  <label for="fechaingreso">Fecha:</label>
-		  <input type="date" id="fechaingreso" name="fechaingreso" min="1900-01-01" max="2033-12-31">
-		</div>
-		
-        <form id="myForm">
-			<div class="ingreso">
-					<label for="name">Nombre:</label>
-					<input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
-					
-					<label for="name">Cédula:</label>
-					<input type="text" id="cedula" name="cedula" placeholder="Ingrese su cédula" required>
-				
-			</div>	
-            <ul id="preguntas"></ul>
-        </form>
-
-        <div class="acciones-sticky">
-            <button id="btnContarRespuestas" onclick="contarRespuestas()">Contar respuestas</button>
-            <button id="btnImprimir" class="btn-outline" onclick="imprimirLo('contDer')">Imprimir</button>
-        </div>
-
-        <div id="resultados">
-            <h2 class="resultados-titulo">Resultados</h2>
-            <table id="tablaResultados">
-                <tbody id="tbodyResultados"></tbody>
-            </table>
-            <div class="grafico-wrap">
-                <canvas id="myChart"></canvas>
-            </div>
-        </div>
-    </div>
-	<script src="../js/funcgral.js"></script>
-    <script src="../js/ovo.js"></script>
 </div>
-	  	<footer>
-			<p>Copyright © 2024 TechFaRo. Todos los derechos reservados.</p>
-		</footer>
+
+<div class="container">
+
+    <!-- WELCOME -->
+    <div id="welcome" class="welcome-screen">
+        <h2>Descubre tu orientación vocacional</h2>
+        <p>Responde 80 preguntas sobre actividades que te gustaría realizar. Al finalizar conocerás tu perfil en 5 áreas profesionales.</p>
+        <div class="welcome-card">
+            <h3>¿Cómo funciona?</h3>
+            <ul>
+                <li>80 preguntas divididas en 8 bloques de 10</li>
+                <li>Responde SI o NO a cada actividad</li>
+                <li>Usa los botones o las teclas 1 (SI) y 2 (NO)</li>
+                <li>Al finalizar verás tu perfil gráfico</li>
+                <li>Duración estimada: 5-8 minutos</li>
+            </ul>
+        </div>
+        <button class="btn-start" onclick="startQuiz()">Comenzar Test</button>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="quiz" class="hidden">
+        <div class="progress-wrap">
+            <div class="progress-info">
+                <span id="progressText">Pregunta 1 de 80</span>
+                <span id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="steps-dots" id="stepsDots"></div>
+
+        <div id="questionsContainer"></div>
+
+        <div class="nav-buttons">
+            <button class="btn-nav btn-prev" id="btnPrev" onclick="prevStep()" disabled>← Anterior</button>
+            <button class="btn-nav btn-next" id="btnNext" onclick="nextStep()">Siguiente →</button>
+        </div>
+
+        <div class="keyboard-hint">💡 Atajo de teclado: <strong>1</strong> = SI &nbsp;|&nbsp; <strong>2</strong> = NO &nbsp;|&nbsp; <strong>← →</strong> = Navegar</div>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results" class="results-screen hidden">
+        <div class="results-header">
+            <h2>🎯 Tu Perfil Vocacional</h2>
+            <p>Estos son tus resultados basados en tus respuestas</p>
+        </div>
+
+        <div class="results-grid" id="resultsGrid"></div>
+
+        <div class="chart-container">
+            <canvas id="resultsChart"></canvas>
+        </div>
+
+        <button class="btn-restart" onclick="location.reload()">🔄 Realizar de nuevo</button>
+    </div>
+
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal-overlay hidden">
+    <div class="modal-box">
+        <div class="lock-icon">🔒</div>
+        <h3>Acceso restringido</h3>
+        <p class="modal-sub">Solo personal autorizado puede ver los resultados</p>
+        <div class="modal-field">
+            <label>Usuario</label>
+            <input type="text" id="modalUser" placeholder="Ingrese usuario" autocomplete="off">
+        </div>
+        <div class="modal-field">
+            <label>Contraseña</label>
+            <input type="password" id="modalPass" placeholder="Ingrese contraseña">
+        </div>
+        <div class="modal-error" id="modalError"></div>
+        <div class="modal-actions">
+            <button class="modal-btn-cancel" onclick="closeLoginModal()">Cancelar</button>
+            <button class="modal-btn-login" onclick="checkLoginAndShow()">Ver resultados</button>
+        </div>
+    </div>
+</div>
+
+<script src="../js/ovo_mejorado.js"></script>
+
 </body>
 </html>
