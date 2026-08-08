@@ -563,3 +563,220 @@ function mostrarResultadosFinales() {
         }
     });
 }
+
+
+// ===== NUEVAS FUNCIONES: Volver, Imprimir cuestionario, Imprimir completo =====
+
+function volverAlCuestionario() {
+    document.getElementById('results').classList.add('hidden');
+    document.getElementById('quiz').classList.remove('hidden');
+    renderStep();
+    updateProgress();
+}
+
+function imprimirCuestionarioDesdeResultados() {
+    imprimirCuestionario();
+}
+
+function imprimirCompleto() {
+    const nombreDisplay = evalNombre || '';
+    const cedulaDisplay = evalCedula || '';
+    const fechaDisplay = evalFecha || '';
+
+    // Calcular resultados
+    const counts = {1:0, 2:0, 3:0, 4:0, 5:0};
+    preguntas.forEach((p, i) => {
+        if (answers[i] === true) counts[p.a]++;
+    });
+    const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+
+    // HTML del cuestionario
+    let preguntasHTML = '';
+    preguntas.forEach((p, i) => {
+        const siMarcado = answers[i] === true ? '<span style="font-weight:700;font-size:10pt;">✕</span>' : '';
+        const noMarcado = answers[i] === false ? '<span style="font-weight:700;font-size:10pt;">✕</span>' : '';
+        preguntasHTML += `
+        <div style="display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px dotted #bbb;page-break-inside:avoid;">
+            <span style="font-weight:700;font-size:10.5pt;min-width:22px;text-align:right;flex-shrink:0;">${p.n}.</span>
+            <span style="flex:1;padding-top:1px;font-size:10.5pt;">${p.t}</span>
+            <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
+                    <span style="width:14px;height:14px;border:1.5px solid #000;border-radius:50%;display:flex;align-items:center;justify-content:center;">${siMarcado}</span>
+                    <span style="font-size:7pt;font-weight:700;">SI</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
+                    <span style="width:14px;height:14px;border:1.5px solid #000;border-radius:50%;display:flex;align-items:center;justify-content:center;">${noMarcado}</span>
+                    <span style="font-size:7pt;font-weight:700;">NO</span>
+                </div>
+            </div>
+        </div>`;
+    });
+
+    // HTML de resultados (barras simples)
+    let resultadosHTML = '';
+    sorted.forEach(([area, count]) => {
+        const info = areaInfo[area];
+        const pct = Math.round((count / 16) * 100);
+        resultadosHTML += `
+        <div style="margin-bottom:12px;page-break-inside:avoid;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span style="font-weight:700;font-size:11pt;color:${info.color}">${info.name} — ${info.desc}</span>
+                <span style="font-weight:700;font-size:11pt;">${count}/16 (${pct}%)</span>
+            </div>
+            <div style="width:100%;height:18px;background:#e5e7eb;border-radius:99px;overflow:hidden;">
+                <div style="width:${pct}%;height:100%;background:${info.color};border-radius:99px;"></div>
+            </div>
+        </div>`;
+    });
+
+    const htmlContent = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>O.V.O. Completo — ${nombreDisplay || 'Resultados'}</title>
+<style>
+@page { size: A4; margin: 14mm 16mm; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.3;
+    color: #000;
+    background: #fff;
+    padding: 10mm;
+}
+.header {
+    border-bottom: 2px solid #000;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+}
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+}
+.header-top h1 {
+    font-size: 20pt;
+    letter-spacing: 3px;
+    margin: 0;
+}
+.header-top .version {
+    font-size: 8pt;
+    color: #444;
+    text-align: right;
+}
+.header-sub {
+    font-size: 9pt;
+    color: #333;
+    margin-bottom: 8px;
+}
+.datos {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+.campo {
+    flex: 1;
+    min-width: 140px;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+.campo label {
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.campo .line {
+    flex: 1;
+    border-bottom: 1px solid #000;
+    min-width: 60px;
+    height: 16px;
+    padding-left: 4px;
+    font-size: 10pt;
+}
+.instrucciones {
+    background: #f5f5f5;
+    border-left: 3px solid #000;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    font-size: 9pt;
+}
+.section-title {
+    font-size: 14pt;
+    font-weight: 700;
+    margin: 20px 0 10px 0;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #000;
+}
+.results-section {
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+.footer {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 7.5pt;
+    color: #555;
+    border-top: 1px solid #ccc;
+    padding-top: 5px;
+}
+.page-break {
+    page-break-before: always;
+}
+</style>
+</head>
+<body>
+    <!-- PORTADA / DATOS -->
+    <div class="header">
+        <div class="header-top">
+            <h1>O.V.O.</h1>
+            <div class="version">Informe Completo<br>TechFaRo © 2024</div>
+        </div>
+        <div class="header-sub">Orientación Vocacional y Ocupacional — Cuestionario de Intereses</div>
+        <div class="datos">
+            <div class="campo"><label>Nombre completo</label><div class="line">${nombreDisplay}</div></div>
+            <div class="campo"><label>Cédula de identidad</label><div class="line">${cedulaDisplay}</div></div>
+            <div class="campo"><label>Fecha</label><div class="line">${fechaDisplay}</div></div>
+        </div>
+    </div>
+
+    <!-- RESULTADOS -->
+    <div class="section-title">🎯 Perfil Vocacional</div>
+    <div class="results-section">
+        ${resultadosHTML}
+    </div>
+
+    <!-- CUESTIONARIO -->
+    <div class="page-break"></div>
+    <div class="section-title">📋 Cuestionario de Intereses</div>
+    <div class="instrucciones">
+        <strong>Instrucciones:</strong> Lee cada actividad y marca con una <strong>X</strong> dentro del círculo si te <strong>gustaría</strong> realizarla (SI), o déjalo en blanco si <strong>no te interesa</strong> (NO). No hay respuestas correctas ni incorrectas.
+    </div>
+    ${preguntasHTML}
+
+    <div class="footer">
+        O.V.O. — Orientación Vocacional y Ocupacional | TechFaRo © 2024
+    </div>
+    <script>window.onload = function() { setTimeout(function() { window.print(); }, 500); };</script>
+</body>
+</html>`;
+
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, '_blank');
+    if (!w) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `OVO_Completo_${(nombreDisplay || 'resultados').replace(/\s+/g, '_')}.html`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+}

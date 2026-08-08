@@ -73,7 +73,12 @@
             <canvas id="resultsChart"></canvas>
         </div>
 
-        <button class="btn-restart" onclick="location.reload()">🔄 Realizar de nuevo</button>
+        <div class="results-actions">
+            <button class="btn-action btn-back-quiz" onclick="volverAlCuestionario()">📋 Volver al cuestionario</button>
+            <button class="btn-action btn-print-quiz" onclick="imprimirCuestionarioDesdeResultados()">🖨️ Imprimir cuestionario</button>
+            <button class="btn-action btn-print-full" onclick="imprimirCompleto()">📄 Imprimir cuestionario + resultados</button>
+            <button class="btn-restart" onclick="location.reload()">🔄 Realizar de nuevo</button>
+        </div>
     </div>
 
 </div>

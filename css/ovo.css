@@ -505,3 +505,46 @@ body {
 .bg-area-5 { background: #7c3aed; }
 
 .hidden { display: none !important; }
+
+
+/* ===== BOTONES DE RESULTADOS (nuevos) ===== */
+.results-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 24px;
+    margin-bottom: 16px;
+}
+.btn-action {
+    padding: 12px 24px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow);
+}
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent);
+}
+.btn-back-quiz:hover {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, rgba(79,70,229,0.08), var(--card));
+}
+.btn-print-quiz:hover {
+    border-color: #059669;
+    background: linear-gradient(135deg, rgba(5,150,105,0.08), var(--card));
+}
+.btn-print-full:hover {
+    border-color: #d97706;
+    background: linear-gradient(135deg, rgba(217,119,6,0.08), var(--card));
+}
