@@ -231,14 +231,10 @@ function renderStep() {
 
     document.getElementById('btnPrev').disabled = currentStep === 0;
     const btnNext = document.getElementById('btnNext');
-    const btnPrint = document.getElementById('btnPrint');
-
     if (currentStep === TOTAL_STEPS - 1) {
         btnNext.textContent = 'Ver resultados ✓';
-        btnPrint.classList.remove('hidden');
     } else {
         btnNext.textContent = 'Siguiente →';
-        btnPrint.classList.add('hidden');
     }
 }
 
