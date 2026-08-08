@@ -112,6 +112,18 @@ if(sessionStorage.getItem("verificado")){
 
 				generarPreguntas(preguntas);
 
+				function actualizarProgreso() {
+					const total = preguntas.length;
+					const marcadas = document.querySelectorAll('#preguntas input[type="checkbox"]:checked').length;
+					const barra = document.getElementById('progresoBarra');
+					const texto = document.getElementById('progresoTexto');
+					if (barra) barra.style.width = (total ? (marcadas / total) * 100 : 0) + '%';
+					if (texto) texto.textContent = `${marcadas} / ${total}`;
+				}
+
+				document.getElementById('preguntas').addEventListener('change', actualizarProgreso);
+				actualizarProgreso();
+
 				function contarRespuestas() {
 					const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 					const respuestas = {Area_I: 0, Area_II: 0, Area_III: 0, Area_IV: 0, Area_V: 0};

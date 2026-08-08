@@ -13,10 +13,42 @@
 <body>
  <div class="container-flex">
     <div class="container" id="contIzq">
-       
+        <div class="resumen-panel">
+            <div class="brand-mark">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="4" y="2" width="16" height="20" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
+                    <path d="M8 7h8M8 11h8M8 15h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                <span>O.V.O.</span>
+            </div>
+            <p class="resumen-desc">Test de Orientación Vocacional y Ocupacional. Marcá las actividades que te gustaría realizar.</p>
+
+            <div class="progreso-wrap">
+                <div class="progreso-header">
+                    <span>Progreso</span>
+                    <span id="progresoTexto">0 / 0</span>
+                </div>
+                <div class="progreso-barra-bg">
+                    <div class="progreso-barra" id="progresoBarra" style="width:0%"></div>
+                </div>
+            </div>
+
+            <ul class="leyenda-areas">
+                <li><span class="dot dot-1"></span>Área I</li>
+                <li><span class="dot dot-2"></span>Área II</li>
+                <li><span class="dot dot-3"></span>Área III</li>
+                <li><span class="dot dot-4"></span>Área IV</li>
+                <li><span class="dot dot-5"></span>Área V</li>
+            </ul>
+
+            <p class="resumen-hint">Al terminar, presioná <strong>"Contar respuestas"</strong> para ver tu perfil.</p>
+        </div>
     </div>
 	<div class="container"id="contDer">
-        <h1>Cuestionario O.V.O.</h1>
+        <header class="encabezado">
+            <h1>Cuestionario O.V.O.</h1>
+            <p class="subtitulo">Orientación Vocacional y Ocupacional</p>
+        </header>
 		<div class="fec">
 		  <label for="fechaingreso">Fecha:</label>
 		  <input type="date" id="fechaingreso" name="fechaingreso" min="1900-01-01" max="2033-12-31">
@@ -33,15 +65,20 @@
 			</div>	
             <ul id="preguntas"></ul>
         </form>
-        <button id="btnContarRespuestas" onclick="contarRespuestas()">Contar respuestas</button>
-        
-		<button id="btnImprimir" onclick="imprimirLo('contDer')">Imprimir</button>
-		
+
+        <div class="acciones-sticky">
+            <button id="btnContarRespuestas" onclick="contarRespuestas()">Contar respuestas</button>
+            <button id="btnImprimir" class="btn-outline" onclick="imprimirLo('contDer')">Imprimir</button>
+        </div>
+
         <div id="resultados">
+            <h2 class="resultados-titulo">Resultados</h2>
             <table id="tablaResultados">
                 <tbody id="tbodyResultados"></tbody>
             </table>
-            <canvas id="myChart"></canvas>
+            <div class="grafico-wrap">
+                <canvas id="myChart"></canvas>
+            </div>
         </div>
     </div>
 	<script src="../js/funcGral.js"></script>
