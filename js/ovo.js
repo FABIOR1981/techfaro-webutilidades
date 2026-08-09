@@ -267,32 +267,39 @@ const interpretacionesPerfil = {
 function detectarTipoPerfil(counts) {
     // counts: objeto {1: N, 2: N, 3: N, 4: N, 5: N}
     // Devuelve: { tipo: 'dominante'|'mixto2'|'mixto3'|'multipotencial', areas: [area1, area2, ...] }
+    //
+    // LÓGICA: incluir TODAS las áreas cuya diferencia con el puntaje máximo
+    // sea menor o igual a UMBRAL_MIXTO.
 
     const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]); // [[area, count], ...]
-    const valores = sorted.map(x => x[1]);
+    const maxPuntaje = sorted[0][1];
     const areas = sorted.map(x => parseInt(x[0]));
+    const puntajes = sorted.map(x => x[1]);
 
-    // Verificar si es multipotencial (4 o 5 áreas dentro del umbral)
-    // Si la diferencia entre la 1° y la 4° es menor o igual al umbral → 4 áreas cercanas
-    if (valores[0] - valores[3] <= UMBRAL_MIXTO) {
-        return { tipo: 'multipotencial', areas: areas };
+    // Incluir todas las áreas dentro del umbral del puntaje máximo
+    const areasPrincipales = [];
+    for (let i = 0; i < sorted.length; i++) {
+        if (maxPuntaje - puntajes[i] <= UMBRAL_MIXTO) {
+            areasPrincipales.push(areas[i]);
+        } else {
+            break; // Como están ordenadas, al encontrar una fuera del umbral, las siguientes también lo estarán
+        }
     }
 
-    // Verificar si es mixto triple (3 áreas principales cercanas, 4° lejos)
-    if (valores[0] - valores[2] <= UMBRAL_MIXTO && valores[0] - valores[3] > UMBRAL_MIXTO) {
-        return { tipo: 'mixto3', areas: areas.slice(0, 3) };
-    }
+    const cantidad = areasPrincipales.length;
 
-    // Verificar si es mixto binario (2 áreas cercanas, 3° lejos)
-    if (valores[0] - valores[1] <= UMBRAL_MIXTO && valores[0] - valores[2] > UMBRAL_MIXTO) {
-        return { tipo: 'mixto2', areas: areas.slice(0, 2) };
+    if (cantidad === 1) {
+        return { tipo: 'dominante', areas: areasPrincipales };
     }
-
-    // Si no cumple ninguna condición anterior → dominante
-    return { tipo: 'dominante', areas: [areas[0]] };
+    if (cantidad === 2) {
+        return { tipo: 'mixto2', areas: areasPrincipales };
+    }
+    if (cantidad === 3) {
+        return { tipo: 'mixto3', areas: areasPrincipales };
+    }
+    // 4 o 5 áreas
+    return { tipo: 'multipotencial', areas: areasPrincipales };
 }
-
-// ===== FUNCIÓN AUXILIAR: Obtener interpretación según tipo de perfil =====
 function obtenerInterpretacion(tipoPerfil, areas) {
     if (tipoPerfil === 'dominante') {
         return interpretacionesPerfil.dominante[areas[0]];
@@ -345,18 +352,14 @@ function imprimirCompleto() {
     const infoTop = areaInfo[areaTop];
 
     // Subtítulo según tipo de perfil
+    // Subtítulo dinámico según cantidad de áreas principales
     let subtituloTipo = '';
-    if (perfilDetectado.tipo === 'dominante') {
+    const cantAreas = perfilDetectado.areas.length;
+    if (cantAreas === 1) {
         subtituloTipo = `Área dominante: <strong>${infoTop.name} — ${infoTop.desc}</strong>`;
-    } else if (perfilDetectado.tipo === 'mixto2') {
-        const info2 = areaInfo[perfilDetectado.areas[1]];
-        subtituloTipo = `Áreas combinadas: <strong>${infoTop.name}</strong> + <strong>${info2.name}</strong>`;
-    } else if (perfilDetectado.tipo === 'mixto3') {
-        const info2 = areaInfo[perfilDetectado.areas[1]];
-        const info3 = areaInfo[perfilDetectado.areas[2]];
-        subtituloTipo = `Áreas combinadas: <strong>${infoTop.name}</strong> + <strong>${info2.name}</strong> + <strong>${info3.name}</strong>`;
     } else {
-        subtituloTipo = `Perfil equilibrado entre las <strong>5 áreas</strong>`;
+        const nombresAreas = perfilDetectado.areas.map(a => `<strong>${areaInfo[a].name}</strong>`);
+        subtituloTipo = `Áreas combinadas: ${nombresAreas.join(' + ')}`;
     }
 
     // Badge según tipo
@@ -364,7 +367,7 @@ function imprimirCompleto() {
         'dominante': 'Perfil Dominante',
         'mixto2': 'Perfil Mixto (2 áreas)',
         'mixto3': 'Perfil Mixto (3 áreas)',
-        'multipotencial': 'Perfil Multipotencial'
+        'multipotencial': `Perfil Multipotencial (${cantAreas} áreas)`
     }[perfilDetectado.tipo];
 
     // ===== HTML DEL CUESTIONARIO =====
