@@ -91,6 +91,98 @@ const areaInfo = {
     5: { name: "Área V", desc: "Salud-Biológica", color: "#7c3aed" }
 };
 
+// ===== INTERPRETACIONES VOCACIONALES =====
+// EDITABLE POR EL PROFESIONAL — Modificar los textos según criterio experto
+const interpretacionesPerfil = {
+    // Interpretación por área dominante (cuando hay un claro ganador)
+    dominante: {
+        1: {
+            titulo: "Perfil Artístico",
+            descripcion: "Tienes una marcada inclinación hacia actividades creativas y expresivas. Disfrutas del diseño, la música, las artes visuales y la comunicación audiovisual. Tu creatividad es tu principal fortaleza.",
+            carreras: "Diseño gráfico, Bellas Artes, Música, Comunicación Audiovisual, Publicidad, Fotografía, Arquitectura de Interiores, Animación digital.",
+            consejo: "Busca espacios donde puedas expresarte libremente. Tu talento artístico puede combinarse con herramientas tecnológicas para ampliar tus posibilidades profesionales."
+        },
+        2: {
+            titulo: "Perfil Humanístico",
+            descripcion: "Te motiva comprender al ser humano, sus culturas, lenguajes y comportamientos. Tienes habilidades para la comunicación, la enseñanza y el análisis social.",
+            carreras: "Psicología, Derecho, Pedagogía, Sociología, Antropología, Filosofía, Periodismo, Trabajo Social, Traducción e Interpretación.",
+            consejo: "Tu sensibilidad social y capacidad de escucha son valiosas. Considera orientaciones que te permitan impactar positivamente en comunidades e individuos."
+        },
+        3: {
+            titulo: "Perfil Administrativo",
+            descripcion: "Destacas en la planificación, organización y gestión de recursos. Tienes facilidad para los números, la toma de decisiones estratégicas y el liderazgo.",
+            carreras: "Administración de Empresas, Contabilidad, Economía, Marketing, Recursos Humanos, Comercio Internacional, Turismo, Finanzas.",
+            consejo: "Tu visión organizativa te permite liderar equipos y proyectos. Desarrolla habilidades blandas para complementar tu perfil técnico-administrativo."
+        },
+        4: {
+            titulo: "Perfil Científico-Técnico",
+            descripcion: "Te atrae la resolución de problemas lógicos, el diseño de sistemas y la investigación científica. Disfrutas entender cómo funcionan las cosas.",
+            carreras: "Ingeniería (Civil, Sistemas, Mecánica, Electrónica), Arquitectura, Matemáticas, Física, Química, Estadística, Computación.",
+            consejo: "Tu pensamiento analítico es una fortaleza clave. Mantente actualizado en tecnologías emergentes y busca proyectos que desafíen tu capacidad de innovación."
+        },
+        5: {
+            titulo: "Perfil Salud-Biológica",
+            descripcion: "Te interesa el cuidado de la vida, la salud humana, animal y el medio ambiente. Tienes vocación de servicio y curiosidad por los procesos biológicos.",
+            carreras: "Medicina, Enfermería, Odontología, Nutrición, Veterinaria, Biología, Agronomía, Ecología, Farmacia, Fisioterapia.",
+            consejo: "Tu vocación de ayuda es admirable. La constancia y la empatía serán fundamentales en tu desarrollo profesional en el área de la salud."
+        }
+    },
+    // Interpretación cuando hay dos áreas empatadas o muy cercanas (perfil mixto)
+    mixto: {
+        "1-2": {
+            titulo: "Perfil Artístico-Humanístico",
+            descripcion: "Combinas creatividad con sensibilidad social. Eres capaz de expresar ideas complejas de forma accesible y emocional.",
+            carreras: "Comunicación Social, Diseño Editorial, Arteterapia, Docencia en Artes, Producción Cultural, Periodismo especializado."
+        },
+        "1-3": {
+            titulo: "Perfil Artístico-Administrativo",
+            descripcion: "Tienes visión creativa y sentido comercial. Puedes transformar ideas artísticas en proyectos viables.",
+            carreras: "Dirección de Arte, Branding, Gestión Cultural, Diseño de Producto, Marketing Creativo, Producción Audiovisual."
+        },
+        "1-4": {
+            titulo: "Perfil Artístico-Técnico",
+            descripcion: "Fusionas creatividad con precisión técnica. Eres ideal para proyectos que requieren innovación y rigor metodológico.",
+            carreras: "Diseño Industrial, Arquitectura, Animación 3D, Desarrollo de Videojuegos, Ingeniería en Diseño, UX/UI."
+        },
+        "1-5": {
+            titulo: "Perfil Artístico-Salud",
+            descripcion: "Tu creatividad se orienta al bienestar y la sanación. Tienes una visión holística del cuidado humano.",
+            carreras: "Musicoterapia, Arteterapia, Diseño de Espacios Terapéuticos, Estética, Decoración de Ambientes de Salud."
+        },
+        "2-3": {
+            titulo: "Perfil Humanístico-Administrativo",
+            descripcion: "Combinas comprensión humana con habilidades de gestión. Eres un puente entre personas y organizaciones.",
+            carreras: "Gestión de Talento Humano, Coaching, Consultoría Organizacional, Relaciones Públicas, Dirección de Fundaciones."
+        },
+        "2-4": {
+            titulo: "Perfil Humanístico-Técnico",
+            descripcion: "Aplicas el conocimiento técnico con una mirada humanista. Buscas que la tecnología sirva a las personas.",
+            carreras: "Ingeniería Social, Ergonomía, Accesibilidad Tecnológica, Docencia en Ciencias Técnicas, Divulgación Científica."
+        },
+        "2-5": {
+            titulo: "Perfil Humanístico-Salud",
+            descripcion: "Tu vocación de ayuda se complementa con una profunda comprensión del ser humano. Ideal para atención integral.",
+            carreras: "Psicología Clínica, Terapia Ocupacional, Logopedia, Medicina Familiar, Trabajo Social en Salud, Psicopedagogía."
+        },
+        "3-4": {
+            titulo: "Perfil Administrativo-Técnico",
+            descripcion: "Eres capaz de gestionar proyectos tecnológicos y optimizar procesos con visión estratégica.",
+            carreras: "Gestión de Proyectos TI, Ingeniería Industrial, Logística, Supply Chain, Análisis de Datos, Consultoría Tecnológica."
+        },
+        "3-5": {
+            titulo: "Perfil Administrativo-Salud",
+            descripcion: "Puedes gestionar instituciones de salud con eficiencia y sensibilidad hacia el bienestar de pacientes.",
+            carreras: "Administración Hospitalaria, Gestión de Servicios de Salud, Salud Pública, Auditoría Médica, Gestión de Calidad en Salud."
+        },
+        "4-5": {
+            titulo: "Perfil Técnico-Salud",
+            descripcion: "Aplicas el rigor científico al cuidado de la salud. Eres ideal para la investigación biomédica y tecnología sanitaria.",
+            carreras: "Ingeniería Biomédica, Bioinformática, Tecnología Médica, Farmacología, Biotecnología, Ingeniería de Alimentos."
+        }
+    }
+};
+
+
 const STEP_SIZE = 10;
 const TOTAL_STEPS = Math.ceil(preguntas.length / STEP_SIZE);
 let currentStep = 0;
@@ -583,14 +675,32 @@ function imprimirCompleto() {
     const cedulaDisplay = evalCedula || '';
     const fechaDisplay = evalFecha || '';
 
-    // Calcular resultados
+    // ===== CALCULAR RESULTADOS =====
     const counts = {1:0, 2:0, 3:0, 4:0, 5:0};
     preguntas.forEach((p, i) => {
         if (answers[i] === true) counts[p.a]++;
     });
     const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+    const [area1, count1] = sorted[0];
+    const [area2, count2] = sorted[1];
+    const diff = count1 - count2;
 
-    // HTML del cuestionario
+    // ===== DETERMINAR PERFIL =====
+    let perfilInterpretado = null;
+    let tipoPerfil = '';
+
+    // Si hay un claro dominante (diferencia >= 3 puntos)
+    if (diff >= 3) {
+        tipoPerfil = 'dominante';
+        perfilInterpretado = interpretacionesPerfil.dominante[area1];
+    } else {
+        // Perfil mixto — ordenar las dos áreas para la clave
+        const key = [area1, area2].sort().join('-');
+        tipoPerfil = 'mixto';
+        perfilInterpretado = interpretacionesPerfil.mixto[key] || interpretacionesPerfil.dominante[area1];
+    }
+
+    // ===== HTML DEL CUESTIONARIO =====
     let preguntasHTML = '';
     preguntas.forEach((p, i) => {
         const siMarcado = answers[i] === true ? '<span style="font-weight:700;font-size:10pt;">✕</span>' : '';
@@ -612,7 +722,7 @@ function imprimirCompleto() {
         </div>`;
     });
 
-    // HTML de resultados (barras simples)
+    // ===== HTML DE RESULTADOS (barras) =====
     let resultadosHTML = '';
     sorted.forEach(([area, count]) => {
         const info = areaInfo[area];
@@ -629,6 +739,49 @@ function imprimirCompleto() {
         </div>`;
     });
 
+    // ===== HTML DE INTERPRETACIÓN =====
+    const infoDominante = areaInfo[area1];
+    const infoSecundaria = areaInfo[area2];
+    const pctDominante = Math.round((count1 / 16) * 100);
+    const pctSecundaria = Math.round((count2 / 16) * 100);
+
+    const interpretacionHTML = `
+    <div class="interpretacion-box">
+        <div class="interp-header">
+            <div class="interp-badge" style="background:${infoDominante.color}20;color:${infoDominante.color};border:2px solid ${infoDominante.color};">
+                ${tipoPerfil === 'dominante' ? 'Perfil Dominante' : 'Perfil Mixto'}
+            </div>
+            <h2 style="font-size:18pt;margin:10px 0 4px 0;color:${infoDominante.color};">${perfilInterpretado.titulo}</h2>
+            <p style="font-size:9pt;color:#666;margin:0;">
+                ${tipoPerfil === 'dominante'
+                    ? `Área dominante: <strong>${infoDominante.name} — ${infoDominante.desc}</strong> (${count1}/16 — ${pctDominante}%)`
+                    : `Áreas combinadas: <strong>${infoDominante.name}</strong> (${count1}/16) + <strong>${infoSecundaria.name}</strong> (${count2}/16)`
+                }
+            </p>
+        </div>
+
+        <div class="interp-section">
+            <h3>📝 Descripción del Perfil</h3>
+            <p>${perfilInterpretado.descripcion}</p>
+        </div>
+
+        <div class="interp-section">
+            <h3>🎓 Orientaciones Profesionales Sugeridas</h3>
+            <p>${perfilInterpretado.carreras}</p>
+        </div>
+
+        <div class="interp-section consejo">
+            <h3>💡 Recomendación</h3>
+            <p>${perfilInterpretado.consejo}</p>
+        </div>
+
+        <div class="interp-nota">
+            <strong>Nota del profesional:</strong> Esta interpretación es una guía orientativa basada en los resultados del test.
+            Se recomienda una entrevista personalizada para una orientación vocacional más precisa.
+        </div>
+    </div>`;
+
+    // ===== HTML COMPLETO =====
     const htmlContent = `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -640,7 +793,7 @@ function imprimirCompleto() {
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     font-size: 10.5pt;
-    line-height: 1.3;
+    line-height: 1.4;
     color: #000;
     background: #fff;
     padding: 10mm;
@@ -698,13 +851,6 @@ body {
     padding-left: 4px;
     font-size: 10pt;
 }
-.instrucciones {
-    background: #f5f5f5;
-    border-left: 3px solid #000;
-    padding: 5px 10px;
-    margin-bottom: 10px;
-    font-size: 9pt;
-}
 .section-title {
     font-size: 14pt;
     font-weight: 700;
@@ -718,6 +864,65 @@ body {
     border-radius: 8px;
     padding: 16px;
     margin-bottom: 16px;
+}
+.interpretacion-box {
+    background: #fff;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    page-break-inside: avoid;
+}
+.interp-header {
+    text-align: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed #ddd;
+}
+.interp-badge {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 99px;
+    font-size: 9pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.interp-section {
+    margin-bottom: 14px;
+}
+.interp-section h3 {
+    font-size: 11pt;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #1a1a2e;
+}
+.interp-section p {
+    font-size: 10pt;
+    color: #333;
+    text-align: justify;
+}
+.interp-section.consejo {
+    background: #f0f9ff;
+    border-left: 4px solid #0ea5e9;
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+}
+.interp-nota {
+    font-size: 8.5pt;
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+.instrucciones {
+    background: #f5f5f5;
+    border-left: 3px solid #000;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    font-size: 9pt;
 }
 .footer {
     margin-top: 10px;
@@ -747,11 +952,15 @@ body {
         </div>
     </div>
 
-    <!-- RESULTADOS -->
-    <div class="section-title">🎯 Perfil Vocacional</div>
+    <!-- RESULTADOS GRÁFICOS -->
+    <div class="section-title">📊 Resultados por Área</div>
     <div class="results-section">
         ${resultadosHTML}
     </div>
+
+    <!-- INTERPRETACIÓN PROFESIONAL -->
+    <div class="section-title">🎯 Interpretación del Perfil</div>
+    ${interpretacionHTML}
 
     <!-- CUESTIONARIO -->
     <div class="page-break"></div>
