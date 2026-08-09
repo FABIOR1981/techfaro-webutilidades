@@ -93,6 +93,565 @@ const areaInfo = {
 
 // ===== INTERPRETACIONES VOCACIONALES =====
 // EDITABLE POR EL PROFESIONAL — Modificar los textos según criterio experto
+//
+// El sistema detecta automáticamente 4 tipos de perfil:
+//   1. DOMINANTE     : 1 área claramente por encima de las demás
+//   2. MIXTO BINARIO : 2 áreas principales muy cercanas
+//   3. MIXTO TRIPLE  : 3 áreas principales muy cercanas
+//   4. MULTIPOTENCIAL: 4 o 5 áreas con puntuaciones similares (perfil equilibrado)
+//
+// Umbral de diferencia para considerar "cercanas": 2 puntos (configurable)
+const UMBRAL_MIXTO = 2;
+
+const interpretacionesPerfil = {
+    // ───────────────────────────────────────────────
+    // 1. PERFILES DOMINANTES (1 área clara ganadora)
+    // ───────────────────────────────────────────────
+    dominante: {
+        1: {
+            titulo: "Perfil Artístico",
+            descripcion: "Tienes una marcada inclinación hacia actividades creativas y expresivas. Disfrutas del diseño, la música, las artes visuales y la comunicación audiovisual. Tu creatividad es tu principal fortaleza.",
+            carreras: "Diseño gráfico, Bellas Artes, Música, Comunicación Audiovisual, Publicidad, Fotografía, Arquitectura de Interiores, Animación digital, Diseño de Moda.",
+            consejo: "Busca espacios donde puedas expresarte libremente. Tu talento artístico puede combinarse con herramientas tecnológicas para ampliar tus posibilidades profesionales."
+        },
+        2: {
+            titulo: "Perfil Humanístico",
+            descripcion: "Te motiva comprender al ser humano, sus culturas, lenguajes y comportamientos. Tienes habilidades para la comunicación, la enseñanza y el análisis social.",
+            carreras: "Psicología, Derecho, Pedagogía, Sociología, Antropología, Filosofía, Periodismo, Trabajo Social, Traducción e Interpretación, Ciencias Políticas.",
+            consejo: "Tu sensibilidad social y capacidad de escucha son valiosas. Considera orientaciones que te permitan impactar positivamente en comunidades e individuos."
+        },
+        3: {
+            titulo: "Perfil Administrativo",
+            descripcion: "Destacas en la planificación, organización y gestión de recursos. Tienes facilidad para los números, la toma de decisiones estratégicas y el liderazgo.",
+            carreras: "Administración de Empresas, Contabilidad, Economía, Marketing, Recursos Humanos, Comercio Internacional, Turismo, Finanzas, Gestión Pública.",
+            consejo: "Tu visión organizativa te permite liderar equipos y proyectos. Desarrolla habilidades blandas para complementar tu perfil técnico-administrativo."
+        },
+        4: {
+            titulo: "Perfil Científico-Técnico",
+            descripcion: "Te atrae la resolución de problemas lógicos, el diseño de sistemas y la investigación científica. Disfrutas entender cómo funcionan las cosas.",
+            carreras: "Ingeniería (Civil, Sistemas, Mecánica, Electrónica, Industrial), Arquitectura, Matemáticas, Física, Química, Estadística, Computación, Astronomía.",
+            consejo: "Tu pensamiento analítico es una fortaleza clave. Mantente actualizado en tecnologías emergentes y busca proyectos que desafíen tu capacidad de innovación."
+        },
+        5: {
+            titulo: "Perfil Salud-Biológica",
+            descripcion: "Te interesa el cuidado de la vida, la salud humana, animal y el medio ambiente. Tienes vocación de servicio y curiosidad por los procesos biológicos.",
+            carreras: "Medicina, Enfermería, Odontología, Nutrición, Veterinaria, Biología, Agronomía, Ecología, Farmacia, Fisioterapia, Bioquímica.",
+            consejo: "Tu vocación de ayuda es admirable. La constancia y la empatía serán fundamentales en tu desarrollo profesional en el área de la salud."
+        }
+    },
+
+    // ───────────────────────────────────────────────
+    // 2. PERFILES MIXTOS BINARIOS (2 áreas principales)
+    // ───────────────────────────────────────────────
+    mixto2: {
+        "1-2": {
+            titulo: "Perfil Artístico-Humanístico",
+            descripcion: "Combinas creatividad con sensibilidad social. Eres capaz de expresar ideas complejas de forma accesible y emocional. Tu comunicación tiene un sello personal y artístico.",
+            carreras: "Comunicación Social, Diseño Editorial, Arteterapia, Docencia en Artes, Producción Cultural, Periodismo especializado, Guionismo, Community Management creativo."
+        },
+        "1-3": {
+            titulo: "Perfil Artístico-Administrativo",
+            descripcion: "Tienes visión creativa y sentido comercial. Puedes transformar ideas artísticas en proyectos viables y rentables. Eres innovador en el mundo de los negocios.",
+            carreras: "Dirección de Arte, Branding, Gestión Cultural, Diseño de Producto, Marketing Creativo, Producción Audiovisual, Emprendimiento en industrias creativas."
+        },
+        "1-4": {
+            titulo: "Perfil Artístico-Técnico",
+            descripcion: "Fusionas creatividad con precisión técnica. Eres ideal para proyectos que requieren innovación y rigor metodológico. La tecnología es tu lienzo.",
+            carreras: "Diseño Industrial, Arquitectura, Animación 3D, Desarrollo de Videojuegos, Ingeniería en Diseño, UX/UI, Realidad Virtual/Aumentada, Diseño de Hardware."
+        },
+        "1-5": {
+            titulo: "Perfil Artístico-Salud",
+            descripcion: "Tu creatividad se orienta al bienestar y la sanación. Tienes una visión holística del cuidado humano. El arte es tu herramienta de sanación.",
+            carreras: "Musicoterapia, Arteterapia, Diseño de Espacios Terapéuticos, Estética profesional, Decoración de Ambientes de Salud, Diseño de productos médicos."
+        },
+        "2-3": {
+            titulo: "Perfil Humanístico-Administrativo",
+            descripcion: "Combinas comprensión humana con habilidades de gestión. Eres un puente entre personas y organizaciones. Liderás con empatía.",
+            carreras: "Gestión de Talento Humano, Coaching, Consultoría Organizacional, Relaciones Públicas, Dirección de Fundaciones, Gestión de Proyectos Sociales, Mediación."
+        },
+        "2-4": {
+            titulo: "Perfil Humanístico-Técnico",
+            descripcion: "Aplicas el conocimiento técnico con una mirada humanista. Buscas que la tecnología sirva a las personas. Eres un traductor entre humanos y máquinas.",
+            carreras: "Ingeniería Social, Ergonomía, Accesibilidad Tecnológica, Docencia en Ciencias Técnicas, Divulgación Científica, Experiencia de Usuario (UX Research)."
+        },
+        "2-5": {
+            titulo: "Perfil Humanístico-Salud",
+            descripcion: "Tu vocación de ayuda se complementa con una profunda comprensión del ser humano. Ideal para atención integral que va más allá de lo físico.",
+            carreras: "Psicología Clínica, Terapia Ocupacional, Logopedia, Medicina Familiar, Trabajo Social en Salud, Psicopedagogía, Tanatología, Neuropsicología."
+        },
+        "3-4": {
+            titulo: "Perfil Administrativo-Técnico",
+            descripcion: "Eres capaz de gestionar proyectos tecnológicos y optimizar procesos con visión estratégica. La eficiencia y la innovación van de la mano.",
+            carreras: "Gestión de Proyectos TI, Ingeniería Industrial, Logística, Supply Chain, Análisis de Datos, Consultoría Tecnológica, Transformación Digital, CIO/CTO."
+        },
+        "3-5": {
+            titulo: "Perfil Administrativo-Salud",
+            descripcion: "Puedes gestionar instituciones de salud con eficiencia y sensibilidad hacia el bienestar de pacientes. Liderás con cabeza y corazón.",
+            carreras: "Administración Hospitalaria, Gestión de Servicios de Salud, Salud Pública, Auditoría Médica, Gestión de Calidad en Salud, Dirección de Clínicas, Epidemiología aplicada."
+        },
+        "4-5": {
+            titulo: "Perfil Técnico-Salud",
+            descripcion: "Aplicas el rigor científico al cuidado de la salud. Eres ideal para la investigación biomédica y tecnología sanitaria de vanguardia.",
+            carreras: "Ingeniería Biomédica, Bioinformática, Tecnología Médica, Farmacología, Biotecnología, Ingeniería de Alimentos, Genética, Neuroingeniería."
+        }
+    },
+
+    // ───────────────────────────────────────────────
+    // 3. PERFILES MIXTOS TRIPLES (3 áreas principales)
+    // ───────────────────────────────────────────────
+    mixto3: {
+        "1-2-3": {
+            titulo: "Perfil Creativo-Comunicador-Gestor",
+            descripcion: "Eres un creador con visión estratégica y habilidades de comunicación. Puedes concebir, comunicar y ejecutar proyectos creativos de principio a fin. Tu versatilidad te permite moverte entre equipos multidisciplinarios.",
+            carreras: "Dirección de proyectos creativos, Producción cultural, Marketing de contenidos, Branding estratégico, Gestión de festivales, Comunicación institucional."
+        },
+        "1-2-4": {
+            titulo: "Perfil Creativo-Humanista-Tecnológico",
+            descripcion: "Unes la sensibilidad artística con el rigor técnico y la comprensión humana. Eres capaz de diseñar soluciones tecnológicas centradas en las personas, con un toque estético único.",
+            carreras: "Diseño de interacción (IxD), Arquitectura de información, Docencia en tecnología creativa, Desarrollo de apps educativas, Museografía digital."
+        },
+        "1-2-5": {
+            titulo: "Perfil Creativo-Humanista-Sanador",
+            descripcion: "Tu creatividad y comprensión humana se orientan al bienestar. Tienes un enfoque holístico que integra expresión artística, apoyo emocional y cuidado de la salud.",
+            carreras: "Arteterapia, Musicoterapia, Psicología del arte, Diseño de espacios de bienestar, Terapias alternativas, Comunicación en salud mental."
+        },
+        "1-3-4": {
+            titulo: "Perfil Creativo-Emprendedor-Técnico",
+            descripcion: "Eres un innovador que puede conceptualizar, planificar y construir. Tu mente creativa encuentra soluciones técnicas viables y comercialmente rentables.",
+            carreras: "Emprendimiento tecnológico, Desarrollo de productos, Innovación corporativa, Startups, Propiedad intelectual, Consultoría de innovación."
+        },
+        "1-3-5": {
+            titulo: "Perfil Creativo-Emprendedor-Sanador",
+            descripcion: "Identificas oportunidades en el sector salud y bienestar desde una perspectiva creativa. Puedes lanzar negocios que mejoren la calidad de vida de las personas.",
+            carreras: "Emprendimiento en salud, Diseño de productos wellness, Marketing farmacéutico, Gestión de centros estéticos, Innovación en nutrición, Telemedicina creativa."
+        },
+        "1-4-5": {
+            titulo: "Perfil Creativo-Técnico-Sanador",
+            descripcion: "Aplicas la innovación tecnológica al cuidado de la salud con un enfoque estético y humano. Eres ideal para el diseño de dispositivos médicos, apps de salud y ambientes terapéuticos.",
+            carreras: "Diseño de dispositivos médicos, UX en salud, Ingeniería biomédica creativa, Apps de bienestar, Diseño de prótesis estéticas, Realidad virtual terapéutica."
+        },
+        "2-3-4": {
+            titulo: "Perfil Humanista-Gestor-Técnico",
+            descripcion: "Eres un líder que entiende tanto a las personas como a los sistemas. Puedes gestionar equipos técnicos con empatía y traducir necesidades humanas en soluciones tecnológicas organizadas.",
+            carreras: "Gestión ágil de proyectos, Dirección de equipos de desarrollo, Consultoría de transformación digital, Gobierno de TI, Capacitación tecnológica."
+        },
+        "2-3-5": {
+            titulo: "Perfil Humanista-Gestor-Sanador",
+            descripcion: "Tienes una vocación de servicio integral que abarca la gestión, la comprensión humana y el cuidado de la salud. Eres un administrador con alma de cuidador.",
+            carreras: "Dirección de centros de salud, Gestión de programas sociales en salud, Salud ocupacional, Políticas públicas de salud, Coordinación de equipos multidisciplinarios."
+        },
+        "2-4-5": {
+            titulo: "Perfil Humanista-Técnico-Sanador",
+            descripcion: "Unes la comprensión del ser humano con el rigor científico y la vocación de cuidado. Eres ideal para roles que requieren investigación aplicada al bienestar humano.",
+            carreras: "Investigación en salud pública, Bioética, Epidemiología social, Ingeniería de tejidos, Neurociencia cognitiva, Psicología de la tecnología."
+        },
+        "3-4-5": {
+            titulo: "Perfil Gestor-Técnico-Sanador",
+            descripcion: "Eres un profesional que puede planificar, ejecutar y supervisar proyectos de alta complejidad en el sector salud y tecnología. Tu perfil es altamente demandado en la industria 4.0 de la salud.",
+            carreras: "Gestión de hospitales tecnológicos, Dirección de laboratorios, Ingeniería clínica, Salud digital, Gestión de datos biomédicos, Auditoría de sistemas de salud."
+        }
+    },
+
+    // ───────────────────────────────────────────────
+    // 4. PERFIL MULTIPOTENCIAL (4 o 5 áreas cercanas)
+    // ───────────────────────────────────────────────
+    multipotencial: {
+        titulo: "Perfil Multipotencial / Equilibrado",
+        descripcion: "Tus intereses están distribuidos de manera equilibrada entre múltiples áreas. Esto indica una gran capacidad de adaptación, curiosidad intelectual versátil y habilidades transferibles. No te sientas presionado a especializarte en una sola cosa: tu fortaleza está justamente en conectar ideas de distintos campos.",
+        carreras: "Gestión de proyectos multidisciplinarios, Consultoría generalista, Emprendimiento, Docencia universitaria, Investigación interdisciplinaria, Políticas públicas, Comunicación científica, Diseño de sistemas complejos.",
+        consejo: "Tu perfil es un activo valioso en un mundo que valora cada vez más la interdisciplinariedad. Busca roles que te permitan explorar múltiples facetas. Considera carreras con énfasis integrador o diseña tu propia trayectoria profesional combinando varias disciplinas."
+    }
+};
+
+// ===== FUNCIÓN AUXILIAR: Detectar tipo de perfil =====
+function detectarTipoPerfil(counts) {
+    // counts: objeto {1: N, 2: N, 3: N, 4: N, 5: N}
+    // Devuelve: { tipo: 'dominante'|'mixto2'|'mixto3'|'multipotencial', areas: [area1, area2, ...] }
+
+    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]); // [[area, count], ...]
+    const valores = sorted.map(x => x[1]);
+    const areas = sorted.map(x => parseInt(x[0]));
+
+    // Verificar si es multipotencial (4 o 5 áreas dentro del umbral)
+    // Si la diferencia entre la 1° y la 4° es menor o igual al umbral → 4 áreas cercanas
+    if (valores[0] - valores[3] <= UMBRAL_MIXTO) {
+        return { tipo: 'multipotencial', areas: areas };
+    }
+
+    // Verificar si es mixto triple (3 áreas principales cercanas, 4° lejos)
+    if (valores[0] - valores[2] <= UMBRAL_MIXTO && valores[0] - valores[3] > UMBRAL_MIXTO) {
+        return { tipo: 'mixto3', areas: areas.slice(0, 3) };
+    }
+
+    // Verificar si es mixto binario (2 áreas cercanas, 3° lejos)
+    if (valores[0] - valores[1] <= UMBRAL_MIXTO && valores[0] - valores[2] > UMBRAL_MIXTO) {
+        return { tipo: 'mixto2', areas: areas.slice(0, 2) };
+    }
+
+    // Si no cumple ninguna condición anterior → dominante
+    return { tipo: 'dominante', areas: [areas[0]] };
+}
+
+// ===== FUNCIÓN AUXILIAR: Obtener interpretación según tipo de perfil =====
+function obtenerInterpretacion(tipoPerfil, areas) {
+    if (tipoPerfil === 'dominante') {
+        return interpretacionesPerfil.dominante[areas[0]];
+    }
+    if (tipoPerfil === 'mixto2') {
+        const key = areas.slice().sort((a, b) => a - b).join('-');
+        return interpretacionesPerfil.mixto2[key] || interpretacionesPerfil.dominante[areas[0]];
+    }
+    if (tipoPerfil === 'mixto3') {
+        const key = areas.slice().sort((a, b) => a - b).join('-');
+        return interpretacionesPerfil.mixto3[key] || interpretacionesPerfil.multipotencial;
+    }
+    if (tipoPerfil === 'multipotencial') {
+        return interpretacionesPerfil.multipotencial;
+    }
+    return interpretacionesPerfil.dominante[areas[0]];
+}
+
+// ===== NUEVAS FUNCIONES: Volver, Imprimir cuestionario, Imprimir completo =====
+
+function volverAlCuestionario() {
+    document.getElementById('results').classList.add('hidden');
+    document.getElementById('quiz').classList.remove('hidden');
+    renderStep();
+    updateProgress();
+}
+
+function imprimirCuestionarioDesdeResultados() {
+    imprimirCuestionario();
+}
+
+function imprimirCompleto() {
+    const nombreDisplay = evalNombre || '';
+    const cedulaDisplay = evalCedula || '';
+    const fechaDisplay = evalFecha || '';
+
+    // ===== CALCULAR RESULTADOS =====
+    const counts = {1:0, 2:0, 3:0, 4:0, 5:0};
+    preguntas.forEach((p, i) => {
+        if (answers[i] === true) counts[p.a]++;
+    });
+
+    // ===== DETECTAR TIPO DE PERFIL =====
+    const perfilDetectado = detectarTipoPerfil(counts);
+    const perfilInterpretado = obtenerInterpretacion(perfilDetectado.tipo, perfilDetectado.areas);
+
+    // Preparar datos para el HTML
+    const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+    const areaTop = perfilDetectado.areas[0];
+    const infoTop = areaInfo[areaTop];
+
+    // Subtítulo según tipo de perfil
+    let subtituloTipo = '';
+    if (perfilDetectado.tipo === 'dominante') {
+        subtituloTipo = `Área dominante: <strong>${infoTop.name} — ${infoTop.desc}</strong>`;
+    } else if (perfilDetectado.tipo === 'mixto2') {
+        const info2 = areaInfo[perfilDetectado.areas[1]];
+        subtituloTipo = `Áreas combinadas: <strong>${infoTop.name}</strong> + <strong>${info2.name}</strong>`;
+    } else if (perfilDetectado.tipo === 'mixto3') {
+        const info2 = areaInfo[perfilDetectado.areas[1]];
+        const info3 = areaInfo[perfilDetectado.areas[2]];
+        subtituloTipo = `Áreas combinadas: <strong>${infoTop.name}</strong> + <strong>${info2.name}</strong> + <strong>${info3.name}</strong>`;
+    } else {
+        subtituloTipo = `Perfil equilibrado entre las <strong>5 áreas</strong>`;
+    }
+
+    // Badge según tipo
+    const badgeTexto = {
+        'dominante': 'Perfil Dominante',
+        'mixto2': 'Perfil Mixto (2 áreas)',
+        'mixto3': 'Perfil Mixto (3 áreas)',
+        'multipotencial': 'Perfil Multipotencial'
+    }[perfilDetectado.tipo];
+
+    // ===== HTML DEL CUESTIONARIO =====
+    let preguntasHTML = '';
+    preguntas.forEach((p, i) => {
+        const siMarcado = answers[i] === true ? '<span style="font-weight:700;font-size:10pt;">✕</span>' : '';
+        const noMarcado = answers[i] === false ? '<span style="font-weight:700;font-size:10pt;">✕</span>' : '';
+        preguntasHTML += `
+        <div style="display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px dotted #bbb;page-break-inside:avoid;">
+            <span style="font-weight:700;font-size:10.5pt;min-width:22px;text-align:right;flex-shrink:0;">${p.n}.</span>
+            <span style="flex:1;padding-top:1px;font-size:10.5pt;">${p.t}</span>
+            <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
+                    <span style="width:14px;height:14px;border:1.5px solid #000;border-radius:50%;display:flex;align-items:center;justify-content:center;">${siMarcado}</span>
+                    <span style="font-size:7pt;font-weight:700;">SI</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
+                    <span style="width:14px;height:14px;border:1.5px solid #000;border-radius:50%;display:flex;align-items:center;justify-content:center;">${noMarcado}</span>
+                    <span style="font-size:7pt;font-weight:700;">NO</span>
+                </div>
+            </div>
+        </div>`;
+    });
+
+    // ===== HTML DE RESULTADOS (barras) =====
+    let resultadosHTML = '';
+    sorted.forEach(([area, count]) => {
+        const info = areaInfo[area];
+        const pct = Math.round((count / 16) * 100);
+        const esPrincipal = perfilDetectado.areas.includes(parseInt(area));
+        const opacidad = esPrincipal ? '1' : '0.6';
+        resultadosHTML += `
+        <div style="margin-bottom:12px;page-break-inside:avoid;opacity:${opacidad};">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span style="font-weight:700;font-size:11pt;color:${info.color}">${info.name} — ${info.desc}</span>
+                <span style="font-weight:700;font-size:11pt;">${count}/16 (${pct}%)</span>
+            </div>
+            <div style="width:100%;height:18px;background:#e5e7eb;border-radius:99px;overflow:hidden;">
+                <div style="width:${pct}%;height:100%;background:${info.color};border-radius:99px;"></div>
+            </div>
+        </div>`;
+    });
+
+    // ===== HTML DE INTERPRETACIÓN =====
+    const interpretacionHTML = `
+    <div class="interpretacion-box">
+        <div class="interp-header">
+            <div class="interp-badge" style="background:${infoTop.color}20;color:${infoTop.color};border:2px solid ${infoTop.color};">
+                ${badgeTexto}
+            </div>
+            <h2 style="font-size:18pt;margin:10px 0 4px 0;color:${infoTop.color};">${perfilInterpretado.titulo}</h2>
+            <p style="font-size:9pt;color:#666;margin:0;">${subtituloTipo}</p>
+        </div>
+
+        <div class="interp-section">
+            <h3>📝 Descripción del Perfil</h3>
+            <p>${perfilInterpretado.descripcion}</p>
+        </div>
+
+        <div class="interp-section">
+            <h3>🎓 Orientaciones Profesionales Sugeridas</h3>
+            <p>${perfilInterpretado.carreras}</p>
+        </div>
+
+        <div class="interp-section consejo">
+            <h3>💡 Recomendación</h3>
+            <p>${perfilInterpretado.consejo || 'Explora las áreas que más te motivan y busca orientación profesional personalizada para profundizar en tu perfil.'}</p>
+        </div>
+
+        <div class="interp-nota">
+            <strong>Nota del profesional:</strong> Esta interpretación es una guía orientativa basada en los resultados del test.
+            Se recomienda una entrevista personalizada para una orientación vocacional más precisa.
+        </div>
+    </div>`;
+
+    // ===== HTML COMPLETO =====
+    const htmlContent = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>O.V.O. Completo — ${nombreDisplay || 'Resultados'}</title>
+<style>
+@page { size: A4; margin: 14mm 16mm; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.4;
+    color: #000;
+    background: #fff;
+    padding: 10mm;
+}
+.header {
+    border-bottom: 2px solid #000;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+}
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+}
+.header-top h1 {
+    font-size: 20pt;
+    letter-spacing: 3px;
+    margin: 0;
+}
+.header-top .version {
+    font-size: 8pt;
+    color: #444;
+    text-align: right;
+}
+.header-sub {
+    font-size: 9pt;
+    color: #333;
+    margin-bottom: 8px;
+}
+.datos {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+.campo {
+    flex: 1;
+    min-width: 140px;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+.campo label {
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.campo .line {
+    flex: 1;
+    border-bottom: 1px solid #000;
+    min-width: 60px;
+    height: 16px;
+    padding-left: 4px;
+    font-size: 10pt;
+}
+.section-title {
+    font-size: 14pt;
+    font-weight: 700;
+    margin: 20px 0 10px 0;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #000;
+}
+.results-section {
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+.interpretacion-box {
+    background: #fff;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    page-break-inside: avoid;
+}
+.interp-header {
+    text-align: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed #ddd;
+}
+.interp-badge {
+    display: inline-block;
+    padding: 4px 16px;
+    border-radius: 99px;
+    font-size: 9pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.interp-section {
+    margin-bottom: 14px;
+}
+.interp-section h3 {
+    font-size: 11pt;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #1a1a2e;
+}
+.interp-section p {
+    font-size: 10pt;
+    color: #333;
+    text-align: justify;
+}
+.interp-section.consejo {
+    background: #f0f9ff;
+    border-left: 4px solid #0ea5e9;
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+}
+.interp-nota {
+    font-size: 8.5pt;
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+.instrucciones {
+    background: #f5f5f5;
+    border-left: 3px solid #000;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    font-size: 9pt;
+}
+.footer {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 7.5pt;
+    color: #555;
+    border-top: 1px solid #ccc;
+    padding-top: 5px;
+}
+.page-break {
+    page-break-before: always;
+}
+</style>
+</head>
+<body>
+    <!-- PORTADA / DATOS -->
+    <div class="header">
+        <div class="header-top">
+            <h1>O.V.O.</h1>
+            <div class="version">Informe Completo<br>TechFaRo © 2024</div>
+        </div>
+        <div class="header-sub">Orientación Vocacional y Ocupacional — Cuestionario de Intereses</div>
+        <div class="datos">
+            <div class="campo"><label>Nombre completo</label><div class="line">${nombreDisplay}</div></div>
+            <div class="campo"><label>Cédula de identidad</label><div class="line">${cedulaDisplay}</div></div>
+            <div class="campo"><label>Fecha</label><div class="line">${fechaDisplay}</div></div>
+        </div>
+    </div>
+
+    <!-- RESULTADOS GRÁFICOS -->
+    <div class="section-title">📊 Resultados por Área</div>
+    <div class="results-section">
+        ${resultadosHTML}
+    </div>
+
+    <!-- INTERPRETACIÓN PROFESIONAL -->
+    <div class="section-title">🎯 Interpretación del Perfil</div>
+    ${interpretacionHTML}
+
+    <!-- CUESTIONARIO -->
+    <div class="page-break"></div>
+    <div class="section-title">📋 Cuestionario de Intereses</div>
+    <div class="instrucciones">
+        <strong>Instrucciones:</strong> Lee cada actividad y marca con una <strong>X</strong> dentro del círculo si te <strong>gustaría</strong> realizarla (SI), o déjalo en blanco si <strong>no te interesa</strong> (NO). No hay respuestas correctas ni incorrectas.
+    </div>
+    ${preguntasHTML}
+
+    <div class="footer">
+        O.V.O. — Orientación Vocacional y Ocupacional | TechFaRo © 2024
+    </div>
+    <script>window.onload = function() { setTimeout(function() { window.print(); }, 500); };</script>
+</body>
+</html>`;
+
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, '_blank');
+    if (!w) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `OVO_Completo_${(nombreDisplay || 'resultados').replace(/\s+/g, '_')}.html`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+}
+
+
+// ===== INTERPRETACIONES VOCACIONALES =====
+// EDITABLE POR EL PROFESIONAL — Modificar los textos según criterio experto
 const interpretacionesPerfil = {
     // Interpretación por área dominante (cuando hay un claro ganador)
     dominante: {
@@ -659,333 +1218,3 @@ function mostrarResultadosFinales() {
 
 // ===== NUEVAS FUNCIONES: Volver, Imprimir cuestionario, Imprimir completo =====
 
-function volverAlCuestionario() {
-    document.getElementById('results').classList.add('hidden');
-    document.getElementById('quiz').classList.remove('hidden');
-    renderStep();
-    updateProgress();
-}
-
-function imprimirCuestionarioDesdeResultados() {
-    imprimirCuestionario();
-}
-
-function imprimirCompleto() {
-    const nombreDisplay = evalNombre || '';
-    const cedulaDisplay = evalCedula || '';
-    const fechaDisplay = evalFecha || '';
-
-    // ===== CALCULAR RESULTADOS =====
-    const counts = {1:0, 2:0, 3:0, 4:0, 5:0};
-    preguntas.forEach((p, i) => {
-        if (answers[i] === true) counts[p.a]++;
-    });
-    const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
-    const [area1, count1] = sorted[0];
-    const [area2, count2] = sorted[1];
-    const diff = count1 - count2;
-
-    // ===== DETERMINAR PERFIL =====
-    let perfilInterpretado = null;
-    let tipoPerfil = '';
-
-    // Si hay un claro dominante (diferencia >= 3 puntos)
-    if (diff >= 3) {
-        tipoPerfil = 'dominante';
-        perfilInterpretado = interpretacionesPerfil.dominante[area1];
-    } else {
-        // Perfil mixto — ordenar las dos áreas para la clave
-        const key = [area1, area2].sort().join('-');
-        tipoPerfil = 'mixto';
-        perfilInterpretado = interpretacionesPerfil.mixto[key] || interpretacionesPerfil.dominante[area1];
-    }
-
-    // ===== HTML DEL CUESTIONARIO =====
-    let preguntasHTML = '';
-    preguntas.forEach((p, i) => {
-        const siMarcado = answers[i] === true ? '<span style="font-weight:700;font-size:10pt;">✕</span>' : '';
-        const noMarcado = answers[i] === false ? '<span style="font-weight:700;font-size:10pt;">✕</span>' : '';
-        preguntasHTML += `
-        <div style="display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px dotted #bbb;page-break-inside:avoid;">
-            <span style="font-weight:700;font-size:10.5pt;min-width:22px;text-align:right;flex-shrink:0;">${p.n}.</span>
-            <span style="flex:1;padding-top:1px;font-size:10.5pt;">${p.t}</span>
-            <div style="display:flex;gap:10px;align-items:center;flex-shrink:0;">
-                <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
-                    <span style="width:14px;height:14px;border:1.5px solid #000;border-radius:50%;display:flex;align-items:center;justify-content:center;">${siMarcado}</span>
-                    <span style="font-size:7pt;font-weight:700;">SI</span>
-                </div>
-                <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
-                    <span style="width:14px;height:14px;border:1.5px solid #000;border-radius:50%;display:flex;align-items:center;justify-content:center;">${noMarcado}</span>
-                    <span style="font-size:7pt;font-weight:700;">NO</span>
-                </div>
-            </div>
-        </div>`;
-    });
-
-    // ===== HTML DE RESULTADOS (barras) =====
-    let resultadosHTML = '';
-    sorted.forEach(([area, count]) => {
-        const info = areaInfo[area];
-        const pct = Math.round((count / 16) * 100);
-        resultadosHTML += `
-        <div style="margin-bottom:12px;page-break-inside:avoid;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-                <span style="font-weight:700;font-size:11pt;color:${info.color}">${info.name} — ${info.desc}</span>
-                <span style="font-weight:700;font-size:11pt;">${count}/16 (${pct}%)</span>
-            </div>
-            <div style="width:100%;height:18px;background:#e5e7eb;border-radius:99px;overflow:hidden;">
-                <div style="width:${pct}%;height:100%;background:${info.color};border-radius:99px;"></div>
-            </div>
-        </div>`;
-    });
-
-    // ===== HTML DE INTERPRETACIÓN =====
-    const infoDominante = areaInfo[area1];
-    const infoSecundaria = areaInfo[area2];
-    const pctDominante = Math.round((count1 / 16) * 100);
-    const pctSecundaria = Math.round((count2 / 16) * 100);
-
-    const interpretacionHTML = `
-    <div class="interpretacion-box">
-        <div class="interp-header">
-            <div class="interp-badge" style="background:${infoDominante.color}20;color:${infoDominante.color};border:2px solid ${infoDominante.color};">
-                ${tipoPerfil === 'dominante' ? 'Perfil Dominante' : 'Perfil Mixto'}
-            </div>
-            <h2 style="font-size:18pt;margin:10px 0 4px 0;color:${infoDominante.color};">${perfilInterpretado.titulo}</h2>
-            <p style="font-size:9pt;color:#666;margin:0;">
-                ${tipoPerfil === 'dominante'
-                    ? `Área dominante: <strong>${infoDominante.name} — ${infoDominante.desc}</strong> (${count1}/16 — ${pctDominante}%)`
-                    : `Áreas combinadas: <strong>${infoDominante.name}</strong> (${count1}/16) + <strong>${infoSecundaria.name}</strong> (${count2}/16)`
-                }
-            </p>
-        </div>
-
-        <div class="interp-section">
-            <h3>📝 Descripción del Perfil</h3>
-            <p>${perfilInterpretado.descripcion}</p>
-        </div>
-
-        <div class="interp-section">
-            <h3>🎓 Orientaciones Profesionales Sugeridas</h3>
-            <p>${perfilInterpretado.carreras}</p>
-        </div>
-
-        <div class="interp-section consejo">
-            <h3>💡 Recomendación</h3>
-            <p>${perfilInterpretado.consejo}</p>
-        </div>
-
-        <div class="interp-nota">
-            <strong>Nota del profesional:</strong> Esta interpretación es una guía orientativa basada en los resultados del test.
-            Se recomienda una entrevista personalizada para una orientación vocacional más precisa.
-        </div>
-    </div>`;
-
-    // ===== HTML COMPLETO =====
-    const htmlContent = `<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>O.V.O. Completo — ${nombreDisplay || 'Resultados'}</title>
-<style>
-@page { size: A4; margin: 14mm 16mm; }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 10.5pt;
-    line-height: 1.4;
-    color: #000;
-    background: #fff;
-    padding: 10mm;
-}
-.header {
-    border-bottom: 2px solid #000;
-    padding-bottom: 8px;
-    margin-bottom: 10px;
-}
-.header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 6px;
-}
-.header-top h1 {
-    font-size: 20pt;
-    letter-spacing: 3px;
-    margin: 0;
-}
-.header-top .version {
-    font-size: 8pt;
-    color: #444;
-    text-align: right;
-}
-.header-sub {
-    font-size: 9pt;
-    color: #333;
-    margin-bottom: 8px;
-}
-.datos {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-bottom: 8px;
-}
-.campo {
-    flex: 1;
-    min-width: 140px;
-    display: flex;
-    align-items: baseline;
-    gap: 4px;
-}
-.campo label {
-    font-size: 7.5pt;
-    text-transform: uppercase;
-    font-weight: 700;
-    white-space: nowrap;
-}
-.campo .line {
-    flex: 1;
-    border-bottom: 1px solid #000;
-    min-width: 60px;
-    height: 16px;
-    padding-left: 4px;
-    font-size: 10pt;
-}
-.section-title {
-    font-size: 14pt;
-    font-weight: 700;
-    margin: 20px 0 10px 0;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #000;
-}
-.results-section {
-    background: #fafafa;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 16px;
-}
-.interpretacion-box {
-    background: #fff;
-    border: 2px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 20px;
-    page-break-inside: avoid;
-}
-.interp-header {
-    text-align: center;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px dashed #ddd;
-}
-.interp-badge {
-    display: inline-block;
-    padding: 4px 16px;
-    border-radius: 99px;
-    font-size: 9pt;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-.interp-section {
-    margin-bottom: 14px;
-}
-.interp-section h3 {
-    font-size: 11pt;
-    font-weight: 700;
-    margin-bottom: 6px;
-    color: #1a1a2e;
-}
-.interp-section p {
-    font-size: 10pt;
-    color: #333;
-    text-align: justify;
-}
-.interp-section.consejo {
-    background: #f0f9ff;
-    border-left: 4px solid #0ea5e9;
-    padding: 10px 14px;
-    border-radius: 0 8px 8px 0;
-}
-.interp-nota {
-    font-size: 8.5pt;
-    color: #666;
-    font-style: italic;
-    text-align: center;
-    margin-top: 14px;
-    padding-top: 10px;
-    border-top: 1px solid #eee;
-}
-.instrucciones {
-    background: #f5f5f5;
-    border-left: 3px solid #000;
-    padding: 5px 10px;
-    margin-bottom: 10px;
-    font-size: 9pt;
-}
-.footer {
-    margin-top: 10px;
-    text-align: center;
-    font-size: 7.5pt;
-    color: #555;
-    border-top: 1px solid #ccc;
-    padding-top: 5px;
-}
-.page-break {
-    page-break-before: always;
-}
-</style>
-</head>
-<body>
-    <!-- PORTADA / DATOS -->
-    <div class="header">
-        <div class="header-top">
-            <h1>O.V.O.</h1>
-            <div class="version">Informe Completo<br>TechFaRo © 2024</div>
-        </div>
-        <div class="header-sub">Orientación Vocacional y Ocupacional — Cuestionario de Intereses</div>
-        <div class="datos">
-            <div class="campo"><label>Nombre completo</label><div class="line">${nombreDisplay}</div></div>
-            <div class="campo"><label>Cédula de identidad</label><div class="line">${cedulaDisplay}</div></div>
-            <div class="campo"><label>Fecha</label><div class="line">${fechaDisplay}</div></div>
-        </div>
-    </div>
-
-    <!-- RESULTADOS GRÁFICOS -->
-    <div class="section-title">📊 Resultados por Área</div>
-    <div class="results-section">
-        ${resultadosHTML}
-    </div>
-
-    <!-- INTERPRETACIÓN PROFESIONAL -->
-    <div class="section-title">🎯 Interpretación del Perfil</div>
-    ${interpretacionHTML}
-
-    <!-- CUESTIONARIO -->
-    <div class="page-break"></div>
-    <div class="section-title">📋 Cuestionario de Intereses</div>
-    <div class="instrucciones">
-        <strong>Instrucciones:</strong> Lee cada actividad y marca con una <strong>X</strong> dentro del círculo si te <strong>gustaría</strong> realizarla (SI), o déjalo en blanco si <strong>no te interesa</strong> (NO). No hay respuestas correctas ni incorrectas.
-    </div>
-    ${preguntasHTML}
-
-    <div class="footer">
-        O.V.O. — Orientación Vocacional y Ocupacional | TechFaRo © 2024
-    </div>
-    <script>window.onload = function() { setTimeout(function() { window.print(); }, 500); };</script>
-</body>
-</html>`;
-
-    const blob = new Blob([htmlContent], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const w = window.open(url, '_blank');
-    if (!w) {
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `OVO_Completo_${(nombreDisplay || 'resultados').replace(/\s+/g, '_')}.html`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    }
-}
