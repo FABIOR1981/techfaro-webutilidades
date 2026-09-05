@@ -29,7 +29,15 @@ const MENU_MANIFEST = [
     categoria: 'Cuestionarios',
     icono: 'clipboard',
     items: [
-      { nombre: 'OVO', archivo: 'ovo.html', icono: 'compass' },
+     
+      {
+        categoria: 'Test Vocacional',
+        icono: 'compass',
+        items: [
+          { nombre: 'OVO', archivo: 'ovo.html', icono: 'compass' },
+         
+        ],
+      },
       {
         categoria: 'MBTI',
         icono: 'cabeza',
