@@ -47,10 +47,26 @@ function loadPageInContainer(filePath) {
   frame.id = 'moduleFrame';
   frame.src = filePath;
   frame.style.width = '100%';
-  frame.style.height = 'calc(100vh - 130px)';
+  frame.style.height = '640px'; // altura provisoria hasta que cargue y se pueda medir
   frame.style.border = 'none';
   frame.style.minHeight = '640px';
   frame.setAttribute('allow', 'clipboard-read; clipboard-write');
+
+  // Ajusta la altura del iframe a la altura real de su contenido, para que
+  // páginas cortas no dejen espacio vacío y páginas largas no queden con
+  // scroll interno (en vez de eso, la página completa se desplaza).
+  function ajustarAltura() {
+    try {
+      const doc = frame.contentWindow.document;
+      const alto = Math.max(
+        doc.documentElement.scrollHeight,
+        doc.body ? doc.body.scrollHeight : 0
+      );
+      frame.style.height = Math.max(alto, 640) + 'px';
+    } catch (e) {
+      // Si por algún motivo no se puede medir, se mantiene la última altura
+    }
+  }
 
   frame.onload = () => {
     // Estilo y scroll independiente
@@ -68,10 +84,20 @@ function loadPageInContainer(filePath) {
     `;
     prime.head.appendChild(styleTag);
 
-    // Mantener ancho al 100% del contenedor y evitar cortes por scroll externo
     frame.style.width = '100%';
     frame.style.transform = 'none';
-    frame.style.height = 'calc(100vh - 130px)';
+
+    // Medir altura inicial y volver a medir cuando el contenido cambie
+    // (nuevas preguntas, resultados, gráficos, etc.)
+    ajustarAltura();
+    if (window.ResizeObserver) {
+      const ro = new ResizeObserver(ajustarAltura);
+      ro.observe(prime.documentElement);
+    }
+    // Red de seguridad por si algo cambia el tamaño sin disparar el observer
+    frame.contentWindow.addEventListener('resize', ajustarAltura);
+    setTimeout(ajustarAltura, 300);
+    setTimeout(ajustarAltura, 1000);
   };
 
   containerDestino.appendChild(frame);
