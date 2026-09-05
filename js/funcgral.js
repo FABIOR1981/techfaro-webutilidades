@@ -76,11 +76,15 @@ function loadPageInContainer(filePath) {
     prime.body.style.overflowX = 'auto';
     prime.body.style.minWidth = '100%';
 
-    // Forzar quiebra de contenido muy ancho en el iframe
+    // Forzar quiebra de contenido muy ancho en el iframe.
+    // box-sizing:border-box es clave: sin esto, en páginas que no lo definen
+    // por su cuenta, "max-width:100%" + padding propio hace que el elemento
+    // termine siendo MÁS ancho que su contenedor (el padding se suma aparte).
     const styleTag = prime.createElement('style');
     styleTag.textContent = `
-      * { max-width: 100% !important; overflow-wrap: anywhere !important; }
+      * { box-sizing: border-box !important; max-width: 100% !important; overflow-wrap: anywhere !important; }
       input, textarea, select, table { max-width: 100% !important; }
+      body { margin: 0 !important; }
     `;
     prime.head.appendChild(styleTag);
 

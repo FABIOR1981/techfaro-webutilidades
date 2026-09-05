@@ -318,12 +318,19 @@ tr:hover {
 @media (max-width: 1024px) {
     .container-flex {
         flex-direction: column;
+        /* En modo columna el "ancho" pasa a ser el eje transversal: sin esto,
+           align-items:flex-start (pensado para el modo fila de escritorio)
+           hace que los paneles se encojan a su tamaño de contenido en vez de
+           ocupar el ancho disponible -- y un iframe sin ancho resuelto cae
+           en su tamaño por defecto del navegador (300px). */
+        align-items: stretch;
     }
 
     #contIzq,
     #contDer,
     .container {
         max-width: 100%;
-        flex: 1 1 100%;
+        width: 100%;
+        flex: 1 1 auto;
     }
 }
