@@ -1,3 +1,5 @@
+if(sessionStorage.getItem("verificado")){
+
 // VALORES BRUTOS: 1, 2, 3, 4, 5 (Visibles en el HTML y la interfaz)
 const RAW_SCORE_VALUES = [1, 2, 3, 4, 5];
 // Mapeo interno: 1=-2, 2=-1, 3=0, 4=1, 5=2 (Se calcula como Raw Score - 3)
@@ -343,3 +345,8 @@ function calcularResultado() {
 
 // Se asegura que las preguntas se rendericen al cargar la página
 document.addEventListener('DOMContentLoaded', renderizarPreguntas);
+
+} else {
+	// No hay sesión iniciada: volver al login
+	window.location.href = darUrl('index.html');
+}

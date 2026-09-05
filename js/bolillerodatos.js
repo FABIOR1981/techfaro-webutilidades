@@ -1,3 +1,5 @@
+if(sessionStorage.getItem("verificado")){
+
 let gruposGenerados;
 let cantidadCedulasPorGrupo;
 let listaFilas;
@@ -106,4 +108,9 @@ async function generarListas() {
   } catch (error) {
     mensajeDiv.textContent = `Error al leer el archivo: ${error.message}`;
   }
+}
+
+} else {
+	// No hay sesión iniciada: volver al login
+	window.location.href = darUrl('index.html');
 }

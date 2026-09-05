@@ -57,13 +57,7 @@ if(sessionStorage.getItem("verificado")){
 		}
 
 	
-}else{
-	//window.location.href ='https://techfaro-webutilidades.netlify.app';
-	//window.location.href ='E:/Users/FABIOR/Desktop/pruebas/techfaro-webutilidades';
-	window.location.href =darUrl('index.html');
-}
-
-async function generarListas() {
+	async function generarListas() {
 		  const archivo = document.getElementById('archivoCedulas').files[0];
 		   cantidadCedulasPorGrupo = parseInt(document.getElementById('cantidadCedulasPorGrupo').value);
 		  const listaCedulasElement = document.getElementById('listaCedulas');
@@ -84,3 +78,9 @@ async function generarListas() {
 			mensajeDiv.textContent = `Error al leer el archivo: ${error.message}`;
 		  }
 		}
+
+}else{
+	//window.location.href ='https://techfaro-webutilidades.netlify.app';
+	//window.location.href ='E:/Users/FABIOR/Desktop/pruebas/techfaro-webutilidades';
+	window.location.href =darUrl('index.html');
+}

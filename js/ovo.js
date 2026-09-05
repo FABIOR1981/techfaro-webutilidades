@@ -1,3 +1,5 @@
+if(sessionStorage.getItem("verificado")){
+
 // O.V.O. Mejorado - TechFaRo
 
 const preguntas = [
@@ -1131,3 +1133,9 @@ function mostrarResultadosFinales() {
 
 // ===== NUEVAS FUNCIONES: Volver, Imprimir cuestionario, Imprimir completo =====
 
+
+
+} else {
+	// No hay sesión iniciada: volver al login
+	window.location.href = darUrl('index.html');
+}
