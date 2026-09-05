@@ -42,14 +42,14 @@ nav {
     transform: translateY(-1px);
 }
 
-.menu-item a::after {
+.menu-item > a::after {
     content: '\25BC';
     font-size: 0.72rem;
     transition: transform 0.2s ease;
     opacity: 0.7;
 }
 
-.menu-item:not(:has(.submenu)) a::after {
+.menu-item:not(:has(.submenu)) > a::after {
     content: '';
 }
 
@@ -75,13 +75,25 @@ nav {
 }
 
 .submenu li a {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 8px 16px;
     text-decoration: none;
     color: #1f2937;
     border-radius: 8px;
     transition: background-color 0.15s ease;
     font-weight: 500;
+}
+
+/* Las hojas del menú (abren una herramienta real, no despliegan nada más)
+   llevan una flecha hacia la DERECHA, para indicar "esto navega" y no
+   confundirlas con las categorías, que despliegan más contenido (flecha
+   hacia abajo, arriba). */
+.submenu > li:not(.menu-item) > a::after {
+    content: '\25B8';
+    font-size: 0.72rem;
+    opacity: 0.5;
 }
 
 .submenu li a:hover,
