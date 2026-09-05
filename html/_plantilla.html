@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<!--
+  PLANTILLA PARA UNA HERRAMIENTA NUEVA
+  -------------------------------------
+  Cómo usarla (ver también html/COMO_AGREGAR_UNA_HERRAMIENTA.md):
+
+    1) Copiá este archivo a html/nombre-de-tu-herramienta.html
+       Copiá también js/_plantilla.js a js/nombre-de-tu-herramienta.js
+    2) Cambiá el <title> y el <h1> de acá abajo.
+    3) Si tu herramienta necesita estilos propios, creá css/nombre.css
+       y descomentá el <link> de más abajo.
+    4) Escribí el contenido de tu herramienta dentro del <div class="container">.
+    5) Escribí la lógica en tu archivo .js (ver la plantilla de JS: ya viene
+       protegida con el chequeo de sesión, no hace falta agregarlo).
+    6) Agregá un renglón en js/menu-manifest.js para que aparezca en el menú.
+
+  Qué NO hay que hacer (errores ya vistos en este proyecto):
+    - No armes tu propio "menú lateral" ni un <div id="contIzq"> acá:
+      esta página se carga DENTRO del menú principal, que ya tiene el suyo.
+    - No te olvides de <script src="../js/funcgral.js"> ANTES que tu propio
+      script: si tu JS usa darUrl(), esa función vive en funcgral.js.
+-->
+<html>
+<head>
+    <title>Nombre de la Herramienta</title>
+    <link rel="stylesheet" href="../css/comunes.css">
+    <!-- <link rel="stylesheet" href="../css/nombre-de-tu-herramienta.css"> -->
+</head>
+<body>
+    <div class="container">
+        <h1>Nombre de la Herramienta</h1>
+
+        <!-- Contenido de la herramienta acá -->
+
+    </div>
+
+    <script src="../js/funcgral.js"></script>
+    <script src="../js/_plantilla.js"></script>
+
+    <footer>
+        <p>Copyright © 2024 TechFaRo. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
