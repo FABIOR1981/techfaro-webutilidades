@@ -85,7 +85,15 @@ enlaces.forEach(enlace => {
     const containerDestino = document.getElementById('contDer');
     if (containerDestino) {
       loadPageInContainer(urlBase);
-      window.history.replaceState(null, '', nuevaUrl);
+      try {
+        window.history.replaceState(null, '', nuevaUrl);
+      } catch (e) {
+        // nuevaUrl apunta siempre al dominio de producción; si se está probando
+        // en otro origen (localhost, preview de Netlify, etc.) el navegador
+        // bloquea replaceState entre orígenes distintos. No es crítico: solo
+        // afecta la URL mostrada en la barra de direcciones, no la navegación.
+        console.warn('No se pudo actualizar la URL visible (origen distinto al de producción):', e.message);
+      }
     } else {
       window.location.href = nuevaUrl;
     }
