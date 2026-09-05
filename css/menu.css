@@ -91,7 +91,7 @@ nav {
    confundirlas con las categorías, que despliegan más contenido (flecha
    hacia abajo, arriba). */
 .submenu > li:not(.menu-item) > a::after {
-    content: '\25B8';
+    content: '\25B6';
     font-size: 0.72rem;
     opacity: 0.5;
 }
