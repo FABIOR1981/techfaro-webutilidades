@@ -113,6 +113,11 @@ enlaces.forEach(enlace => {
     const urlBase = enlace.dataset.url;
     const nuevaUrl = darUrl(urlBase);
     const containerDestino = document.getElementById('contDer');
+
+    // Marcar en el menú cuál herramienta está abierta ahora
+    enlaces.forEach(e => e.classList.remove('active'));
+    enlace.classList.add('active');
+
     if (containerDestino) {
       loadPageInContainer(urlBase);
       try {

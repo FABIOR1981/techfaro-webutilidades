@@ -17,7 +17,7 @@ h1 {
 }
 
 button:hover {
-    background-color: darken(var(--primary-color), 10%);
+    filter: brightness(0.9);
 }
 
 #resultados {

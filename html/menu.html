@@ -8,6 +8,19 @@
   <link rel="stylesheet" href="../css/menu.css">
 </head>
 <body>
+<header class="site-header">
+  <div class="site-header__brand">
+    <span class="site-header__logo">TF</span>
+    <div class="site-header__titles">
+      <span class="site-header__title">TechFaRo</span>
+      <span class="site-header__subtitle">Herramientas internas</span>
+    </div>
+  </div>
+  <div class="site-header__user">
+    <span class="site-header__username" id="nombreUsuarioHeader"></span>
+    <button type="button" class="site-header__logout" id="btnCerrarSesion">Cerrar sesión</button>
+  </div>
+</header>
 <main>
 <div class="container-flex">
 	<div class="container" id="contIzq" >
@@ -24,6 +37,24 @@
 	  <script src="../js/menu-manifest.js"></script>
 	  <script src="../js/funcgral.js"></script>
 	  <script src="../js/menu.js"></script>
+	  <script>
+	    // Header de marca: mostrar quien inicio sesion y permitir cerrarla
+	    (function () {
+	      const nombre = sessionStorage.getItem('nombreUsuario');
+	      const spanUsuario = document.getElementById('nombreUsuarioHeader');
+	      if (spanUsuario) {
+	        spanUsuario.textContent = nombre ? ('Hola, ' + nombre) : '';
+	      }
+	      const btnSalir = document.getElementById('btnCerrarSesion');
+	      if (btnSalir) {
+	        btnSalir.addEventListener('click', () => {
+	          sessionStorage.removeItem('verificado');
+	          sessionStorage.removeItem('nombreUsuario');
+	          window.location.href = darUrl('index.html');
+	        });
+	      }
+	    })();
+	  </script>
 	</div>
 	<div class="container"id="contDer">
 	</div>

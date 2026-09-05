@@ -24,6 +24,11 @@ document.querySelector('form').addEventListener('submit', (event) => {
 			// Si la validación es correcta, puedes enviar el formulario al servidor o realizar otra acción
 			//alert('Login exitoso!');
 			sessionStorage.setItem('verificado', true);
+			// Guardamos el nombre de quien inició sesión para mostrarlo en el menú
+			const usuarioEncontrado = usuarios.find(u => u.usuario === codificar(limpiarTexto(username).toUpperCase()));
+			if (usuarioEncontrado) {
+				sessionStorage.setItem('nombreUsuario', usuarioEncontrado.Persona);
+			}
 			 //window.location.href ='https://techfaro-webutilidades.netlify.app';
 			   //window.location.href ='E:/Users/FABIOR/Desktop/pruebas/techfaro-webutilidades/html/menu.html';
 			   window.location.href =darUrl('menu.html');

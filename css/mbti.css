@@ -1,12 +1,6 @@
-:root {
-    --primary-color: #43a047;
-    --secondary-color: #f8fafc;
-    --accent-color: #00bfae;
-    --text-color: #222;
-    --border-radius: 16px;
-    --font-family: 'Inter', 'Roboto', Arial, sans-serif;
-    --shadow: 0 4px 16px rgba(0,0,0,0.12);
-}
+/* Las variables de color, tipografía y sombra vienen de comunes.css
+   (ya cargado antes que este archivo), para que todas las herramientas
+   compartan la misma paleta en un solo lugar. */
 
 body {
     font-family: var(--font-family);
