@@ -281,3 +281,25 @@ nav {
 .submenu li:not(.menu-item) > a.active .menu-icon {
     opacity: 1;
 }
+
+/* ============ Correcciones de contraste en modo oscuro ============ */
+.theme-label {
+    color: var(--text-color);
+}
+[data-theme='dark'] .theme-label {
+    color: #e2e8f0;
+}
+
+/* El botón de cerrar sesión debe seguir siendo "fantasma" (borde sutil) en
+   modo oscuro, no el verde sólido que se le da a los botones normales -
+   si no, queda texto verde sobre fondo verde, casi ilegible. */
+[data-theme='dark'] .site-header__logout {
+    background: transparent;
+    color: #94a3b8;
+    border-color: #334155;
+}
+[data-theme='dark'] .site-header__logout:hover {
+    background: #2a1414;
+    color: #f87171;
+    border-color: #7f1d1d;
+}
