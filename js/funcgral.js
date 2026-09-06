@@ -76,6 +76,12 @@ function loadPageInContainer(filePath) {
     prime.body.style.overflowX = 'auto';
     prime.body.style.minWidth = '100%';
 
+    // Arrancar la herramienta con el mismo tema (claro/oscuro) que ya está
+    // elegido en el menú, para que no aparezca en blanco en medio de modo oscuro.
+    if (document.documentElement.getAttribute('data-theme') === 'dark') {
+      prime.documentElement.setAttribute('data-theme', 'dark');
+    }
+
     // Forzar quiebra de contenido muy ancho en el iframe.
     // box-sizing:border-box es clave: sin esto, en páginas que no lo definen
     // por su cuenta, "max-width:100%" + padding propio hace que el elemento
