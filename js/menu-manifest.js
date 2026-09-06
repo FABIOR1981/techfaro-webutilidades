@@ -34,7 +34,7 @@ const MENU_MANIFEST = [
         categoria: 'Test Vocacional',
         icono: 'compass',
         items: [
-          { nombre: 'OVO', archivo: 'ovo.html', icono: 'vocacion' },
+          { nombre: 'OVO', archivo: 'ovo.html', icono: 'aptitudes' },
          
         ],
       },
@@ -92,8 +92,14 @@ const ICONOS = {
   mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
   recargar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>',
   campana: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
-  // Encrucijada / Caminos (Enfoque de elección de carrera)
-  vocacion: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="19" r="2"/><path d="M12 17V7"/><path d="M12 7 7 2"/><path d="M12 7l5-5"/></svg>'
+  // Opción A: Birrete / Graduación (Enfoque académico)
+testVocacional: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>',
+
+// Opción B: Encrucijada / Caminos (Enfoque de elección de carrera)
+vocacion: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="19" r="2"/><path d="M12 17V7"/><path d="M12 7 7 2"/><path d="M12 7l5-5"/></svg>',
+
+// Opción C: Foco / Descubrimiento (Enfoque de aptitudes y talentos)
+aptitudes: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15 14c.8-.7 2-2 2-4a5 5 0 0 0-10 0c0 2 1.2 3.3 2 4l1 1h4z"/></svg>'
 };
 
 // Arma el <ul class="menu"> a partir de MENU_MANIFEST y lo inserta en el <nav>.
