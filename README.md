@@ -15,7 +15,7 @@ Sitio publicado: https://techfaro-webutilidades.netlify.app
 | **Bolillero Datos Completo** | Igual que el anterior, pero a partir de un archivo con todos los datos de cada postulante. |
 | **Hash SHA-256** | Calcula el hash de un texto, por ejemplo para preparar contraseñas. |
 
-En `archivospruebas/` hay archivos de ejemplo con datos ficticios para probar los bolilleros.
+En `archivospruebas/` hay archivos de ejemplo para probar los bolilleros.
 
 ## Cómo se usa
 
