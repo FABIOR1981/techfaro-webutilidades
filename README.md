@@ -4,6 +4,10 @@ Conjunto de herramientas web de apoyo para el trabajo de evaluación y selecció
 
 Sitio publicado: https://techfaro-webutilidades.netlify.app
 
+## Documentación
+
+El manual de usuario está en [documentacion-central](https://github.com/FABIOR1981/documentacion-central/tree/main/techfaro-webutilidades/documentacion) ([PDF](https://github.com/FABIOR1981/documentacion-central/blob/main/techfaro-webutilidades/documentacion/MANUAL_USUARIO.pdf)). También se puede consultar desde la bitácora de proyectos.
+
 ## Herramientas
 
 | Herramienta | Qué hace |
