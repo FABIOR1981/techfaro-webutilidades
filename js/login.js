@@ -1,5 +1,7 @@
 document.querySelector('form').addEventListener('submit', (event) => {
     event.preventDefault();
+    const errorLogin = document.getElementById('mensajeLogin');
+    if (errorLogin) errorLogin.hidden = true;
 
 
 	let usuarios = [
@@ -35,7 +37,13 @@ document.querySelector('form').addEventListener('submit', (event) => {
 			 
 			 
 		} else {
-			alert(resultadoValidacion); // Mostrar el mensaje de error específico
+			// Mostrar el mensaje de error específico dentro del formulario
+			if (errorLogin) {
+				errorLogin.textContent = resultadoValidacion;
+				errorLogin.hidden = false;
+			} else {
+				alert(resultadoValidacion);
+			}
 		}
 	
 });

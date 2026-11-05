@@ -10,3 +10,13 @@
 footer {
     background-color: rgba(0, 0, 0, 0.1);
 }
+
+.login-error {
+    color: #b91c1c;
+    background: #fdecec;
+    border: 1px solid #f3c8c8;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    margin: 0;
+}
