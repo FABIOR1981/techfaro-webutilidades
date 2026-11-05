@@ -73,12 +73,6 @@ main {
     border-color: #334155;
 }
 
-[data-theme='dark'] button,
-[data-theme='dark'] input[type='submit'] {
-    background-color: #22c55e;
-    color: #0f172a;
-}
-
 [data-theme='dark'] tr:nth-child(odd) {
     background: #0b172f;
 }
