@@ -130,15 +130,6 @@ main {
     border-color: #1e293b;
 }
 
-.container-flex {
-    display: flex;
-    gap: 20px;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    overflow-x: hidden;
-}
-
 .container {
     background-color: #ffffff;
     border: 1px solid #e5edf5;
@@ -152,6 +143,7 @@ main {
 
 #contIzq {
     flex: 0 0 280px;
+    width: 280px;
     max-width: 280px;
     background-color: rgba(255, 255, 255, 0.92);
 }
@@ -177,11 +169,6 @@ main {
     overflow-y: auto;
 }
 
-#contIzq {
-    flex: 0 0 280px;
-    width: 280px;
-    max-width: 280px;
-}
 
 .container-flex {
     display: flex;
@@ -190,11 +177,9 @@ main {
     justify-content: flex-start;
     align-items: flex-start;
     width: 100%;
-}
-
-.container-flex {
     overflow-x: hidden;
 }
+
 
 
 body,
@@ -235,6 +220,15 @@ a:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 4px rgba(67, 160, 71, 0.15);
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+a:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
 }
 
 button,
