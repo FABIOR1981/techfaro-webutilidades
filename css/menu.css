@@ -106,7 +106,7 @@ nav {
     background: #e6f9f1;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
     .container-flex {
         flex-direction: column;
     }

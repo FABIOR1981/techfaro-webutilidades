@@ -54,7 +54,7 @@ if (sessionStorage.getItem('verificado')) {
             anchor.addEventListener('click', (event) => {
                 // href="#" no debe llevar la página al inicio, en ningún tamaño
                 event.preventDefault();
-                if (window.matchMedia('(max-width: 900px)').matches) {
+                if (window.matchMedia('(max-width: 1024px)').matches) {
                     item.classList.toggle('open');
                 }
             });
