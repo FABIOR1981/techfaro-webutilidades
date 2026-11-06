@@ -35,6 +35,7 @@ const MENU_MANIFEST = [
         icono: 'compass',
         items: [
           { nombre: 'OVO', archivo: 'ovo.html', icono: 'aptitudes' },
+          { nombre: 'OVO corrector', archivo: 'ovo_corrector.html', icono: 'aptitudes' },
          
         ],
       },

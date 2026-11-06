@@ -1,0 +1,90 @@
+/* Corrector de OVO: carga rápida de respuestas desde el papel */
+.corrector { max-width: 980px; }
+
+.corr-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 12px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+[data-theme="dark"] .corr-card { background: #1e293b; }
+
+.corr-datos,
+.corr-barra {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    margin: 8px 0;
+}
+.corr-datos label,
+.corr-barra label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.9rem;
+}
+.corr-datos input,
+.corr-barra input,
+.corr-cadena textarea {
+    padding: 8px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font: inherit;
+    background: transparent;
+    color: inherit;
+}
+.corr-cadena textarea { width: 100%; margin: 8px 0; box-sizing: border-box; }
+
+.corr-ayuda { font-size: 0.9rem; color: var(--text-light); }
+.corr-mensaje { font-weight: 600; color: #b91c1c; min-height: 1.2em; }
+
+.corr-areas { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.corr-area {
+    padding: 6px 10px;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.corr-lista { display: flex; flex-direction: column; gap: 6px; }
+.corr-fila {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+}
+.corr-fila.activa { border-color: var(--accent); }
+.corr-fila.si { background: rgba(67, 160, 71, 0.14); }
+.corr-fila.no { background: rgba(225, 29, 72, 0.10); }
+.corr-num { font-weight: 700; }
+.corr-texto { font-size: 0.92rem; }
+.corr-area-tag { font-size: 0.8rem; color: var(--text-light); margin-top: 2px; }
+
+.corr-botones { display: flex; gap: 6px; }
+.corr-botones button {
+    padding: 6px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+}
+.corr-botones button[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
+.corr-acciones { display: flex; gap: 12px; justify-content: flex-end; margin: 12px 0; }
+
+@media (max-width: 700px) {
+    .corr-fila { grid-template-columns: 34px 1fr; }
+    .corr-botones { grid-column: 2; }
+}
