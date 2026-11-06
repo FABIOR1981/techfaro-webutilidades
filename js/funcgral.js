@@ -1,36 +1,17 @@
 //sessionStorage.setItem('Produccion', false);
 
 
+// Construye la URL de una página dentro del mismo sitio donde se está navegando.
+// Así el login, el menú y las herramientas comparten origen y sessionStorage,
+// también en previews de Netlify o en pruebas locales (antes siempre iba a producción).
 function darUrl(cadena) {
-	const modo=true;
-
-
- // URLs base para producción y desarrollo
-  const URL_PRODUCCION = 'https://techfaro-webutilidades.netlify.app/';
-  //const URL_DESARROLLO = 'E:/Users/FABIOR/Desktop/pruebas/techfaro-webutilidades/';
-  const URL_DESARROLLO = 'D:/Cosas/Programacion/Desarrollo/TechFaRo-webUtilidades/';
-  
-  
- 
-
-  try {
-    
-	if(cadena!='index.html'){
-		cadena='html/'+cadena;
-	}
-
-    // Construir la URL según el modo	
-    if (modo) {
-		
-      return URL_PRODUCCION + cadena;
-    } else {
-		
-      return URL_DESARROLLO + cadena;
-    }
-  } catch (error) {
-    console.error('Error al construir la URL:', error);
-    return 'URL inválida';
+  // Carpeta raíz del sitio: si la página actual está dentro de /html/, subimos un nivel
+  let carpeta = window.location.pathname.replace(/[^/]*$/, '');
+  if (carpeta.endsWith('/html/')) {
+    carpeta = carpeta.slice(0, -'html/'.length);
   }
+  const ruta = (cadena === 'index.html') ? cadena : 'html/' + cadena;
+  return new URL(carpeta + ruta, window.location.href).href;
 }
 
 

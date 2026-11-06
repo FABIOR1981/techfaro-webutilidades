@@ -52,8 +52,9 @@ if (sessionStorage.getItem('verificado')) {
         if (submenu && anchor) {
             // Permite expandir/contraer submenú en móvil
             anchor.addEventListener('click', (event) => {
-                if (window.matchMedia('(max-width: 900px)').matches) {
-                    event.preventDefault();
+                // href="#" no debe llevar la página al inicio, en ningún tamaño
+                event.preventDefault();
+                if (window.matchMedia('(max-width: 1024px)').matches) {
                     item.classList.toggle('open');
                 }
             });
