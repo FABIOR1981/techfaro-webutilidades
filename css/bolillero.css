@@ -86,4 +86,12 @@ footer {
     text-align: right;
 }
 
-
+/* Foco visible para navegación con teclado */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #43a047;
+    outline-offset: 2px;
+}

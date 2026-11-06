@@ -547,3 +547,18 @@ body {
     border-color: #d97706;
     background: linear-gradient(135deg, rgba(217,119,6,0.08), var(--card));
 }
+
+/* Foco visible para navegación con teclado */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #43a047;
+    outline-offset: 2px;
+}
+
+.modal-field input:focus-visible {
+    outline: 3px solid #43a047;
+    outline-offset: 2px;
+}
