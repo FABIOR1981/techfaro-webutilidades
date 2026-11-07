@@ -143,3 +143,8 @@ textarea:focus-visible {
     outline: 3px solid #43a047;
     outline-offset: 2px;
 }
+
+.opciones-resultado { margin: 12px 0; }
+.opciones-resultado label { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+.descripcion-tipo { margin-top: 12px; padding: 12px 16px; border-left: 4px solid #43a047; background: #f1f8f1; border-radius: 6px; }
+.descripcion-tipo .nota-tipo { font-size: 0.85em; color: #555; }
