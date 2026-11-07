@@ -239,6 +239,7 @@ if(sessionStorage.getItem("verificado")){
 			const right = tipoMBTIArray.slice(parejaIndex + 1).join("");
 			tipoMBTI = (left ? left + "-" : "") + tipoMBTIArray[parejaIndex] + (right ? "-" + right : "");
 		}
+		ultimoTipoMBTI = tipoMBTI;
 		resultadoDiv.innerHTML = `
 			<div class="informe-mbti-resultado" style="padding: 10px; border: 2px solid #1c4e7f; border-radius: 8px; background-color: #f0f8ff; font-family: Arial, sans-serif;">
                 
@@ -260,6 +261,7 @@ if(sessionStorage.getItem("verificado")){
 					<h3 style="color: #31708f; margin-top: 0; font-size: 1.1em;">Tipo de Personalidad Sugerido</h3>
 					<p style="font-size: 0.9em; margin: 5px 0;">El perfil resultante es:</p>
 					<h2><span style="color: #c0392b; font-size: 2.5em; font-weight: bold; letter-spacing: 4px;">${tipoMBTI}</span></h2>
+				${renderDescripcionTipo(tipoMBTI)}
 				</section>
 			</div>
 		`;
@@ -360,6 +362,7 @@ if(sessionStorage.getItem("verificado")){
 				const right = tipoMBTIArray.slice(parejaIndex + 1).join("");
 				tipoMBTI = (left ? left + "-" : "") + tipoMBTIArray[parejaIndex] + (right ? "-" + right : "");
 			}
+		ultimoTipoMBTI = tipoMBTI;
 		resultadoDiv.innerHTML = `
 			<div class="informe-mbti-resultado" style="padding: 10px; border: 2px solid #1c4e7f; border-radius: 8px; background-color: #f0f8ff; font-family: Arial, sans-serif;">
 				
@@ -381,6 +384,7 @@ if(sessionStorage.getItem("verificado")){
 					<h3 style="color: #31708f; margin-top: 0; font-size: 1.1em;">Tipo de Personalidad Sugerido</h3>
 					<p style="font-size: 0.9em; margin: 5px 0;">El perfil resultante es:</p>
 					<h2><span style="color: #c0392b; font-size: 2.5em; font-weight: bold; letter-spacing: 4px;">${tipoMBTI}</span></h2>
+				${renderDescripcionTipo(tipoMBTI)}
 				</section>
 			</div>
 		`;
